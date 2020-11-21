@@ -3,10 +3,65 @@ Survey
 
 ## Lists
 
-@Motokawa
+### @Motokawa
+##### Hessisan
+- Sharpness-Aware Minimization for Efficiently Improving Generalization
+https://github.com/MLHPC/Papers/issues/51
+- Modular Block-diagonal Curvature Approximations for Feedforward Architectures
+https://github.com/MLHPC/Papers/issues/31
+- When Does Preconditioning Help or Hurt Generalization?
+https://github.com/MLHPC/Papers/issues/26
+- Assessing Local Generalization Capability in Deep Models 
+https://github.com/MLHPC/Papers/issues/28
 
-@Takeuchi
+##### Sensitivity and Variance
+- Sensitivity and Generalization in Neural Networks: an Empirical Study
+https://github.com/MLHPC/Papers/issues/11
+
+- Understanding Why Neural Networks Generalize Well Through GSNR of Parameters
+https://github.com/MLHPC/Papers/issues/4
+
+
+##### SGD Noise
+- An Empirical Study of Large-Batch Stochastic Gradient Descent with Structured Covariance Noise
+https://github.com/MLHPC/Papers/issues/2
+- The Power of Interpolation: Understanding the Effectiveness of SGD in Modern Over-parametrized Learning (Escaping Efficiency)
+https://github.com/MLHPC/Papers/issues/3
+- The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects
+https://github.com/MLHPC/Papers/issues/7
+
+### @Takeuchi
+- How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
+https://github.com/MLHPC/Papers/issues/22
 
 @Takagi
 
-@Naganuma
+### @Naganuma
+
+##### Generalization Measures
+- Fantastic Generalization Measures and Where to Find Them
+https://github.com/MLHPC/Papers/issues/12
+- On the interplay between noise and curvature and its effect on optimization and generalization
+https://github.com/MLHPC/Papers/issues/6
+
+##### Large Batch Training
+- Measuring the Effects of Data Parallelism on Neural Network Training
+https://github.com/MLHPC/Papers/issues/16
+- Which Algorithmic Choices Matter at Which Batch Sizes? Insights From a Noisy Quadratic Model
+https://github.com/MLHPC/Papers/issues/10
+- Don't Use Large Mini-batches, Use Local SGD
+https://github.com/MLHPC/Papers/issues/9
+- An Empirical Model of Large-Batch Training
+https://github.com/MLHPC/Papers/issues/8
+
+##### Saddle Point
+- Gradient Descent Can Take Exponential Time to Escape Saddle Points
+https://github.com/MLHPC/Papers/issues/14
+- How to Escape Saddle Points Efficiently
+https://github.com/MLHPC/Papers/issues/18
+
+##### Variance of Gradient and Gradient Noise
+- Gradient Diversity: a Key Ingredient for Scalable Distributed Learning
+https://github.com/MLHPC/Papers/issues/13
+- On the Generalization Benefit of Noise in Stochastic Gradient Descent
+https://github.com/MLHPC/Papers/issues/42
