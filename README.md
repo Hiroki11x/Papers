@@ -34,7 +34,11 @@ https://github.com/MLHPC/Papers/issues/7
 - How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
 https://github.com/MLHPC/Papers/issues/22
 
-@Takagi
+### @Takagi
+- Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
+https://github.com/MLHPC/Papers/issues/54
+- Understanding self-supervised learning with dual deep networks
+https://github.com/MLHPC/Papers/issues/60
 
 ### @Naganuma
 
