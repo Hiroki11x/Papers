@@ -33,6 +33,8 @@ https://github.com/MLHPC/Papers/issues/7
 ### @Takeuchi
 - How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
 https://github.com/MLHPC/Papers/issues/22
+- On the Geometry of Generalization and Memorization in Deep Neural Networks
+https://github.com/MLHPC/Papers/issues/62
 
 ### @Takagi
 - Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
