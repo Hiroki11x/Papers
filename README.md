@@ -17,7 +17,6 @@ https://github.com/MLHPC/Papers/issues/28
 ##### Sensitivity and Variance
 - Sensitivity and Generalization in Neural Networks: an Empirical Study
 https://github.com/MLHPC/Papers/issues/11
-
 - Understanding Why Neural Networks Generalize Well Through GSNR of Parameters
 https://github.com/MLHPC/Papers/issues/4
 
@@ -31,10 +30,15 @@ https://github.com/MLHPC/Papers/issues/3
 https://github.com/MLHPC/Papers/issues/7
 
 ### @Takeuchi
+##### DNN Training Dynamics
 - How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
 https://github.com/MLHPC/Papers/issues/22
 - On the Geometry of Generalization and Memorization in Deep Neural Networks
 https://github.com/MLHPC/Papers/issues/62
+
+##### Optimization, Regularization
+- On regularization of gradient descent, layer imbalance and flat minima
+https://github.com/MLHPC/Papers/issues/69
 
 ### @Takagi
 - Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
