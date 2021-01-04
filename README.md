@@ -39,6 +39,8 @@ https://github.com/MLHPC/Papers/issues/62
 ##### Optimization, Regularization
 - On regularization of gradient descent, layer imbalance and flat minima
 https://github.com/MLHPC/Papers/issues/69
+- On the Variance of the Adaptive Learning Rate and Beyond
+https://github.com/MLHPC/Papers/issues/73
 
 ### @Takagi
 - Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
