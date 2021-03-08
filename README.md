@@ -50,6 +50,10 @@ https://github.com/MLHPC/Papers/issues/60
 
 ### @Naganuma
 
+##### Relationship wrt DataPoint
+- Small Data, Big Decisions: Model Selection in the Small-Data Regime
+https://github.com/MLHPC/Papers/issues/72
+
 ##### Generalization Measures
 - Fantastic Generalization Measures and Where to Find Them
 https://github.com/MLHPC/Papers/issues/12
