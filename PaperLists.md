@@ -4,8 +4,7 @@
 # Optimization
 
 
-- [Sharpness-Aware Minimization for Efficiently Improving Generalization](https://github.com/MLHPC/Papers/issues/51)
-
+- Sharpness-Aware Minimization for Efficiently Improving Generalization [link](https://github.com/MLHPC/Papers/issues/51) [PDF](https://github.com/MLHPC/Papers/files/5452144/SAM_Foret%2B2020.pdf)
 # Other
 
 和幸くんに任せる
