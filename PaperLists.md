@@ -11,3 +11,6 @@
 
 参考
 https://shunk031.me/paper-survey/about/
+
+
+PDFが見つからないやつもあるかもしれないので教えて下さい @kazuyuki8 (from @hiroki11x)
