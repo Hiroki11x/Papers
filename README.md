@@ -81,3 +81,10 @@ https://github.com/MLHPC/Papers/issues/18
 https://github.com/MLHPC/Papers/issues/13
 - On the Generalization Benefit of Noise in Stochastic Gradient Descent
 https://github.com/MLHPC/Papers/issues/42
+
+
+##### Now Reading
+- Catastrophic Fisher Explosion: Early Phase Fisher Matrix Impacts Generalization
+https://github.com/MLHPC/Papers/issues/71
+- Direction Matters: On the Implicit Regularization Effect of Stochastic Gradient Descent with Moderate Learning Rate 
+https://github.com/MLHPC/Papers/issues/58
