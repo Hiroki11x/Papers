@@ -20,6 +20,9 @@ https://github.com/MLHPC/Papers/issues/11
 - Understanding Why Neural Networks Generalize Well Through GSNR of Parameters
 https://github.com/MLHPC/Papers/issues/4
 
+##### KFAC
+- WoodFisher: Efficient Second-Order Approximation for Neural Network Compression
+https://github.com/MLHPC/Papers/issues/64
 
 ##### SGD Noise
 - An Empirical Study of Large-Batch Stochastic Gradient Descent with Structured Covariance Noise
@@ -59,6 +62,8 @@ https://github.com/MLHPC/Papers/issues/72
 https://github.com/MLHPC/Papers/issues/12
 - On the interplay between noise and curvature and its effect on optimization and generalization
 https://github.com/MLHPC/Papers/issues/6
+- Catastrophic Fisher Explosion: Early Phase Fisher Matrix Impacts Generalization
+https://github.com/MLHPC/Papers/issues/71
 
 ##### Large Batch Training
 - Measuring the Effects of Data Parallelism on Neural Network Training
@@ -82,9 +87,10 @@ https://github.com/MLHPC/Papers/issues/13
 - On the Generalization Benefit of Noise in Stochastic Gradient Descent
 https://github.com/MLHPC/Papers/issues/42
 
-
-##### Now Reading
-- Catastrophic Fisher Explosion: Early Phase Fisher Matrix Impacts Generalization
-https://github.com/MLHPC/Papers/issues/71
+##### Dynamics
 - Direction Matters: On the Implicit Regularization Effect of Stochastic Gradient Descent with Moderate Learning Rate 
 https://github.com/MLHPC/Papers/issues/58
+
+##### OOD
+- SWAD: Domain Generalization by Seeking Flat Minima
+https://github.com/MLHPC/Papers/issues/92
