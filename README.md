@@ -32,6 +32,8 @@ https://github.com/MLHPC/Papers/issues/3
 - The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects
 https://github.com/MLHPC/Papers/issues/7
 
+--------------------------------------------------------------------------------------------------------------
+
 ### @Takeuchi
 ##### DNN Training Dynamics
 - How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
@@ -45,11 +47,15 @@ https://github.com/MLHPC/Papers/issues/69
 - On the Variance of the Adaptive Learning Rate and Beyond
 https://github.com/MLHPC/Papers/issues/73
 
+--------------------------------------------------------------------------------------------------------------
+
 ### @Takagi
 - Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
 https://github.com/MLHPC/Papers/issues/54
 - Understanding self-supervised learning with dual deep networks
 https://github.com/MLHPC/Papers/issues/60
+
+--------------------------------------------------------------------------------------------------------------
 
 ### @Naganuma
 
@@ -94,3 +100,19 @@ https://github.com/MLHPC/Papers/issues/58
 ##### OOD
 - SWAD: Domain Generalization by Seeking Flat Minima
 https://github.com/MLHPC/Papers/issues/92
+
+##### Generalizaton
+- How Does Mixup Help With Robustness and Generalization?
+https://github.com/MLHPC/Papers/issues/137
+
+--------------------------------------------------------------------------------------------------------------
+
+### @Fujimori
+- Bad Global Minima Exist and SGD Can Reach Them
+https://github.com/MLHPC/Papers/issues/67
+
+--------------------------------------------------------------------------------------------------------------
+
+### @Ishida
+- Large Batch Optimization for Deep Learning Using New Complete Layer-Wise Adaptive Rate Scaling
+https://github.com/MLHPC/Papers/issues/81
