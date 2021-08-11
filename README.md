@@ -46,6 +46,8 @@ https://github.com/MLHPC/Papers/issues/62
 https://github.com/MLHPC/Papers/issues/69
 - On the Variance of the Adaptive Learning Rate and Beyond
 https://github.com/MLHPC/Papers/issues/73
+- On the diffusion approximation of nonconvex stochastic gradient descent
+https://github.com/MLHPC/Papers/issues/23
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -116,3 +118,6 @@ https://github.com/MLHPC/Papers/issues/67
 ### @Ishida
 - Large Batch Optimization for Deep Learning Using New Complete Layer-Wise Adaptive Rate Scaling
 https://github.com/MLHPC/Papers/issues/81
+
+- Spectral Normalization for Generative Adversarial Networks 
+https://github.com/MLHPC/Papers/issues/143
