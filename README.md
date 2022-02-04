@@ -1,5 +1,5 @@
 # Papers
-Survey
+Surveys
 
 ## Lists
 
