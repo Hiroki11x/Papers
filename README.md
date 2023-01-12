@@ -122,7 +122,6 @@ https://github.com/MLHPC/Papers/issues/81
 - Spectral Normalization for Generative Adversarial Networks 
 https://github.com/MLHPC/Papers/issues/143
 
-
 # TODO
 最終的にはこんな感じで公開したい
 https://github.com/shunk031/paper-survey
