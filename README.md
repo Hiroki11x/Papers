@@ -3,7 +3,6 @@ Surveys
 
 ## Lists
 
-### @Motokawa
 ##### Hessisan
 - Sharpness-Aware Minimization for Efficiently Improving Generalization
 https://github.com/MLHPC/Papers/issues/51
@@ -34,7 +33,6 @@ https://github.com/MLHPC/Papers/issues/7
 
 --------------------------------------------------------------------------------------------------------------
 
-### @Takeuchi
 ##### DNN Training Dynamics
 - How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
 https://github.com/MLHPC/Papers/issues/22
@@ -51,15 +49,12 @@ https://github.com/MLHPC/Papers/issues/23
 
 --------------------------------------------------------------------------------------------------------------
 
-### @Takagi
 - Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
 https://github.com/MLHPC/Papers/issues/54
 - Understanding self-supervised learning with dual deep networks
 https://github.com/MLHPC/Papers/issues/60
 
 --------------------------------------------------------------------------------------------------------------
-
-### @Naganuma
 
 ##### Relationship wrt DataPoint
 - Small Data, Big Decisions: Model Selection in the Small-Data Regime
@@ -109,19 +104,16 @@ https://github.com/MLHPC/Papers/issues/137
 
 --------------------------------------------------------------------------------------------------------------
 
-### @Fujimori
 - Bad Global Minima Exist and SGD Can Reach Them
 https://github.com/MLHPC/Papers/issues/67
 
 --------------------------------------------------------------------------------------------------------------
 
-### @Ishida
 - Large Batch Optimization for Deep Learning Using New Complete Layer-Wise Adaptive Rate Scaling
 https://github.com/MLHPC/Papers/issues/81
 
 - Spectral Normalization for Generative Adversarial Networks 
 https://github.com/MLHPC/Papers/issues/143
 
-# TODO
 最終的にはこんな感じで公開したい
 https://github.com/shunk031/paper-survey
