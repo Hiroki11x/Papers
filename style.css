@@ -1,0 +1,22 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+#issues-container {
+    margin-top: 20px;
+}
+
+.issue {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.issue h2 {
+    margin-top: 0;
+}
+
+.issue p {
+    margin-bottom: 0;
+}
