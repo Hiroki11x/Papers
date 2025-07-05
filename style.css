@@ -121,13 +121,84 @@ main {
     border-bottom: 1px solid #d0d7de;
 }
 
-.label-filter .btn-sm, .pagination .btn-sm {
+/* ラベルフィルターのリンクを.tagクラスと同様のスタイルに統一 */
+.label-filter a {
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #0969da;
+    background-color: #ddf4ff;
+    border: 1px solid transparent;
+    border-radius: 2em;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+/* アクティブなラベルフィルターのスタイル */
+.label-filter a.active {
+    color: #ffffff;
+    background-color: #0969da;
+    border-color: #0969da;
+}
+
+/* ホバー時のスタイル */
+.label-filter a:hover {
+    color: #ffffff;
+    background-color: #0969da;
+    border-color: #0969da;
+}
+
+/* 削除：不要になった古いスタイル */
+/* .label-filter .btn-sm, .pagination .btn-sm {
     margin-right: 4px;
     margin-bottom: 4px;
-}
+} */
 
 .pagination {
     margin-top: 24px;
     display: flex;
     justify-content: center;
+}
+
+/* ページネーションのスタイル改善 */
+.pagination a {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #0969da;
+    text-decoration: none;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.pagination a:hover {
+    background-color: #f6f8fa;
+    border-color: #d0d7de;
+}
+
+.pagination a.current {
+    color: #ffffff;
+    background-color: #0969da;
+    border-color: #0969da;
+}
+
+.pagination a.disabled {
+    color: #8c959f;
+    background-color: transparent;
+    border-color: #d0d7de;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #8c959f;
 }
