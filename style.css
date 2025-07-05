@@ -70,9 +70,16 @@ main {
 
 .tag {
     display: inline-block;
-    margin-right: 8px; /* Space between tags */
+    margin-right: 4px;
+    margin-bottom: 4px;
+    padding: 2px 8px;
     font-size: 12px;
-    color: #586069;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #0969da;
+    background-color: #ddf4ff;
+    border: 1px solid transparent;
+    border-radius: 2em;
 }
 
 /* --- Detail View --- */
