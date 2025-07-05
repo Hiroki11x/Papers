@@ -1,171 +1,126 @@
+/* --- Base & Font --- */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
+    font-family: 'Zen Kaku Gothic New', -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    background-color: #f6f8fa; /* Primer background color */
+    color: #24292e; /* Primer text color */
+}
+
+/* --- Header & Footer --- */
+header {
+    background-color: #24292e;
+    color: #ffffff;
+    padding: 16px;
+    text-align: center;
+    font-weight: 500;
+}
+
+header h1 {
+    font-size: 24px;
     margin: 0;
 }
 
-header {
-    background: #fff;
-    padding: 1rem;
+footer {
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    padding: 2rem;
+    margin-top: 2rem;
+    font-size: 12px;
+    color: #586069; /* Primer muted color */
 }
 
+/* --- Main Container --- */
 main {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin-top: 24px;
+    margin-bottom: 24px;
 }
 
-/* --- List View --- */
+/* --- Issue Card (List View) --- */
 .issue-card {
     display: block;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .issue-card:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    border-color: #0969da;
+    box-shadow: 0 0 0 1px #0969da;
 }
 
 .issue-card h2 {
-    margin-top: 0;
-    font-size: 1.4rem;
-    margin-bottom: 0.75rem;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    color: #0969da; /* Primer link color */
 }
 
 .issue-card .meta {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 12px;
+    color: #586069;
 }
 
-.meta .date {
-    display: block;
-    margin-bottom: 0.75rem;
+/* --- Tag Styling --- */
+.meta .tags {
+    margin-top: 8px;
 }
 
-.tags .tag {
+.tag {
     display: inline-block;
-    padding: 0.25rem 0.6rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    margin-right: 0.5rem;
-    color: white;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    margin-right: 8px; /* Space between tags */
+    font-size: 12px;
+    color: #586069;
 }
 
 /* --- Detail View --- */
 .back-link {
     display: inline-block;
-    margin-bottom: 1.5rem;
-    color: #337ab7;
-    text-decoration: none;
+    margin-bottom: 24px;
+    font-size: 14px;
 }
 
-.back-link:hover {
-    text-decoration: underline;
+.issue-detail h2 {
+    font-size: 32px;
+    font-weight: 500;
+    border-bottom: 1px solid #d0d7de;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
 }
 
 .issue-body {
-    margin-top: 1.5rem;
-    font-size: 1rem;
+    margin-top: 16px;
+    font-size: 16px;
     line-height: 1.7;
 }
 
 .issue-body pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 14px;
     background-color: #f6f8fa;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+    padding: 16px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-size: 0.9rem;
 }
 
-/* --- Label Filter --- */
+/* --- Label Filter & Pagination --- */
 .label-filter {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #d0d7de;
 }
 
-.label-filter a {
-    display: inline-block;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.4rem 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 1rem;
-    text-decoration: none;
-    color: #555;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+.label-filter .btn-sm, .pagination .btn-sm {
+    margin-right: 4px;
+    margin-bottom: 4px;
 }
 
-.label-filter a:hover {
-    background-color: #f0f0f0;
-    border-color: #ccc;
-}
-
-.label-filter a.active {
-    background-color: #0366d6;
-    color: white;
-    border-color: #0366d6;
-}
-
-
-/* --- Pagination --- */
 .pagination {
-    margin-top: 2rem;
-    text-align: center;
-}
-
-.pagination a, .pagination span {
-    display: inline-block;
-    margin: 0 0.25rem;
-    padding: 0.5rem 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-decoration: none;
-    color: #337ab7;
-}
-
-.pagination a:hover {
-    background-color: #f0f0f0;
-}
-
-.pagination .current {
-    background-color: #337ab7;
-    color: white;
-    border-color: #337ab7;
-    cursor: default;
-}
-
-.pagination .disabled {
-    color: #ccc;
-    cursor: default;
-}
-
-.pagination .disabled:hover {
-    background-color: transparent;
-}
-
-footer {
-    text-align: center;
-    padding: 1rem;
-    margin-top: 2rem;
-    font-size: 0.9rem;
-    color: #666;
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
 }

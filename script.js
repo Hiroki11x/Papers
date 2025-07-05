@@ -143,8 +143,8 @@ function createMetaElement(issue) {
         issue.labels.forEach(label => {
             const tagElement = document.createElement("span");
             tagElement.classList.add("tag");
-            tagElement.textContent = label.name;
-            tagElement.style.backgroundColor = `#${label.color}`;
+            // Changed to add brackets and space
+            tagElement.textContent = `[${label.name}]`;
             tagsElement.appendChild(tagElement);
         });
         metaElement.appendChild(tagsElement);
