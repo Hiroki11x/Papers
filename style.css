@@ -1,22 +1,62 @@
 body {
-    font-family: sans-serif;
-    margin: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
 }
 
-#issues-container {
-    margin-top: 20px;
+header {
+    background: #fff;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
-.issue {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.issue h2 {
+.issue-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.issue-card h2 {
     margin-top: 0;
+    font-size: 1.5rem;
 }
 
-.issue p {
+.issue-card .meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.issue-card .tags span {
+    display: inline-block;
+    background: #eef;
+    color: #337ab7;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+}
+
+.issue-card p {
     margin-bottom: 0;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #666;
 }
