@@ -70,8 +70,8 @@ main {
 
 .tag {
     display: inline-block;
-    margin-right: 4px;
-    margin-bottom: 4px;
+    margin-right: 8px;
+    margin-bottom: 8px;
     padding: 2px 8px;
     font-size: 12px;
     font-weight: 500;
