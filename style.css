@@ -19,13 +19,22 @@ main {
     padding: 0 1rem;
 }
 
+/* --- List View --- */
 .issue-card {
+    display: block; /* aタグになったのでblock要素に */
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-decoration: none; /* リンクの下線を消す */
+    color: inherit; /* 親要素の色を継承 */
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.issue-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .issue-card h2 {
@@ -39,18 +48,31 @@ main {
     margin-bottom: 1rem;
 }
 
-.issue-card .tags span {
+/* --- Detail View --- */
+.back-link {
     display: inline-block;
-    background: #eef;
+    margin-bottom: 1.5rem;
     color: #337ab7;
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    margin-right: 0.5rem;
+    text-decoration: none;
 }
 
-.issue-card p {
-    margin-bottom: 0;
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.issue-body {
+    margin-top: 1.5rem;
+}
+
+.issue-body pre {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 1rem;
+    white-space: pre-wrap; /* 長い行を折り返す */
+    word-wrap: break-word;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9rem;
 }
 
 footer {
