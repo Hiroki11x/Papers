@@ -1,3 +1,5 @@
+console.log("Running script.js version 6");
+
 const owner = "Hiroki11x";
 const repo = "Papers";
 const apiBaseUrl = `https://api.github.com/repos/${owner}/${repo}`;
