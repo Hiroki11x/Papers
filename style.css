@@ -21,31 +21,48 @@ main {
 
 /* --- List View --- */
 .issue-card {
-    display: block; /* aタグになったのでblock要素に */
+    display: block;
     background: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-decoration: none; /* リンクの下線を消す */
-    color: inherit; /* 親要素の色を継承 */
-    transition: box-shadow 0.2s ease-in-out;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .issue-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
 
 .issue-card h2 {
     margin-top: 0;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
 }
 
 .issue-card .meta {
     font-size: 0.9rem;
     color: #666;
-    margin-bottom: 1rem;
+}
+
+.meta .date {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.tags .tag {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    color: white;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 
 /* --- Detail View --- */
@@ -62,17 +79,87 @@ main {
 
 .issue-body {
     margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
 }
 
 .issue-body pre {
-    background-color: #f9f9f9;
+    background-color: #f6f8fa;
     border: 1px solid #ddd;
-    border-radius: 3px;
+    border-radius: 5px;
     padding: 1rem;
-    white-space: pre-wrap; /* 長い行を折り返す */
+    white-space: pre-wrap;
     word-wrap: break-word;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     font-size: 0.9rem;
+}
+
+/* --- Label Filter --- */
+.label-filter {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.label-filter a {
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    text-decoration: none;
+    color: #555;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.label-filter a:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+.label-filter a.active {
+    background-color: #0366d6;
+    color: white;
+    border-color: #0366d6;
+}
+
+
+/* --- Pagination --- */
+.pagination {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    margin: 0 0.25rem;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #337ab7;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .current {
+    background-color: #337ab7;
+    color: white;
+    border-color: #337ab7;
+    cursor: default;
+}
+
+.pagination .disabled {
+    color: #ccc;
+    cursor: default;
+}
+
+.pagination .disabled:hover {
+    background-color: transparent;
 }
 
 footer {
