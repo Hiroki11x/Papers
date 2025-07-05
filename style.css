@@ -202,3 +202,114 @@ main {
     font-size: 14px;
     color: #8c959f;
 }
+
+/* --- Issue Card Preview --- */
+.issue-preview {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #656d76;
+    line-height: 1.4;
+}
+
+/* --- Markdown Styling --- */
+.issue-body h1, .issue-body h2, .issue-body h3, .issue-body h4, .issue-body h5, .issue-body h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.issue-body h1 {
+    font-size: 2em;
+    border-bottom: 1px solid #d0d7de;
+    padding-bottom: 8px;
+}
+
+.issue-body h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #d0d7de;
+    padding-bottom: 8px;
+}
+
+.issue-body h3 {
+    font-size: 1.25em;
+}
+
+.issue-body p {
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.issue-body ul, .issue-body ol {
+    margin-bottom: 16px;
+    padding-left: 32px;
+}
+
+.issue-body li {
+    margin-bottom: 4px;
+}
+
+.issue-body .code-block {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 14px;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+    padding: 16px;
+    margin: 16px 0;
+    overflow-x: auto;
+}
+
+.issue-body .code-block code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+}
+
+.issue-body .inline-code {
+    background-color: rgba(175, 184, 193, 0.2);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9em;
+}
+
+.issue-body .markdown-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 16px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.issue-body hr {
+    border: 0;
+    height: 1px;
+    background-color: #d0d7de;
+    margin: 24px 0;
+}
+
+.issue-body a {
+    color: #0969da;
+    text-decoration: none;
+}
+
+.issue-body a:hover {
+    text-decoration: underline;
+}
+
+.issue-body strong {
+    font-weight: 600;
+}
+
+.issue-body em {
+    font-style: italic;
+}
+
+.issue-body blockquote {
+    margin: 16px 0;
+    padding: 0 16px;
+    border-left: 4px solid #d0d7de;
+    color: #656d76;
+}

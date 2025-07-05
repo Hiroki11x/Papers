@@ -1,4 +1,4 @@
-console.log("Running script.js version 6");
+console.log("Running script.js version 7");
 
 const owner = "Hiroki11x";
 const repo = "Papers";
@@ -52,6 +52,60 @@ async function fetchLabels() {
     return await response.json();
 }
 
+// --- Markdown Parsing ---------------------------------
+// 基本的なMarkdownをHTMLに変換
+function parseMarkdown(markdown) {
+    if (!markdown) return "No description provided.";
+    
+    let html = markdown
+        // コードブロック (```で囲まれた部分)
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+            return `<pre class="code-block ${lang || ''}"><code>${escapeHtml(code.trim())}</code></pre>`;
+        })
+        // インラインコード (`で囲まれた部分)
+        .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+        // 画像 ![alt](url)
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="markdown-image">')
+        // リンク [text](url)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        // 見出し
+        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+        // 太字
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__(.*?)__/g, '<strong>$1</strong>')
+        // 斜体
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        // 水平線
+        .replace(/^---$/gm, '<hr>')
+        .replace(/^\*\*\*$/gm, '<hr>')
+        // リスト項目
+        .replace(/^[\*\-\+] (.*)$/gm, '<li>$1</li>')
+        .replace(/^(\d+)\. (.*)$/gm, '<li>$1. $2</li>')
+        // 改行をbrタグに
+        .replace(/\n/g, '<br>');
+    
+    // リストをul/olタグで囲む
+    html = html.replace(/(<li>.*<\/li>)/gs, (match) => {
+        // 番号リストかどうかを判定
+        if (match.includes('<li>1.')) {
+            return `<ol>${match}</ol>`;
+        } else {
+            return `<ul>${match}</ul>`;
+        }
+    });
+    
+    return html;
+}
+
+// HTMLエスケープ関数
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
 // --- Rendering ----------------------------------------
 // 一覧表示をレンダリング
@@ -97,6 +151,7 @@ async function renderDetailView(issueNumber) {
 
         const titleElement = document.createElement("h2");
         titleElement.textContent = issue.title;
+        titleElement.classList.add("issue-title");
 
         const metaElement = createMetaElement(issue);
         const bodyElement = createBodyElement(issue);
@@ -111,7 +166,6 @@ async function renderDetailView(issueNumber) {
     }
 }
 
-
 // --- UI Components ------------------------------------
 // Issueカードを作成
 function createIssueCard(issue) {
@@ -123,9 +177,13 @@ function createIssueCard(issue) {
     titleElement.textContent = issue.title;
 
     const metaElement = createMetaElement(issue);
+    
+    // プレビューテキストを追加
+    const previewElement = createPreviewElement(issue);
 
     issueCard.appendChild(titleElement);
     issueCard.appendChild(metaElement);
+    issueCard.appendChild(previewElement);
     return issueCard;
 }
 
@@ -153,12 +211,43 @@ function createMetaElement(issue) {
     return metaElement;
 }
 
+// プレビューテキストの要素を作成
+function createPreviewElement(issue) {
+    const previewElement = document.createElement("div");
+    previewElement.classList.add("issue-preview");
+    
+    if (issue.body) {
+        // Markdownから画像とコードブロックを除去してプレビュー用のテキストを作成
+        let previewText = issue.body
+            .replace(/```[\s\S]*?```/g, '') // コードブロックを削除
+            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '') // 画像を削除
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1') // リンクはテキストのみ残す
+            .replace(/[#*_`]/g, '') // マークダウン記号を削除
+            .replace(/\n+/g, ' ') // 改行をスペースに
+            .trim();
+        
+        // 150文字でカット
+        if (previewText.length > 150) {
+            previewText = previewText.substring(0, 150) + '...';
+        }
+        
+        previewElement.textContent = previewText || "No description provided.";
+    } else {
+        previewElement.textContent = "No description provided.";
+    }
+    
+    return previewElement;
+}
+
 // Issue本文の要素を作成
 function createBodyElement(issue) {
     const bodyElement = document.createElement("div");
     bodyElement.classList.add("issue-body");
-    // Note: For a real app, use a Markdown parser like 'marked' to safely render HTML
-    bodyElement.innerHTML = `<pre>${issue.body || "No description provided."}</pre>`;
+    
+    // Markdownをパースして表示
+    const parsedHTML = parseMarkdown(issue.body);
+    bodyElement.innerHTML = parsedHTML;
+    
     return bodyElement;
 }
 
