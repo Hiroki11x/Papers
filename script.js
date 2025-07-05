@@ -26,9 +26,10 @@ function displayIssues() {
 
     const metaElement = document.createElement("div");
     metaElement.classList.add("meta");
-    metaElement.innerHTML = `
-        <span>${issue.date}</span>
-    `;
+
+    const dateElement = document.createElement("span");
+    dateElement.textContent = issue.date;
+    metaElement.appendChild(dateElement);
 
     const tagsElement = document.createElement("div");
     tagsElement.classList.add("tags");
@@ -38,7 +39,6 @@ function displayIssues() {
         tagsElement.appendChild(tagElement);
     });
     metaElement.appendChild(tagsElement);
-
 
     const bodyElement = document.createElement("p");
     bodyElement.textContent = issue.body;
