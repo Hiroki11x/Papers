@@ -113,3 +113,5 @@ https://github.com/MLHPC/Papers/issues/81
 
 - Spectral Normalization for Generative Adversarial Networks 
 https://github.com/MLHPC/Papers/issues/143
+
+- In Search of Forgotten Domain Generalization
