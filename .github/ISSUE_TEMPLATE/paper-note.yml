@@ -1,0 +1,68 @@
+name: Paper Note
+description: Add a new paper reading note
+title: "[Paper] "
+labels: []
+body:
+  - type: input
+    id: paper-title
+    attributes:
+      label: Paper title
+      placeholder: e.g., Sharpness-Aware Minimization for Efficiently Improving Generalization
+    validations:
+      required: true
+
+  - type: textarea
+    id: citation
+    attributes:
+      label: Citation
+      description: Author(s), venue, and year
+      placeholder: Foret et al. ICLR 2021.
+    validations:
+      required: true
+
+  - type: input
+    id: link
+    attributes:
+      label: Paper link
+      placeholder: https://arxiv.org/abs/xxxx.xxxxx
+    validations:
+      required: true
+
+  - type: input
+    id: date-read
+    attributes:
+      label: Date read
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: tags
+    attributes:
+      label: Tags
+      description: Comma-separated (align with repository labels where possible)
+      placeholder: optimization, generalization, sgd
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: 2–5 sentences on motivation, approach, and key result.
+    validations:
+      required: true
+
+  - type: textarea
+    id: key-ideas
+    attributes:
+      label: Key ideas
+      placeholder: "- Idea 1\n- Idea 2\n- Idea 3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: comments
+    attributes:
+      label: Comments / limitations
+      placeholder: Notes on assumptions, limitations, or follow-up questions.

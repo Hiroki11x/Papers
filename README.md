@@ -1,117 +1,63 @@
-# Papers
+# Papers: Reading Notes Archive
 
-## Lists
+## Overview
 
-##### Hessisan
-- Sharpness-Aware Minimization for Efficiently Improving Generalization
-https://github.com/MLHPC/Papers/issues/51
-- Modular Block-diagonal Curvature Approximations for Feedforward Architectures
-https://github.com/MLHPC/Papers/issues/31
-- When Does Preconditioning Help or Hurt Generalization?
-https://github.com/MLHPC/Papers/issues/26
-- Assessing Local Generalization Capability in Deep Models 
-https://github.com/MLHPC/Papers/issues/28
+This repository is a lightweight archive of paper reading notes, focused mainly on machine learning and optimization.
 
-##### Sensitivity and Variance
-- Sensitivity and Generalization in Neural Networks: an Empirical Study
-https://github.com/MLHPC/Papers/issues/11
-- Understanding Why Neural Networks Generalize Well Through GSNR of Parameters
-https://github.com/MLHPC/Papers/issues/4
+- Notes are written in **GitHub Issues**
+- The website reads those issues through the GitHub API
+- GitHub Pages provides a simple public index for browsing
 
-##### KFAC
-- WoodFisher: Efficient Second-Order Approximation for Neural Network Compression
-https://github.com/MLHPC/Papers/issues/64
+The goal is clarity and continuity: keep notes easy to add, easy to read, and easy to maintain.
 
-##### SGD Noise
-- An Empirical Study of Large-Batch Stochastic Gradient Descent with Structured Covariance Noise
-https://github.com/MLHPC/Papers/issues/2
-- The Power of Interpolation: Understanding the Effectiveness of SGD in Modern Over-parametrized Learning (Escaping Efficiency)
-https://github.com/MLHPC/Papers/issues/3
-- The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects
-https://github.com/MLHPC/Papers/issues/7
+## Repository structure
 
---------------------------------------------------------------------------------------------------------------
+```text
+.
+├── index.html                # GitHub Pages entry point
+├── assets/
+│   ├── css/style.css         # Site styling
+│   └── js/main.js            # Client-side rendering (issues list/detail)
+├── notes/
+│   └── templates/
+│       └── paper-note.md     # Recommended note format
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       └── paper-note.yml    # Optional issue form for consistent notes
+└── README.md
+```
 
-##### DNN Training Dynamics
-- How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective
-https://github.com/MLHPC/Papers/issues/22
-- On the Geometry of Generalization and Memorization in Deep Neural Networks
-https://github.com/MLHPC/Papers/issues/62
+## How notes are organized
 
-##### Optimization, Regularization
-- On regularization of gradient descent, layer imbalance and flat minima
-https://github.com/MLHPC/Papers/issues/69
-- On the Variance of the Adaptive Learning Rate and Beyond
-https://github.com/MLHPC/Papers/issues/73
-- On the diffusion approximation of nonconvex stochastic gradient descent
-https://github.com/MLHPC/Papers/issues/23
+- **One paper = one GitHub Issue**
+- Issue title should be the paper title
+- Labels are used as topic tags (e.g., `optimization`, `generalization`, `sgd`)
+- Notes are listed in reverse chronological order by issue creation date
+- The site supports browsing by label filters and pagination
 
---------------------------------------------------------------------------------------------------------------
+## How to add a new note
 
-- Rethinking Parameter Counting in Deep Models: Effective Dimensionality Revisited
-https://github.com/MLHPC/Papers/issues/54
-- Understanding self-supervised learning with dual deep networks
-https://github.com/MLHPC/Papers/issues/60
+1. Open a new issue in this repository.
+2. Use the **Paper Note** issue template (or `notes/templates/paper-note.md`).
+3. Fill in the core sections: citation, link, date read, tags, summary, key ideas, comments.
+4. Add relevant labels for discoverability.
+5. Submit the issue — it will automatically appear on the GitHub Pages site.
 
---------------------------------------------------------------------------------------------------------------
+## Publishing / GitHub Pages
 
-##### Relationship wrt DataPoint
-- Small Data, Big Decisions: Model Selection in the Small-Data Regime
-https://github.com/MLHPC/Papers/issues/72
+- The site is fully static (`index.html` + CSS + JS).
+- On load, it fetches issue data from this repository through the GitHub API.
+- No build step is required.
+- Publish via GitHub Pages from the repository root.
 
-##### Generalization Measures
-- Fantastic Generalization Measures and Where to Find Them
-https://github.com/MLHPC/Papers/issues/12
-- On the interplay between noise and curvature and its effect on optimization and generalization
-https://github.com/MLHPC/Papers/issues/6
-- Catastrophic Fisher Explosion: Early Phase Fisher Matrix Impacts Generalization
-https://github.com/MLHPC/Papers/issues/71
+## Design principles
 
-##### Large Batch Training
-- Measuring the Effects of Data Parallelism on Neural Network Training
-https://github.com/MLHPC/Papers/issues/16
-- Which Algorithmic Choices Matter at Which Batch Sizes? Insights From a Noisy Quadratic Model
-https://github.com/MLHPC/Papers/issues/10
-- Don't Use Large Mini-batches, Use Local SGD
-https://github.com/MLHPC/Papers/issues/9
-- An Empirical Model of Large-Batch Training
-https://github.com/MLHPC/Papers/issues/8
+- Keep the workflow issue-first and manual-friendly.
+- Prefer simple structure over additional tooling.
+- Keep presentation clean, readable, and technical.
+- Avoid feature creep (no heavy framework, no complex backend).
 
-##### Saddle Point
-- Gradient Descent Can Take Exponential Time to Escape Saddle Points
-https://github.com/MLHPC/Papers/issues/14
-- How to Escape Saddle Points Efficiently
-https://github.com/MLHPC/Papers/issues/18
+## Future improvements (small, optional)
 
-##### Variance of Gradient and Gradient Noise
-- Gradient Diversity: a Key Ingredient for Scalable Distributed Learning
-https://github.com/MLHPC/Papers/issues/13
-- On the Generalization Benefit of Noise in Stochastic Gradient Descent
-https://github.com/MLHPC/Papers/issues/42
-
-##### Dynamics
-- Direction Matters: On the Implicit Regularization Effect of Stochastic Gradient Descent with Moderate Learning Rate 
-https://github.com/MLHPC/Papers/issues/58
-
-##### OOD
-- SWAD: Domain Generalization by Seeking Flat Minima
-https://github.com/MLHPC/Papers/issues/92
-
-##### Generalizaton
-- How Does Mixup Help With Robustness and Generalization?
-https://github.com/MLHPC/Papers/issues/137
-
---------------------------------------------------------------------------------------------------------------
-
-- Bad Global Minima Exist and SGD Can Reach Them
-https://github.com/MLHPC/Papers/issues/67
-
---------------------------------------------------------------------------------------------------------------
-
-- Large Batch Optimization for Deep Learning Using New Complete Layer-Wise Adaptive Rate Scaling
-https://github.com/MLHPC/Papers/issues/81
-
-- Spectral Normalization for Generative Adversarial Networks 
-https://github.com/MLHPC/Papers/issues/143
-
-- In Search of Forgotten Domain Generalization
+- Add a short “start here” note collection for recommended foundational papers.
+- Add a small label naming guide if label vocabulary expands.

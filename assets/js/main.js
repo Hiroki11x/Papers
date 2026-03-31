@@ -1,4 +1,4 @@
-console.log("Running script.js version 7");
+console.log("Running main.js version 8");
 
 const owner = "Hiroki11x";
 const repo = "Papers";
@@ -227,6 +227,8 @@ async function renderListView(page, selectedLabel) {
 
         issuesContainer.innerHTML = ""; // コンテナをクリア
 
+        renderSiteIntro();
+
         // ラベルフィルターをレンダリング
         renderLabelFilter(allLabels, selectedLabel);
 
@@ -371,6 +373,17 @@ function createBodyElement(issue) {
     bodyElement.innerHTML = parsedHTML;
 
     return bodyElement;
+}
+
+// サイト紹介セクションを作成
+function renderSiteIntro() {
+    const intro = document.createElement("section");
+    intro.classList.add("site-intro");
+    intro.innerHTML = `
+        <h2>Paper Reading Notes</h2>
+        <p>This archive is generated from GitHub Issues in reverse chronological order. Use labels to browse topics.</p>
+    `;
+    issuesContainer.appendChild(intro);
 }
 
 // ラベルフィルターのUIを作成

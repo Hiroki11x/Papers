@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Survey</title>
-    <meta name="description" content="論文サーベイのまとめサイト。機械学習・深層学習に関する論文を整理して掲載しています。">
-    <meta property="og:title" content="Paper Survey">
-    <meta property="og:description" content="論文サーベイのまとめサイト。機械学習・深層学習に関する論文を整理して掲載しています。">
+    <title>Papers | Reading Notes</title>
+    <meta name="description" content="A lightweight archive of machine learning paper reading notes, published from GitHub Issues via GitHub Pages.">
+    <meta property="og:title" content="Papers | Reading Notes">
+    <meta property="og:description" content="A lightweight archive of machine learning paper reading notes, published from GitHub Issues via GitHub Pages.">
     <meta property="og:type" content="website">
     <!-- Primer CSS for GitHub-like styling -->
     <link href="https://unpkg.com/@primer/css@^20.0.0/dist/primer.css" rel="stylesheet" />
@@ -15,18 +15,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <header>
-        <a href="?" class="header-link">
-            <h1>Paper Survey</h1>
-        </a>
+    <header class="site-header">
+        <div class="container-lg p-responsive header-inner">
+            <a href="?" class="header-link">
+                <h1>Papers</h1>
+            </a>
+            <p class="site-subtitle">Research reading notes from GitHub Issues.</p>
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="?">Notes</a>
+                <a href="https://github.com/Hiroki11x/Papers#readme" target="_blank" rel="noopener noreferrer">README</a>
+                <a href="https://github.com/Hiroki11x/Papers/blob/main/notes/templates/paper-note.md" target="_blank" rel="noopener noreferrer">Note template</a>
+                <a href="https://github.com/Hiroki11x/Papers/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+            </nav>
+        </div>
     </header>
     <main id="issues-container" class="container-lg p-responsive"></main>
     <footer>
-        <p>&copy; 2026 hirokinaganuma</p>
+        <p>&copy; 2026 Hiroki Naganuma · Papers</p>
     </footer>
-    <script src="script.js?v=7"></script>
+    <script src="assets/js/main.js?v=8"></script>
 </body>
 </html>
