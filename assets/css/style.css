@@ -6,26 +6,56 @@ body {
 }
 
 /* --- Header & Footer --- */
-header {
+.site-header {
     background-color: #24292e;
     color: #ffffff;
-    padding: 16px;
-    text-align: center;
+    padding: 20px 0 16px;
     font-weight: 500;
+    border-bottom: 1px solid #30363d;
 }
 
-header .header-link {
+.header-inner {
+    text-align: center;
+}
+
+.site-header .header-link {
     color: #ffffff;
     text-decoration: none;
 }
 
-header .header-link:hover {
+.site-header .header-link:hover {
     opacity: 0.85;
 }
 
-header h1 {
-    font-size: 24px;
+.site-header h1 {
+    font-size: 28px;
     margin: 0;
+}
+
+.site-subtitle {
+    margin: 8px 0 14px;
+    font-size: 14px;
+    color: #c9d1d9;
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.site-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid #57606a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.site-nav a:hover {
+    background-color: #30363d;
 }
 
 footer {
@@ -40,6 +70,25 @@ footer {
 main {
     margin-top: 24px;
     margin-bottom: 24px;
+}
+
+.site-intro {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+}
+
+.site-intro h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+}
+
+.site-intro p {
+    margin: 0;
+    color: #57606a;
+    font-size: 14px;
 }
 
 /* --- Loading --- */
