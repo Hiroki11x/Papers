@@ -375,7 +375,7 @@ function createBodyElement(issue) {
     return bodyElement;
 }
 
-// ラベルフィルターのUIを作成
+// サイト紹介セクションを作成
 function renderSiteIntro() {
     const intro = document.createElement("section");
     intro.classList.add("site-intro");
