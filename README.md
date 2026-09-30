@@ -19,6 +19,12 @@ The goal is clarity and continuity: keep notes easy to add, easy to read, and ea
 ├── assets/
 │   ├── css/style.css         # Site styling
 │   └── js/main.js            # Client-side rendering (issues list/detail)
+├── docs/                     # Japanese surveys rebuilt from all issues
+│   ├── README.md             # Index and cross-topic timeline
+│   ├── 00_catalog.md         # Catalog of all notes (topic / venue / year)
+│   ├── 01_critical_batch_size.md
+│   ├── 02_low_precision_and_muon.md
+│   └── 03_semi_synchronous_training.md
 ├── notes/
 │   └── templates/
 │       └── paper-note.md     # Recommended note format
