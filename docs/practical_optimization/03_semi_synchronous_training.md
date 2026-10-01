@@ -111,11 +111,11 @@ $$
 
 **出発点は「ラージバッチよりも Local SGD」という主張**である。[#9](https://github.com/Hiroki11x/Papers/issues/9)（Lin, Stich, Jaggi ら, ICLR 2020）は、ワーカー数増加に伴うラージバッチの汎化劣化に対し、学習後半のみ Local SGD に切り替える **Post-local SGD** を提案し、局所ステップがノイズ注入として働きフラットな解を好むと主張した。本人メモは「ほとんど SWAP と同じ」とコメントしており、モデル平均化（SWA 系）との近さが当初から意識されていた。この観点は後年の [#536](https://github.com/Hiroki11x/Papers/issues/536)（primal averaging）や [#393](https://github.com/Hiroki11x/Papers/issues/393)（チェックポイントマージ）に接続する。
 
-これに対し **[#70](https://github.com/Hiroki11x/Papers/issues/70)**（Gonzalez Ortiz, Frankle, Rabbat ら, NeurIPS 2020 WS OPT）は **対立する実証結果** を示した: 大規模画像分類では Local SGD の通信削減と精度低下のトレードオフが避けられず、「小規模実験の結論は大規模に一般化しない」。スローモメンタム等で一部改善するという知見は、後の外部モメンタム（DiLoCo の Nesterov outer step）の先駆けと読める。
+これに対し **[#70](https://github.com/Hiroki11x/Papers/issues/70)**（Gonzalez Ortiz, Frankle, Rabbat ら, NeurIPS 2020 WS OPT）は **対立する実証結果** を示した: 大規模画像分類では Local SGD の通信削減と精度低下のトレードオフが避けられず、「小規模実験の結論は大規模に一般化しない」。
 
 理論面では **[#165](https://github.com/Hiroki11x/Papers/issues/165)**（Yun, Rajput, Sra, ICLR 2022）が、復元抽出を前提とした従来解析に対し、シャッフル（非復元抽出）ベースの minibatch SGD / local SGD の厳密な上下界を PL 条件下で与えた。本人は「理論に全振りで付録込み76ページ」と嘆いている。
 
-同時期、**分散型（decentralized）SGD** の側では [#169](https://github.com/Hiroki11x/Papers/issues/169)（IBM, 2021）が、大バッチ設定で DPSGD が SSGD より収束面でも有利であり、ランドスケープ依存のノイズが実効学習率を自動調整すると主張した。これは [#9](https://github.com/Hiroki11x/Papers/issues/9) と同様「同期を緩めることで生じるノイズが大バッチの欠点を補う」という系譜にある。ただし本人は「LAMB に勝っているのか？」と、大バッチ向けオプティマイザとの比較の欠如に疑問を呈している。
+同時期、**分散型（decentralized）SGD** の側では [#169](https://github.com/Hiroki11x/Papers/issues/169)（IBM, 2021）が、大バッチ設定で DPSGD が SSGD より収束面でも有利であり、ランドスケープ依存のノイズが実効学習率を自動調整すると主張した。これは [#9](https://github.com/Hiroki11x/Papers/issues/9) と同様「同期を緩めることで生じるノイズが大バッチの欠点を補う」という系譜にある。ただし本人は「LAMB に勝ってる？？」と、大バッチ向けオプティマイザとの比較に疑問を残している。
 
 ### 2.2 第2期（2022–2023）: 周辺の工夫 — 独立サブネット学習とストラグラー対策
 
@@ -131,7 +131,7 @@ $$
 - [#473](https://github.com/Hiroki11x/Papers/issues/473)（Khaled, Kale, Douillard ら, NeurIPS 2025）は、外部学習率 $\gamma$ が最適化誤差とノイズ分散のトレードオフを制御し、**ノイズが小さいときは $\gamma>1$、大きいときは $\gamma<1$ が最適** であること、外部 Nesterov で通信回数 $R$ に対する収束率が改善することを示した。従来の Local SGD 解析（$\gamma=1$ 固定）からの明確な拡張。LLM 実験では Nesterov 外部最適化（DiLoCo）と Schedule-Free SGD（$\gamma\approx 2$）が単純平均を上回った。
 - [#534](https://github.com/Hiroki11x/Papers/issues/534)（SNOO, Meta, 2025-10）は、さらに踏み込んで **「DiLoCo の利得は分散学習そのものではなく、pseudo-gradient への Nesterov 外部更新に由来する」** と主張し、単一ワーカー版 SNOO を提案した。ただし本人は「著者自身がメカニズムはまだ十分理解されていないと明記している」点に注目している。
 - [#536](https://github.com/Hiroki11x/Papers/issues/536)（GPA, Meta / Defazio ら, 2025-12）は SNOO の問いに **primal averaging** の観点から答えようとし、2ループ構造を滑らかな1ステップ更新（GPA）に置き換えた。Llama-160M/1B/8B で AdamW 比約9〜10%少ないステップで同じ検証損失に到達。本人は「sharp な曲率方向の振動を GPA が抑えているのでは」と推測している。
-- 追加 [#393](https://github.com/Hiroki11x/Papers/issues/393)（WSM, 2025-07）は LR 減衰をチェックポイントの加重マージで置き換え、**マージ重みが減衰係数と等価** であることを示した。「学習中の平均化 ≒ 暗黙の最適化アルゴリズム」という同じ流れに位置づけられる。
+- 追加 [#393](https://github.com/Hiroki11x/Papers/issues/393)（WSM, 2025-07）は LR 減衰をチェックポイントの加重マージで置き換え、**マージ重みが減衰係数と等価** であることを示した。「学習中の平均化 ≒ 暗黙の最適化アルゴリズム」という同じ流れに位置づけられる（LR スケジュールとしての詳細は [misc/08 学習率スケジュールと weight decay](../misc/08_lr_schedule_weight_decay.md)）。
 
 これにより、Local SGD → DiLoCo → SNOO/GPA という流れで、**「通信削減のための近似」だったものが「単体でも優れた最適化手法」へと再解釈** される転換が起きた。[#9](https://github.com/Hiroki11x/Papers/issues/9) の「Local SGD はラージバッチより汎化が良い」という主張は、この再解釈の先駆けとも言える。
 
@@ -167,28 +167,28 @@ $$
 timeline
     title セミシンクロナス学習と通信効率の良い分散学習の系譜
     section 2018-2021 Local SGD の汎化と理論
-        2018-08 : Post-local SGD 大バッチより汎化 (issue 9)
-        2020-12 : Local SGD 大規模実証 トレードオフ (issue 70)
-        2021-10 : シャッフル下の Minibatch vs Local SGD 厳密界 (issue 165)
-        2021-12 : 分散型 DPSGD の自己調整学習率 (issue 169)
+        2018-08 : Post-local SGD 大バッチより汎化 issue 9
+        2020-12 : Local SGD 大規模実証 トレードオフ issue 70
+        2021-10 : シャッフル下の Minibatch vs Local SGD 厳密界 issue 165
+        2021-12 : 分散型 DPSGD の自己調整学習率 issue 169
     section 2022-2023 周辺技術
-        2022-10 : LoFT フィルタ単位の独立学習 (issue 311)
-        2023-06 : DropCompute ストラグラー対策 (issue 405)
+        2022-10 : LoFT フィルタ単位の独立学習 issue 311
+        2023-06 : DropCompute ストラグラー対策 issue 405
     section 2025 外部オプティマイザと通信制約
-        2025-04 : Dion Muon の分散直交化 (issue 388)
-        2025-07 : DeCo-SGD staleness と圧縮の共同最適化 (issue 395)
-                : WSM チェックポイントマージ 追加 (issue 393)
-        2025-09 : 外部オプティマイザの理論 LR とモメンタム (issue 473)
-        2025-10 : SNOO 非分散 DiLoCo (issue 534)
-                : MuonBP ブロック周期直交化 追加 (issue 458)
-        2025-12 : GPA primal averaging で DiLoCo を平滑化 (issue 536)
+        2025-04 : Dion Muon の分散直交化 issue 388
+        2025-07 : DeCo-SGD staleness と圧縮の共同最適化 issue 395
+                : WSM チェックポイントマージ 追加 issue 393
+        2025-09 : 外部オプティマイザの理論 LR とモメンタム issue 473
+        2025-10 : SNOO 非分散 DiLoCo issue 534
+                : MuonBP ブロック周期直交化 追加 issue 458
+        2025-12 : GPA primal averaging で DiLoCo を平滑化 issue 536
     section 2026 同期構造の再設計と適応同期
-        2026-04 : Nexus 内外ループで共通ミニマ (issue 520)
-        2026-06 : Factored Gossip DiLoCo (issue 530)
-                : 非同期 PP と1ステップ遅延耐性 (issue 557)
-        2026-09 : GeoMesh 地理分散と1bit通信 (issue 561)
-                : 統計的類似性下の加速2次法 (issue 565)
-                : AutoLoCo 適応的同期間隔 (issue 573)
+        2026-04 : Nexus 内外ループで共通ミニマ issue 520
+        2026-06 : Factored Gossip DiLoCo issue 530
+                : 非同期 PP と1ステップ遅延耐性 issue 557
+        2026-09 : GeoMesh 地理分散と1bit通信 issue 561
+                : 統計的類似性下の加速2次法 issue 565
+                : AutoLoCo 適応的同期間隔 issue 573
 ```
 
 ---
@@ -258,12 +258,12 @@ timeline
 
 | 公開年月 | 論文 (issueリンク) | 著者/組織 | 採択先 | 根拠 | サブトピック |
 |---|---|---|---|---|---|
-| 2018-08 | [#9](https://github.com/Hiroki11x/Papers/issues/9) Don't Use Large Mini-Batches, Use Local SGD | Tao Lin, Sebastian U. Stich, et al. / EPFL | ICLR 2020 | 既知情報 | A. Local SGD とラージバッチ汎化 |
+| 2018-08 | [#9](https://github.com/Hiroki11x/Papers/issues/9) Don't Use Large Mini-Batches, Use Local SGD | Tao Lin, Sebastian U. Stich, et al. / EPFL | ICLR 2020 | arXivコメント | A. Local SGD とラージバッチ汎化 |
 | 2020-12 | [#70](https://github.com/Hiroki11x/Papers/issues/70) Trade-offs of Local SGD at Scale: An Empirical Study | Jose Javier Gonzalez Ortiz, Jonathan Frankle, Mike Rabbat, et al. / MIT, FAIR | NeurIPS 2020 Workshop (OPT) | issue記載 | A. Local SGD の大規模実証 |
-| 2021-10 | [#165](https://github.com/Hiroki11x/Papers/issues/165) Minibatch vs Local SGD with Shuffling | Chulhee Yun, Shashank Rajput, Suvrit Sra / KAIST, UW-Madison, MIT | ICLR 2022 | 既知情報 | A. Local SGD の収束理論 |
+| 2021-10 | [#165](https://github.com/Hiroki11x/Papers/issues/165) Minibatch vs Local SGD with Shuffling | Chulhee Yun, Shashank Rajput, Suvrit Sra / KAIST, UW-Madison, MIT | ICLR 2022 | arXivコメント | A. Local SGD の収束理論 |
 | 2021-12 | [#169](https://github.com/Hiroki11x/Papers/issues/169) Loss Landscape Dependent Self-Adjusting LRs in Decentralized SGD | Wei Zhang, Mingrui Liu, Yu Feng, et al. / IBM Research | arXiv（プレプリント） | 不明 | B. 分散型SGDと大バッチ |
-| 2022-10 | [#311](https://github.com/Hiroki11x/Papers/issues/311) LOFT: Finding Lottery Tickets through Filter-wise Training | Qihan Wang, Chen Dun, et al. (A. Kyrillidis) / Rice Univ. | AISTATS 2023 | 既知情報 | B. 独立サブネット分散学習 |
-| 2023-06 | [#405](https://github.com/Hiroki11x/Papers/issues/405) DropCompute | Niv Giladi, et al. (Daniel Soudry) / Habana Labs (Intel), Technion | NeurIPS 2023 | 既知情報 | D. ストラグラー対策 |
+| 2022-10 | [#311](https://github.com/Hiroki11x/Papers/issues/311) LOFT: Finding Lottery Tickets through Filter-wise Training | Qihan Wang, Chen Dun, et al. (A. Kyrillidis) / Rice Univ. | AISTATS 2023 | Web確認 | B. 独立サブネット分散学習 |
+| 2023-06 | [#405](https://github.com/Hiroki11x/Papers/issues/405) DropCompute | Niv Giladi, et al. (Daniel Soudry) / Habana Labs (Intel), Technion | NeurIPS 2023 | Semantic Scholar確認 | D. ストラグラー対策 |
 | 2025-04 | [#388](https://github.com/Hiroki11x/Papers/issues/388) Dion: Distributed Orthonormalized Updates | Kwangjun Ahn, Byron Xu, Natalie Abreu, John Langford, et al. / Microsoft Research | arXiv（プレプリント） | 不明 | E. Muon の分散・通信効率化 |
 | 2025-07 | [#395](https://github.com/Hiroki11x/Papers/issues/395) DeCo-SGD: Taming Latency and Bandwidth | Rongwei Lu, Jingyan Jiang, et al. / Tsinghua Univ. | arXiv（プレプリント） | 不明 | D. staleness と圧縮 |
 | 2025-07 | [#393](https://github.com/Hiroki11x/Papers/issues/393) WSM: Decay-Free LR Schedule via Checkpoint Merging（追加） | Changxin Tian, et al. / Ant Group | arXiv（プレプリント） | 不明 | C. 学習中のモデル平均化 |
@@ -301,7 +301,7 @@ timeline
 
 ### [#9] Don't Use Large Mini-Batches, Use Local SGD
 
-- **公開**: 2018-08（arXiv 1808.07217） / **採択先**: ICLR 2020（既知情報） / **著者/組織**: Tao Lin, Sebastian U. Stich, Kumar Kshitij Patel, Martin Jaggi / EPFL
+- **公開**: 2018-08（arXiv 1808.07217） / **採択先**: ICLR 2020（arXivコメント） / **著者/組織**: Tao Lin, Sebastian U. Stich, Kumar Kshitij Patel, Martin Jaggi / EPFL
 
 **要約**: ラージバッチ学習の汎化劣化に対し、各ワーカーが局所的に複数ステップ更新してから平均する Local SGD と、学習後半のみ Local SGD に切り替える Post-local SGD を提案した。通信削減と同時に、ラージバッチより良い汎化を得られることを示した。
 
@@ -320,11 +320,10 @@ timeline
 **主な知見**:
 - 大規模設定では通信削減と精度低下のトレードオフが顕著
 - 小規模実験の結論は大規模に一般化しない
-- スローモメンタム等の工夫で一部改善
 
 ### [#165] Minibatch vs Local SGD with Shuffling: Tight Convergence Bounds and Beyond
 
-- **公開**: 2021-10（arXiv 2110.10342） / **採択先**: ICLR 2022（既知情報） / **著者/組織**: Chulhee Yun, Shashank Rajput, Suvrit Sra / KAIST, UW-Madison, MIT
+- **公開**: 2021-10（arXiv 2110.10342） / **採択先**: ICLR 2022（arXivコメント） / **著者/組織**: Chulhee Yun, Shashank Rajput, Suvrit Sra / KAIST, UW-Madison, MIT
 
 **要約**: シャッフル（非復元抽出）ベースの minibatch SGD と local SGD（federated averaging）について、PL 条件を満たす滑らかな関数に対する厳密な上下界を与え、復元抽出より速く収束することを示した。さらに同期シャッフリング（synchronized shuffling）により、同種設定で下界を超える収束率を得た。
 
@@ -349,7 +348,7 @@ timeline
 
 ### [#311] LOFT: Finding Lottery Tickets through Filter-wise Training
 
-- **公開**: 2022-10 / **採択先**: AISTATS 2023（既知情報） / **著者/組織**: Qihan Wang, Chen Dun, Fangshuo Liao, et al. (Anastasios Kyrillidis) / Rice University
+- **公開**: 2022-10 / **採択先**: AISTATS 2023（Web確認） / **著者/組織**: Qihan Wang, Chen Dun, Fangshuo Liao, et al. (Anastasios Kyrillidis) / Rice University
 
 **要約**: CNN の畳み込み層をフィルタ単位で分割し、異なる分散ワーカーで独立に学習させるモデル並列型事前学習アルゴリズム LoFT を提案した。真の当たりくじやモデルの完全学習を必要としないフィルタ距離指標で当たりくじの出現を効率的に特定し、メモリ・通信コストを削減しつつ同等以上の精度を維持した。
 
@@ -360,7 +359,7 @@ timeline
 
 ### [#405] DropCompute: simple and more robust distributed synchronous training via compute variance reduction
 
-- **公開**: 2023-06（arXiv 2306.10598） / **採択先**: NeurIPS 2023（既知情報） / **著者/組織**: Niv Giladi, Shahar Gottlieb, Moran Shkolnik, et al. (Daniel Soudry) / Habana Labs (Intel), Technion
+- **公開**: 2023-06（arXiv 2306.10598） / **採択先**: NeurIPS 2023（Semantic Scholar確認） / **著者/組織**: Niv Giladi, Shahar Gottlieb, Moran Shkolnik, et al. (Daniel Soudry) / Habana Labs (Intel), Technion
 
 **要約**: 同期 All-Reduce 型分散学習で計算時間のばらつき（ストラグラー）が効率を制限する問題に対し、各ワーカーが計算時間しきい値 $\tau$ を超えたらミニバッチの残りを破棄し部分勾配のみを同期する DropCompute を提案した。確率的バッチサイズとなるが SGD 同様の収束保証を示し、非同期化せずに頑健性を高める。冗長化（追加資源が必要）、非同期（収束が不安定）、通信圧縮（計算ばらつきには無力）との差別化を明示している。
 
@@ -395,12 +394,12 @@ timeline
 
 - **公開**: 2025-07 / **採択先**: arXiv（プレプリント）（不明） / **著者/組織**: Changxin Tian, Jiapeng Wang, Qian Zhao, et al. / Ant Group
 
-**要約**: LR 減衰フェーズをチェックポイントの加重マージで置き換える WSM を提案し、マージ重みが勾配更新への減衰係数と等価であることを示した。16.3B MoE で WSD を上回り、マージ期間が最重要要因であることを示した。本ドキュメントでは「学習中のモデル平均化が最適化アルゴリズムと等価になる」例として、primal averaging（[#536](https://github.com/Hiroki11x/Papers/issues/536)）と並べて扱う。
+**要約**: LR 減衰フェーズをチェックポイントの加重マージで置き換える WSM（Warmup-Stable and Merge）を提案し、マージ重みが勾配更新への減衰係数と等価であることを示した（Theorem 3.1）。学習は定数 LR の Stable フェーズのまま継続でき、減衰の効果は後からマージで与える。総パラメータ 16.3B（活性約 1.4B）の MoE で WSD を上回り、マージ期間が最重要要因であることを示した。本ドキュメントでは「学習中のモデル平均化が最適化アルゴリズムと等価になる」例として、primal averaging（[#536](https://github.com/Hiroki11x/Papers/issues/536)）と並べて扱う。LR スケジュールとしての位置づけ・詳細は [misc/08 学習率スケジュールと weight decay](../misc/08_lr_schedule_weight_decay.md) を参照。
 
 **主な知見**:
-- マージ重み ≒ LR 減衰係数
-- 16.3B MoE で WSD を上回る
-- マージ期間が最重要要因
+- マージ重みの設計でコサイン・線形・逆平方根などの減衰曲線をエミュレートできる（線形減衰 ≒ 単純平均）
+- 総パラメータ 16.3B（活性約 1.4B）の MoE で WSD を上回る（MATH +3.5%、HumanEval +2.9%、MMLU-Pro +5.5%）。優位は SFT 後も持続
+- マージ期間（merge duration）が最重要要因。凹型の逆平方根減衰を模倣したマージが単純平均や EMA より良い
 
 ### [#473] Understanding Outer Optimizers in Local SGD: Learning Rates, Momentum, and Acceleration
 
@@ -528,7 +527,7 @@ timeline
 ### 8.1 横断的知見
 
 1. **外部更新は「近似」から「オプティマイザ」へ**
-   Local SGD の平均化（$\gamma=1$）→ DiLoCo の外部 Nesterov → 単一ワーカーの SNOO（[#534](https://github.com/Hiroki11x/Papers/issues/534)）・GPA（[#536](https://github.com/Hiroki11x/Papers/issues/536)）という流れで、2ループ構造が通信とは無関係に AdamW を改善しうることが示された。[#473](https://github.com/Hiroki11x/Papers/issues/473) の実効学習率 $\gamma/(1-\mu)$ の議論は、「外部モメンタムは $H$ ステップ分の変化を外挿する」という見方を与える。WSM（[#393](https://github.com/Hiroki11x/Papers/issues/393)）の「マージ ≒ LR 減衰」も含め、**学習中の平均化・外挿と LR スケジュールは表裏一体** である。
+   Local SGD の平均化（$\gamma=1$）→ DiLoCo の外部 Nesterov → 単一ワーカーの SNOO（[#534](https://github.com/Hiroki11x/Papers/issues/534)）・GPA（[#536](https://github.com/Hiroki11x/Papers/issues/536)）という流れで、2ループ構造が通信とは無関係に AdamW を改善しうることが示された。[#473](https://github.com/Hiroki11x/Papers/issues/473) の実効学習率 $\gamma/(1-\mu)$ の議論は、外部モメンタムが $\gamma>1$（pseudo-gradient 方向への外挿）と同等に働くことを示している。WSM（[#393](https://github.com/Hiroki11x/Papers/issues/393)）の「マージ ≒ LR 減衰」も含め、**学習中の平均化・外挿と LR スケジュールは表裏一体** である。
 
 2. **同期を緩めたノイズは「薬にも毒にもなる」**
    [#9](https://github.com/Hiroki11x/Papers/issues/9)・[#169](https://github.com/Hiroki11x/Papers/issues/169) はノイズがフラット解や実効LRの自動調整に寄与すると主張し、[#70](https://github.com/Hiroki11x/Papers/issues/70)・[#530](https://github.com/Hiroki11x/Papers/issues/530) は大規模・大 $H$・大 $M$ でワーカー間不一致が劣化要因になると示す。[#473](https://github.com/Hiroki11x/Papers/issues/473) のノイズ依存の最適 $\gamma$（低ノイズで $\gamma>1$、高ノイズで $\gamma<1$）は、この両面性を外部学習率で調整する処方箋とみなせる。関連して [#436](https://github.com/Hiroki11x/Papers/issues/436) は、モデルマージングの成否が有効ノイズスケール $S_{\text{eff}}\propto \eta/(B(1-\mu)^2)\cdot\mathrm{tr}\Sigma$ の「中程度」で最も良いとしており、平均化の可否がノイズスケールで決まるという見方と整合的である。
@@ -551,7 +550,7 @@ timeline
 
 ### 8.3 外部 LR とモメンタムの実務的扱い
 
-- $\gamma$ と $\mu$ は独立ではなく、**実効外部LR $\gamma/(1-\mu)$** で考えるのが良い（[#473](https://github.com/Hiroki11x/Papers/issues/473)）。Nesterov を使う場合の最適 $\gamma$ は1未満（≈0.7）、モメンタムなしの SF-SGD では $\gamma\approx 2$ と報告されている。
+- $\gamma$ と $\mu$ は独立ではなく、**実効外部LR $\gamma/(1-\mu)$** で考えるのが良い（[#473](https://github.com/Hiroki11x/Papers/issues/473)）。Nesterov を使う場合の最適 $\gamma$ は1未満（≈0.7）、Schedule-Free SGD（SF-SGD）では $\gamma\approx 2$ と報告されている。
 - $H$ を途中で変えると pseudo-gradient の大きさ・ノイズが変わるため、外部モメンタム・LR の補正が必要（[#573](https://github.com/Hiroki11x/Papers/issues/573)）。
 - 外部モメンタム状態まで global に同期すると周期的な loss spike が生じた例がある（[#530](https://github.com/Hiroki11x/Papers/issues/530) の GlobalM1S）。外部状態の扱いは安定性に直結する。
 - ワーカー間の不一致の監視には、L2 距離より出力分布の JS 距離が loss spike の検出に有効（[#530](https://github.com/Hiroki11x/Papers/issues/530)）。
@@ -590,12 +589,12 @@ timeline
 | [#16](https://github.com/Hiroki11x/Papers/issues/16) / [#403](https://github.com/Hiroki11x/Papers/issues/403) | Measuring the Effects of Data Parallelism on Neural Network Training | 2018-11 | JMLR | 同期データ並列のバッチサイズ・ステップ数の3領域。Local SGD の比較基準（同一論文の重複 issue） |
 | [#10](https://github.com/Hiroki11x/Papers/issues/10) | Which Algorithmic Choices Matter at Which Batch Sizes? (NQM) | 2019-07 | NeurIPS 2019 | モメンタム・EMA 等とバッチサイズの関係。外部モメンタムの効果を考える土台 |
 | [#52](https://github.com/Hiroki11x/Papers/issues/52) | Towards Practical Second Order Optimization for Deep Learning (Shampoo) | 2020-02 | arXiv（プレプリント） | 前処理計算を CPU で非同期化してオーバーヘッドを隠蔽 |
-| [#278](https://github.com/Hiroki11x/Papers/issues/278) | Scalable K-FAC Training with Distributed Preconditioning (DP-KFAC) | 2022-06 | arXiv（プレプリント） | K-FAC の因子計算を分散し通信を2.79–3.15倍削減 |
-| [#402](https://github.com/Hiroki11x/Papers/issues/402) | Adaptive Batch Size Schedules for Distributed Training of LMs | 2024-12 | arXiv（プレプリント） | DDP/FSDP 下の適応バッチサイズ。AutoLoCo の適応同期と対比 |
-| [#428](https://github.com/Hiroki11x/Papers/issues/428) | Simple and Scalable Strategies to Continually Pre-train LLMs | 2024-03 | TMLR | 継続事前学習と LR 再ウォームアップ |
+| [#278](https://github.com/Hiroki11x/Papers/issues/278) | Scalable K-FAC Training with Distributed Preconditioning (DP-KFAC) | 2022-06 | IEEE TCC | K-FAC の因子計算を分散し通信を2.79–3.15倍削減 |
+| [#402](https://github.com/Hiroki11x/Papers/issues/402) | Adaptive Batch Size Schedules for Distributed Training of LMs | 2024-12 | CPAL 2025 | DDP/FSDP 下の適応バッチサイズ。AutoLoCo の適応同期と対比 |
+| [#428](https://github.com/Hiroki11x/Papers/issues/428) | Simple and Scalable Strategies to Continually Pre-train LLMs | 2024-03 | TMLR | 継続事前学習と LR 再ウォームアップ（[misc/08](../misc/08_lr_schedule_weight_decay.md)） |
 | [#399](https://github.com/Hiroki11x/Papers/issues/399) | Energy Consumption in Parallel Neural Network Training | 2025-08 | arXiv（プレプリント） | データ並列スケーリングのエネルギー・大バッチ効果 |
-| [#441](https://github.com/Hiroki11x/Papers/issues/441) | Power Stabilization for AI Training Datacenters | 2025-08 | arXiv（プレプリント） | 同期学習の計算/通信フェーズ交代による電力スイング。同期方式の副作用 |
-| [#436](https://github.com/Hiroki11x/Papers/issues/436) | How does the optimizer implicitly bias the model merging loss landscape? | 2025-10 | ICLR 2026 | 有効ノイズスケールとモデルマージングの成否。平均化可能性の条件 |
+| [#441](https://github.com/Hiroki11x/Papers/issues/441) | Power Stabilization for AI Training Datacenters | 2025-08 | arXiv（プレプリント） | 同期学習の計算/通信フェーズ交代による電力スイング。同期方式の副作用（[misc/11](../misc/11_llm_architecture_reasoning_safety.md)） |
+| [#436](https://github.com/Hiroki11x/Papers/issues/436) | How does the optimizer implicitly bias the model merging loss landscape? | 2025-10 | ICLR 2026 | 有効ノイズスケールとモデルマージングの成否。平均化可能性の条件（[misc/12](../misc/12_continual_rl_misc.md)） |
 | [#478](https://github.com/Hiroki11x/Papers/issues/478) | One Size Does Not Fit All: Adaptive Batch Scheduling with DEBA | 2025-11 | arXiv（プレプリント） | 適応的バッチサイズスケジューリング |
 | [#528](https://github.com/Hiroki11x/Papers/issues/528) | Improving Neural Network Training by Decoupling the Magnitude and Direction of Weight Vectors | 2026-06 | arXiv（プレプリント） | 射影のオーバーヘッドを分散学習で通信とオーバーラップ |
 | [#526](https://github.com/Hiroki11x/Papers/issues/526) | Task-Specific Skill Localization in Fine-tuned Language Models | 2023-02 | ICML 2023 | スキル局在とモデルグラフティング（部分パラメータの扱い） |
@@ -615,7 +614,10 @@ timeline
 - **PipeDream / PipeDream-2BW**: [#557](https://github.com/Hiroki11x/Papers/issues/557) で固定1ステップ遅延の重要性の文脈で比較。
 - arXiv 2403.04081: [#534](https://github.com/Hiroki11x/Papers/issues/534) のメモで「次に読む」候補として挙げられている。
 
-### 9.3 姉妹ドキュメント
+### 9.3 姉妹ドキュメント・関連ドキュメント
 
 - [01 クリティカルバッチサイズ](./01_critical_batch_size.md): Local SGD と大バッチの代替関係、ノイズスケール、適応バッチサイズ。
 - [02 低精度学習と Muon](./02_low_precision_and_muon.md): Dion / MuonBP の詳細、Muon・Lion と低ビット通信、非同期遅延への頑健性。
+- [misc/08 学習率スケジュールと weight decay](../misc/08_lr_schedule_weight_decay.md): WSM（[#393](https://github.com/Hiroki11x/Papers/issues/393)）の主たる解説、チェックポイントマージと LR 減衰の等価性、継続事前学習の LR 再ウォームアップ（[#428](https://github.com/Hiroki11x/Papers/issues/428)）。
+- [misc/12 継続学習・RL・その他](../misc/12_continual_rl_misc.md): モデルマージング（[#436](https://github.com/Hiroki11x/Papers/issues/436), [#526](https://github.com/Hiroki11x/Papers/issues/526)）。重み平均化の可否という観点で Local SGD / DiLoCo の平均化と接続する。
+- [misc/11 LLM アーキテクチャ・推論・安全性](../misc/11_llm_architecture_reasoning_safety.md): AI 学習データセンターの電力安定化（[#441](https://github.com/Hiroki11x/Papers/issues/441)）。同期学習の計算/通信フェーズ交代がもたらすインフラ側の副作用。
