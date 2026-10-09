@@ -1,9 +1,9 @@
 # オプティマイザ設計と比較：2次法・適応的手法・学習型オプティマイザ・ベンチマーク：論文ノートに基づくサーベイ
 
-> 対象：GitHub リポジトリ [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読みノート（issue）のうち、トピック M07「オプティマイザ設計と比較」を primary とする **49件**。
-> 同一論文の重複登録が1組あります：[#525](https://github.com/Hiroki11x/Papers/issues/525)/[#544](https://github.com/Hiroki11x/Papers/issues/544)（Gradient Smoothing）。実質は **48論文** です。なお [#30](https://github.com/Hiroki11x/Papers/issues/30)/[#104](https://github.com/Hiroki11x/Papers/issues/104)（構造化確率的準ニュートン法）は同じ arXiv エントリ（2006.09606）の v1（2020-06）と、題名・手法・実験を改訂した v2（2021-03、CVPR 2021 版）のノートで、内容が異なるため別々に扱います。
-> 論文の公開時期：2015-03（K-FAC 原論文）〜 2026-06（Gradient Smoothing）。ほかに公開年月不明が1件（[#281](https://github.com/Hiroki11x/Papers/issues/281)）。issue の登録時期は 2020-06-24 〜 2026-08-24。
-> 作成日：2026-09-30。2025〜2026年の論文はノートの記述を根拠にまとめています。Muon / Shampoo / SOAP など行列前処理系のオプティマイザは [低精度学習と Muon・直交化/スペクトル系オプティマイザ](../practical_optimization/02_low_precision_and_muon.md) で扱っているため、本稿では重複を避けてそちらへリンクします。
+> 対象：GitHub リポジトリ [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読みノート（issue）のうち、トピック M07「オプティマイザ設計と比較」を primary とする **50件**。
+> 同一論文の重複登録が1組あります：[#525](https://github.com/Hiroki11x/Papers/issues/525)/[#544](https://github.com/Hiroki11x/Papers/issues/544)（Gradient Smoothing）。実質は **49論文** です。なお [#30](https://github.com/Hiroki11x/Papers/issues/30)/[#104](https://github.com/Hiroki11x/Papers/issues/104)（構造化確率的準ニュートン法）は同じ arXiv エントリ（2006.09606）の v1（2020-06）と、題名・手法・実験を改訂した v2（2021-03、CVPR 2021 版）のノートで、内容が異なるため別々に扱います。
+> 論文の公開時期：2015-03（K-FAC 原論文）〜 2026-10（OptiSelect）。ほかに公開年月不明が1件（[#281](https://github.com/Hiroki11x/Papers/issues/281)）。issue の登録時期は 2020-06-24 〜 2026-10-06。
+> 作成日：2026-09-30（2026-10-08 更新）。2025〜2026年の論文はノートの記述を根拠にまとめています。Muon / Shampoo / SOAP など行列前処理系のオプティマイザは [低精度学習と Muon・直交化/スペクトル系オプティマイザ](../practical_optimization/02_low_precision_and_muon.md) で扱っているため、本稿では重複を避けてそちらへリンクします。
 
 ## 概要
 
@@ -12,7 +12,7 @@
 1. **2次情報は深層学習で本当に役に立つのか、役に立つとしたら何のおかげか。** K-FAC [#202](https://github.com/Hiroki11x/Papers/issues/202) から始まる自然勾配の近似は、高速化（SKFAC、SENG、DP-KFAC）と近似の改良（TKFAC、ミニブロック）が続きました。一方で、経験的フィッシャーは真のフィッシャーの近似とは言えないこと [#66](https://github.com/Hiroki11x/Papers/issues/66)、K-FAC は「厳密な2次更新を近似しているから」ではなく「ニューロンに対する1次法を近似しているから」効く可能性 [#187](https://github.com/Hiroki11x/Papers/issues/187) が示され、「2次法」という枠組み自体が問い直されています。
 2. **Adam 系の適応的手法をどう改良し、どう理解するか。** RAdam、MaxVA、AdaBelief、Adan のような改良版が乱立する一方で、大規模ベンチマーク [#129](https://github.com/Hiroki11x/Papers/issues/129) は「Adam を一貫して上回る手法はない」と結論しました。2024年以降は、LLM で Adam が SGD に大差で勝つ理由をヘビーテイルなクラス不均衡で説明する研究 [#375](https://github.com/Hiroki11x/Papers/issues/375)、Adam を符号様降下として見る収束証明 [#380](https://github.com/Hiroki11x/Papers/issues/380)、Adam と Gauss-Newton の対角前処理の比較 [#440](https://github.com/Hiroki11x/Papers/issues/440) と、「Adam は何をしているのか」の理論化が進んでいます。
 3. **オプティマイザの選択とハイパーパラメータ調整のコストをどう減らすか。** ハイパーパラメータ最適化のサーベイ [#288](https://github.com/Hiroki11x/Papers/issues/288)、学習率探索を不要にする学習則 [#47](https://github.com/Hiroki11x/Papers/issues/47)、オプティマイザ自体をメタ学習する VeLO [#351](https://github.com/Hiroki11x/Papers/issues/351) がこの問いに属します。
-4. **勾配・更新の「構造」を使って学習を安定化・高速化できるか。** 勾配の低ランク構造 [#425](https://github.com/Hiroki11x/Papers/issues/425)、テンソルごとの適応的勾配クリッピング [#538](https://github.com/Hiroki11x/Papers/issues/538)、深さ方向に更新を平滑化する Gradient Smoothing [#525](https://github.com/Hiroki11x/Papers/issues/525) など、2025〜2026年の論文は勾配や更新ベクトルの構造を使い、base optimizer の入力や出力に操作を加える方向に向かっています。
+4. **勾配・更新の「構造」を使って学習を安定化・高速化できるか。** 勾配の低ランク構造 [#425](https://github.com/Hiroki11x/Papers/issues/425)、テンソルごとの適応的勾配クリッピング [#538](https://github.com/Hiroki11x/Papers/issues/538)、深さ方向に更新を平滑化する Gradient Smoothing [#525](https://github.com/Hiroki11x/Papers/issues/525) など、2025〜2026年の論文は勾配や更新ベクトルの構造を使い、base optimizer の入力や出力に操作を加える方向に向かっています。2026-10 の OptiSelect [#587](https://github.com/Hiroki11x/Papers/issues/587) は、さらに「どのデータで更新するか」もオプティマイザの状態に合わせて選ぶべきだとして、データ選択とオプティマイザを独立に扱う前提を問い直しています。
 
 ## 目次
 
@@ -103,9 +103,13 @@ $$
   $$\tilde u_\ell = (1-\alpha)\, u_\ell + \frac{\alpha}{2}\left(u_{\ell-1} + u_{\ell+1}\right)$$
   $\alpha = 0$ なら通常のオプティマイザと同じです。同じ形状・同じ役割のパラメータ（q_proj 同士など）の間でだけ平均します。
 
+### 1.8 オプティマイザ状態を使ったデータ選択
+
+従来のデータ選別（データレシピ）はオプティマイザと独立に事前に行われ、オプティマイザの比較も一様サンプリングを前提にしてきました。OptiSelect [#587](https://github.com/Hiroki11x/Papers/issues/587) は、各ステップでバッチサイズ $B$ の $\lambda$ 倍（オーバーサンプリング率 $\lambda$）の候補を用意し、現在のモデルとオプティマイザの状態（前処理行列 $P_t$）から各データの有用性をスコアリングして、上位のデータだけを更新に使います。1.1 節の $P_t^{-1} g_t$ の形で言えば、$P_t$ をデータ選択にも使う発想です。
+
 ## 2. 研究の系譜・時系列ナラティブ
 
-公開年月で見ると、論文は 2019〜2022年（34件）と 2025〜2026年（11件）の2つの山に分かれます。間の 2023年には論文がなく、2024年は1件（[#375](https://github.com/Hiroki11x/Papers/issues/375)）だけです。2025年以降の新しいオプティマイザ論文の多くは Muon / Shampoo 系として [02_low_precision_and_muon.md](../practical_optimization/02_low_precision_and_muon.md) に分類されているため、本稿の後半は理論・比較・後処理型の手法が中心になります。以下では4つの時期に分けて流れを追います。
+公開年月で見ると、論文は 2019〜2022年（34件）と 2025〜2026年（12件）の2つの山に分かれます。間の 2023年には論文がなく、2024年は1件（[#375](https://github.com/Hiroki11x/Papers/issues/375)）だけです。2025年以降の新しいオプティマイザ論文の多くは Muon / Shampoo 系として [02_low_precision_and_muon.md](../practical_optimization/02_low_precision_and_muon.md) に分類されているため、本稿の後半は理論・比較・後処理型の手法が中心になります。以下では4つの時期に分けて流れを追います。
 
 ### 2.1 第0期：源流（2015〜2019）
 
@@ -165,6 +169,8 @@ $$
 
 これらは、Adam の改良が「$v_t$ の式をどう変えるか」だった第1期とは対照的に、base optimizer を固定したまま、その入力（勾配）または出力（更新）に構造的な操作を加える、というモジュール化された設計に移っています。
 
+**オプティマイザとデータ選択の結合。** OptiSelect [#587](https://github.com/Hiroki11x/Papers/issues/587)（EPFL、2026-10）は、操作の対象をさらに外側の「どのデータで勾配を計算するか」に広げました。各ステップで $\lambda B$ 個の候補を、現在のモデルとオプティマイザの前処理行列に基づく有用性でスコアリングし、価値の高いものだけを更新に使います。データ選択とオプティマイザ選択を別々に扱ってきた従来の前提を問い直すもので、AdamW の一次・二次モーメントがデータの影響を後の更新に運ぶと論じた [#545](https://github.com/Hiroki11x/Papers/issues/545)（[11_llm_architecture_reasoning_safety.md](./11_llm_architecture_reasoning_safety.md)）と同じく、「データの効き方はオプティマイザ次第」という見方に立っています。ノートは手法の仕組みの説明と図のみで、評価は記されていません。
+
 ## 3. タイムライン
 
 ```mermaid
@@ -215,6 +221,7 @@ timeline
         2026-01 : issue 510 勾配正則化自然勾配
         2026-02 : issue 513 平坦方向の強化
         2026-06 : issue 525 と 544 Gradient Smoothing
+        2026-10 : issue 587 OptiSelect オプティマイザ依存のデータ選択
 ```
 
 ## 4. サブトピック別の整理
@@ -306,9 +313,17 @@ timeline
 | [#513](https://github.com/Hiroki11x/Papers/issues/513) | 平坦方向ダイナミクスの強化による LLM 事前学習の加速 |
 | [#525](https://github.com/Hiroki11x/Papers/issues/525), [#544](https://github.com/Hiroki11x/Papers/issues/544) | Gradient Smoothing（同一論文） |
 
+### 4.7 オプティマイザとデータ選択（1件）
+
+**要点.** データ選択（カリキュラム）をオプティマイザから独立に決めるのではなく、オプティマイザの状態（前処理行列）に基づいてオンラインに選ぶ方向です。optimizer state がデータの影響を運ぶという [#545](https://github.com/Hiroki11x/Papers/issues/545)（[11_llm_architecture_reasoning_safety.md](./11_llm_architecture_reasoning_safety.md) が primary）と近い問題意識です。
+
+| issue | 手法・内容 |
+|---|---|
+| [#587](https://github.com/Hiroki11x/Papers/issues/587) | OptiSelect（前処理行列に基づく有用性スコアでのオンラインデータ選択） |
+
 ## 5. 論文一覧表（公開年月順）
 
-全49件（重複登録を含む）。採択先は Semantic Scholar と Web で検証済みの値です。「根拠」は採択先を何で確認したかを示します。
+全50件（重複登録を含む）。採択先は Semantic Scholar と Web で検証済みの値です。「根拠」は採択先を何で確認したかを示します。
 
 | 公開 | 論文 | 著者/組織 | 採択先 | 根拠 | サブトピック |
 |---|---|---|---|---|---|
@@ -360,6 +375,7 @@ timeline
 | 2026-02 | [#513](https://github.com/Hiroki11x/Papers/issues/513) Accelerating LLM Pre-Training through Flat-Direction Dynamics Enhancement | Shuchen Zhu, Rizhen Hu, Mingze Wang, Kun Yuan, et al. / Peking Univ. | arXiv（プレプリント） | 不明 | 平坦方向ダイナミクスによる学習加速 |
 | 2026-06 | [#525](https://github.com/Hiroki11x/Papers/issues/525) Gradient Smoothing: Coupling Layer-wise Updates for Improved Optimization | Haoming Meng, Anton Sugolov, Vardan Papyan / Vector Institute / Univ. of Toronto | ICML 2026 | arXivコメント | 層間の更新平滑化 |
 | 2026-06 | [#544](https://github.com/Hiroki11x/Papers/issues/544) Gradient Smoothing: Coupling Layer-wise Updates for Improved Optimization | Haoming Meng, Anton Sugolov, Vardan Papyan / Vector Institute / Univ. of Toronto | ICML 2026 | arXivコメント | 層間の更新平滑化 |
+| 2026-10 | [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect: How does the Optimizer Shape Data Curriculum? | Simin Fan, Alireza Abdollahpoorrostam, Martin Jaggi / EPFL | arXiv（プレプリント） | 不明 | オプティマイザ状態を考慮したオンラインデータ選択（OptiSelect） |
 | 不明（issue登録 2022-08） | [#281](https://github.com/Hiroki11x/Papers/issues/281) Whitened gradient descent, a new updating method for optimizers in deep neural networks | Shahrood University of Technology | Journal of AI and Data Mining | issue記載 | オプティマイザ改良 |
 
 ## 6. 採択先別の集計
@@ -383,10 +399,10 @@ timeline
 | ジャーナル | Neural Processing Letters | 1 | — | [#327](https://github.com/Hiroki11x/Papers/issues/327) |
 | ジャーナル | TMLR | 1 | — | [#203](https://github.com/Hiroki11x/Papers/issues/203) |
 | ジャーナル | WIREs Data Mining and Knowledge Discovery | 1 | — | [#288](https://github.com/Hiroki11x/Papers/issues/288) |
-| プレプリント | arXiv（プレプリント） | 14 | — | [#53](https://github.com/Hiroki11x/Papers/issues/53), [#84](https://github.com/Hiroki11x/Papers/issues/84), [#279](https://github.com/Hiroki11x/Papers/issues/279), [#287](https://github.com/Hiroki11x/Papers/issues/287), [#289](https://github.com/Hiroki11x/Papers/issues/289), [#298](https://github.com/Hiroki11x/Papers/issues/298), [#299](https://github.com/Hiroki11x/Papers/issues/299), [#351](https://github.com/Hiroki11x/Papers/issues/351), [#380](https://github.com/Hiroki11x/Papers/issues/380), [#384](https://github.com/Hiroki11x/Papers/issues/384), [#408](https://github.com/Hiroki11x/Papers/issues/408), [#440](https://github.com/Hiroki11x/Papers/issues/440), [#510](https://github.com/Hiroki11x/Papers/issues/510), [#513](https://github.com/Hiroki11x/Papers/issues/513) |
-| **合計** | | **49** | | |
+| プレプリント | arXiv（プレプリント） | 15 | — | [#53](https://github.com/Hiroki11x/Papers/issues/53), [#84](https://github.com/Hiroki11x/Papers/issues/84), [#279](https://github.com/Hiroki11x/Papers/issues/279), [#287](https://github.com/Hiroki11x/Papers/issues/287), [#289](https://github.com/Hiroki11x/Papers/issues/289), [#298](https://github.com/Hiroki11x/Papers/issues/298), [#299](https://github.com/Hiroki11x/Papers/issues/299), [#351](https://github.com/Hiroki11x/Papers/issues/351), [#380](https://github.com/Hiroki11x/Papers/issues/380), [#384](https://github.com/Hiroki11x/Papers/issues/384), [#408](https://github.com/Hiroki11x/Papers/issues/408), [#440](https://github.com/Hiroki11x/Papers/issues/440), [#510](https://github.com/Hiroki11x/Papers/issues/510), [#513](https://github.com/Hiroki11x/Papers/issues/513), [#587](https://github.com/Hiroki11x/Papers/issues/587) |
+| **合計** | | **50** | | |
 
-プレプリントが 14件と最多で、2025〜2026年の11件のうち6件は、採択先を確認できなかったプレプリントです。国際会議では NeurIPS と ICML、AISTATS が多く、2次法の論文は CVPR・AAAI やジャーナル（IEEE TCC、Journal of Scientific Computing、APJOR）にも分散しています。
+プレプリントが 15件と最多で、2025〜2026年の12件のうち7件は、採択先を確認できなかったプレプリントです。国際会議では NeurIPS と ICML、AISTATS が多く、2次法の論文は CVPR・AAAI やジャーナル（IEEE TCC、Journal of Scientific Computing、APJOR）にも分散しています。
 
 ## 7. 各論文の詳細まとめ
 
@@ -950,6 +966,17 @@ timeline
 
 **メモ**: 意味的な制約として、同じ形状でも座標の意味が層間で一致する保証はなく、特に MLP のニューロンには置換対称性があるので「第 $l$ 層のニューロン $i$ と第 $l+1$ 層のニューロン $i$ が対応する」ことは暗黙の仮定にすぎない、と指摘しています。理論は1ステップ後の表現整列の下界だけを扱い、損失の収束の高速化や汎化の改善は保証しないこと、主要な実験に複数 seed の平均・標準偏差がないこと、大規模分散学習での通信量・壁時計時間の負荷が未検証であること、強すぎる平滑化は層固有の有益な機能分化を消しうることも挙げています。
 
+### [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect: How does the Optimizer Shape Data Curriculum?
+
+- **公開**: 2026-10 ／ **採択先**: arXiv（プレプリント）（根拠: 不明） ／ **著者/組織**: Simin Fan, Alireza Abdollahpoorrostam, Martin Jaggi / EPFL
+- **サブトピック**: オプティマイザ状態を考慮したオンラインデータ選択（OptiSelect）
+
+**要約**: 従来のデータ選別はオプティマイザから独立して事前に行われ、オプティマイザの比較も一様サンプリングを前提にしていた、という問題意識の研究です。各学習ステップでバッチサイズの $\lambda$ 倍の候補を用意し、現在のモデル状態とオプティマイザの状態（前処理行列）に基づいて各データの有用性をスコアリングし、最も価値の高いデータだけをパラメータ更新に使います。
+
+**主な知見**
+- オプティマイザの前処理を使ってデータの有用性を評価する
+- オーバーサンプリング率 $\lambda$ の候補から選択する
+
 ### [#281](https://github.com/Hiroki11x/Papers/issues/281) Whitened gradient descent, a new updating method for optimizers in deep neural networks
 
 - **公開**: 不明（issue登録 2022-08） ／ **採択先**: Journal of AI and Data Mining（根拠: issue記載） ／ **著者/組織**: Shahrood University of Technology
@@ -982,6 +1009,7 @@ timeline
 - **ウォームアップとバッチサイズ。** RAdam [#73](https://github.com/Hiroki11x/Papers/issues/73) のノートにある「バッチサイズを大きくしたらどうなるのか」という疑問は、ノート内では未解決です。臨界バッチサイズとオプティマイザの関係は [01_critical_batch_size.md](../practical_optimization/01_critical_batch_size.md) が扱います。
 - **曲率近似の「適切な粒度」。** 対角（Adam、AdaHessian）、ミニブロック（MBF）、層単位（K-FAC、Shampoo）、層をまたぐ結合（Gradient Smoothing は深さ方向の前処理と解釈できる）と、粒度の選択肢が増えています。どの粒度がどの条件で最適かの統一的な理解はまだありません。
 - **後処理型の手法の組み合わせ。** AdaGC と Gradient Smoothing はどちらも「オプティマイザ非依存」をうたいますが、互いの組み合わせや、Muon 系と組み合わせたときの効果は、ノートには記録がありません。Gradient Smoothing については複数 seed の統計や大規模分散での負荷が未検証、という指摘もあります（[#544](https://github.com/Hiroki11x/Papers/issues/544)）。
+- **データ選択はオプティマイザごとに変えるべきか。** OptiSelect [#587](https://github.com/Hiroki11x/Papers/issues/587) は前処理行列に基づいてデータを選び、[#545](https://github.com/Hiroki11x/Papers/issues/545) は optimizer state がデータの影響を後の更新に運ぶと論じています。データとオプティマイザが相互作用するなら、一様サンプリングの下でのオプティマイザ比較（[#129](https://github.com/Hiroki11x/Papers/issues/129)、[#384](https://github.com/Hiroki11x/Papers/issues/384)）がデータ選択と組み合わせたときにも同じ順位になるかは、ノートからは分かりません。
 - **学習型オプティマイザのその後。** VeLO [#351](https://github.com/Hiroki11x/Papers/issues/351)（2022年）以降、学習型オプティマイザの論文はこのノート群には登録されていません。LLM 規模での実用性はノートからは判断できません。
 
 ### 8.4 実務上の示唆

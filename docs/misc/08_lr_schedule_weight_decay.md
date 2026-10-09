@@ -585,6 +585,9 @@ records から Python スクリプトで生成した表（22件）。
 - [#502](https://github.com/Hiroki11x/Papers/issues/502) Convex Dominance in Deep Learning I: A Scaling Law of Loss and Learning Rate — [09 スケーリング則](./09_scaling_laws.md)（学習率と損失のスケーリング則）
 - [#535](https://github.com/Hiroki11x/Papers/issues/535) Directional Smoothness and Gradient Methods: Convergence and Adaptivity — [06 SGD ダイナミクス・理論](./06_sgd_dynamics_theory.md)（最適化理論、方向的平滑性）
 - [#538](https://github.com/Hiroki11x/Papers/issues/538) AdaGC: Enhancing LLM Pretraining Stability via Adaptive Gradient Clipping — [07 オプティマイザ設計](./07_optimizer_design.md)（学習安定化と適応的勾配クリッピング）
+- [#574](https://github.com/Hiroki11x/Papers/issues/574) Scaling with Collapse: Efficient and Predictable Training of LLM Families — [01 クリティカルバッチサイズ](../practical_optimization/01_critical_batch_size.md)（TPP を固定すると最適な AdamW タイムスケール τ がモデルサイズによらず一定になり、小規模で選んだ τ を大規模へ転送できる）
+- [#575](https://github.com/Hiroki11x/Papers/issues/575) Better Schedules for Low Precision Training of Deep Neural Networks — [02 低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md)（学習中に数値精度を変える精度スケジュールの実験的な比較）
+- [#586](https://github.com/Hiroki11x/Papers/issues/586) A Solvable Model of Adaptive Learning Rate Rescaling: Acceleration, Stability & Scaling — [01 クリティカルバッチサイズ](../practical_optimization/01_critical_batch_size.md)（勾配正規化による実効学習率の自動的な引き上げと、安定性限界での加速の崩壊）
 
 **Practical Optimization 文書との関係**:
 

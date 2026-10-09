@@ -1,4 +1,4 @@
-# 論文ノート全体カタログ（全572件）
+# 論文ノート全体カタログ（全591件）
 
 GitHub Issues に記録された論文ノート全件を、**Practical Optimization**（重点3分野）と **misc**（12トピック）に分類し、採択先と公開時期を整理したカタログです。各トピックの解説は個別ドキュメントを参照してください。
 
@@ -10,16 +10,16 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 
 | 区分 | トピック | 件数 | ドキュメント |
 |---|---|---|---|
-| Practical Optimization | クリティカルバッチサイズ | 61 | [practical_optimization/01_critical_batch_size.md](practical_optimization/01_critical_batch_size.md) |
-| Practical Optimization | 低精度学習・Muon | 69 | [practical_optimization/02_low_precision_and_muon.md](practical_optimization/02_low_precision_and_muon.md) |
-| Practical Optimization | セミシンクロナス学習 | 17 | [practical_optimization/03_semi_synchronous_training.md](practical_optimization/03_semi_synchronous_training.md) |
+| Practical Optimization | クリティカルバッチサイズ | 66 | [practical_optimization/01_critical_batch_size.md](practical_optimization/01_critical_batch_size.md) |
+| Practical Optimization | 低精度学習・Muon | 79 | [practical_optimization/02_low_precision_and_muon.md](practical_optimization/02_low_precision_and_muon.md) |
+| Practical Optimization | セミシンクロナス学習 | 20 | [practical_optimization/03_semi_synchronous_training.md](practical_optimization/03_semi_synchronous_training.md) |
 | misc | OOD汎化・分布シフト・頑健性 | 74 | [misc/01_ood_generalization.md](misc/01_ood_generalization.md) |
 | misc | キャリブレーション・不確実性推定 | 44 | [misc/02_calibration_uncertainty.md](misc/02_calibration_uncertainty.md) |
 | misc | 損失地形・シャープネス | 31 | [misc/03_loss_landscape_sharpness.md](misc/03_loss_landscape_sharpness.md) |
 | misc | 汎化理論・暗黙的バイアス | 59 | [misc/04_generalization_implicit_bias.md](misc/04_generalization_implicit_bias.md) |
 | misc | 正則化・データ拡張・圧縮 | 27 | [misc/05_regularization_augmentation_compression.md](misc/05_regularization_augmentation_compression.md) |
-| misc | SGDのダイナミクスと最適化理論 | 29 | [misc/06_sgd_dynamics_theory.md](misc/06_sgd_dynamics_theory.md) |
-| misc | オプティマイザ設計 | 49 | [misc/07_optimizer_design.md](misc/07_optimizer_design.md) |
+| misc | SGDのダイナミクスと最適化理論 | 30 | [misc/06_sgd_dynamics_theory.md](misc/06_sgd_dynamics_theory.md) |
+| misc | オプティマイザ設計 | 50 | [misc/07_optimizer_design.md](misc/07_optimizer_design.md) |
 | misc | 学習率スケジュール・weight decay | 22 | [misc/08_lr_schedule_weight_decay.md](misc/08_lr_schedule_weight_decay.md) |
 | misc | スケーリング則 | 16 | [misc/09_scaling_laws.md](misc/09_scaling_laws.md) |
 | misc | GAN・ミニマックス最適化 | 20 | [misc/10_gan_minimax.md](misc/10_gan_minimax.md) |
@@ -30,53 +30,53 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 
 | トピック | 1990 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026 | 不明 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| クリティカルバッチサイズ | 0 | 0 | 0 | 0 | 3 | 5 | 3 | 10 | 4 | 3 | 1 | 4 | 16 | 9 | 3 |
-| 低精度学習・Muon | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 2 | 26 | 27 | 8 |
-| セミシンクロナス学習 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 | 1 | 1 | 0 | 5 | 6 | 0 |
+| クリティカルバッチサイズ | 0 | 0 | 0 | 0 | 3 | 5 | 3 | 10 | 4 | 3 | 1 | 5 | 17 | 12 | 3 |
+| 低精度学習・Muon | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 3 | 26 | 36 | 8 |
+| セミシンクロナス学習 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 | 1 | 1 | 0 | 5 | 9 | 0 |
 | OOD汎化・分布シフト・頑健性 | 0 | 0 | 0 | 0 | 3 | 4 | 8 | 9 | 25 | 19 | 0 | 1 | 4 | 1 | 0 |
 | キャリブレーション・不確実性推定 | 0 | 0 | 0 | 0 | 1 | 2 | 8 | 7 | 9 | 15 | 0 | 0 | 0 | 2 | 0 |
 | 損失地形・シャープネス | 0 | 0 | 0 | 0 | 0 | 2 | 4 | 7 | 4 | 9 | 1 | 0 | 2 | 2 | 0 |
 | 汎化理論・暗黙的バイアス | 0 | 0 | 0 | 1 | 1 | 1 | 8 | 17 | 16 | 11 | 1 | 1 | 1 | 0 | 1 |
 | 正則化・データ拡張・圧縮 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 6 | 6 | 11 | 1 | 0 | 0 | 0 | 2 |
-| SGDのダイナミクスと最適化理論 | 0 | 1 | 0 | 1 | 3 | 2 | 3 | 4 | 2 | 6 | 1 | 2 | 2 | 2 | 0 |
-| オプティマイザ設計 | 0 | 0 | 1 | 0 | 1 | 0 | 5 | 11 | 6 | 12 | 0 | 1 | 7 | 4 | 1 |
+| SGDのダイナミクスと最適化理論 | 0 | 1 | 0 | 1 | 4 | 2 | 3 | 4 | 2 | 6 | 1 | 2 | 2 | 2 | 0 |
+| オプティマイザ設計 | 0 | 0 | 1 | 0 | 1 | 0 | 5 | 11 | 6 | 12 | 0 | 1 | 7 | 5 | 1 |
 | 学習率スケジュール・weight decay | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 3 | 1 | 2 | 9 | 5 | 0 |
 | スケーリング則 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 4 | 2 | 1 | 3 | 3 | 1 | 0 |
 | GAN・ミニマックス最適化 | 0 | 0 | 0 | 0 | 3 | 3 | 2 | 2 | 3 | 6 | 0 | 0 | 0 | 0 | 1 |
 | LLM（アーキテクチャ・推論・安全性） | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 4 | 18 | 9 | 0 |
 | 継続学習・強化学習・その他 | 1 | 0 | 0 | 1 | 1 | 2 | 1 | 4 | 5 | 9 | 1 | 1 | 2 | 2 | 2 |
-| **全体（重複なし）** | **1** | **1** | **1** | **3** | **16** | **22** | **44** | **82** | **88** | **110** | **11** | **21** | **90** | **65** | **17** |
+| **全体（重複なし）** | **1** | **1** | **1** | **3** | **17** | **22** | **44** | **82** | **88** | **110** | **11** | **23** | **91** | **80** | **17** |
 
 ## issue 作成年（読んだ年）× トピック（件数）
 
 | トピック | 2020 | 2021 | 2022 | 2023 | 2025 | 2026 |
 |---|---|---|---|---|---|---|
-| クリティカルバッチサイズ | 15 | 7 | 5 | 1 | 22 | 11 |
-| 低精度学習・Muon | 1 | 2 | 2 | 0 | 28 | 36 |
-| セミシンクロナス学習 | 2 | 2 | 1 | 0 | 4 | 8 |
+| クリティカルバッチサイズ | 15 | 7 | 5 | 1 | 22 | 16 |
+| 低精度学習・Muon | 1 | 2 | 2 | 0 | 28 | 46 |
+| セミシンクロナス学習 | 2 | 2 | 1 | 0 | 4 | 11 |
 | OOD汎化・分布シフト・頑健性 | 2 | 25 | 37 | 4 | 5 | 1 |
 | キャリブレーション・不確実性推定 | 1 | 8 | 33 | 0 | 0 | 2 |
 | 損失地形・シャープネス | 7 | 5 | 14 | 0 | 3 | 2 |
 | 汎化理論・暗黙的バイアス | 16 | 17 | 20 | 3 | 3 | 0 |
 | 正則化・データ拡張・圧縮 | 4 | 7 | 15 | 1 | 0 | 0 |
-| SGDのダイナミクスと最適化理論 | 9 | 5 | 7 | 2 | 3 | 3 |
-| オプティマイザ設計 | 10 | 7 | 19 | 0 | 7 | 6 |
+| SGDのダイナミクスと最適化理論 | 9 | 5 | 7 | 2 | 3 | 4 |
+| オプティマイザ設計 | 10 | 7 | 19 | 0 | 7 | 7 |
 | 学習率スケジュール・weight decay | 1 | 0 | 4 | 1 | 9 | 7 |
 | スケーリング則 | 1 | 3 | 2 | 0 | 9 | 1 |
 | GAN・ミニマックス最適化 | 0 | 12 | 8 | 0 | 0 | 0 |
 | LLM（アーキテクチャ・推論・安全性） | 0 | 0 | 1 | 0 | 22 | 12 |
 | 継続学習・強化学習・その他 | 5 | 3 | 17 | 1 | 4 | 2 |
-| **全体（重複なし）** | **73** | **102** | **185** | **13** | **114** | **85** |
+| **全体（重複なし）** | **73** | **102** | **185** | **13** | **114** | **104** |
 
 ## 採択先系列（件数、重複なし）
 
 | 採択先系列 | 件数 |
 |---|---|
-| arXiv / プレプリント | 166 |
+| arXiv / プレプリント | 181 |
 | NeurIPS | 110 |
 | ICML | 67 |
-| ICLR | 63 |
-| ジャーナル・その他会議 | 54 |
+| ICLR | 65 |
+| ジャーナル・その他会議 | 55 |
 | CV系 (CVPR/ICCV/ECCV等) | 27 |
 | ワークショップ | 17 |
 | AISTATS | 13 |
@@ -89,19 +89,19 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | UAI | 4 |
 | IJCAI | 3 |
 | COLT | 2 |
+| CPAL | 2 |
 | ALT | 1 |
-| CPAL | 1 |
 | COLM | 1 |
 
 ## 根拠の内訳（件数）
 
 | 根拠 | 件数 |
 |---|---|
-| 不明 | 162 |
-| arXivコメント | 147 |
+| 不明 | 175 |
+| arXivコメント | 151 |
 | issue記載 | 99 |
-| Semantic Scholar確認 | 85 |
-| Web確認 | 79 |
+| Semantic Scholar確認 | 86 |
+| Web確認 | 80 |
 
 ## 採択先（会議・年）別の issue 一覧
 
@@ -119,7 +119,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | COLM 2026 | 1 | [#543](https://github.com/Hiroki11x/Papers/issues/543) |
 | COLT 2021 | 1 | [#25](https://github.com/Hiroki11x/Papers/issues/25) |
 | COLT 2026 | 1 | [#499](https://github.com/Hiroki11x/Papers/issues/499) |
-| CPAL 2025 | 1 | [#402](https://github.com/Hiroki11x/Papers/issues/402) |
+| CPAL 2025 | 2 | [#402](https://github.com/Hiroki11x/Papers/issues/402), [#578](https://github.com/Hiroki11x/Papers/issues/578) |
 | CVPR 2017 | 1 | [#237](https://github.com/Hiroki11x/Papers/issues/237) |
 | CVPR 2021 | 6 | [#30](https://github.com/Hiroki11x/Papers/issues/30), [#102](https://github.com/Hiroki11x/Papers/issues/102), [#103](https://github.com/Hiroki11x/Papers/issues/103), [#104](https://github.com/Hiroki11x/Papers/issues/104), [#105](https://github.com/Hiroki11x/Papers/issues/105), [#257](https://github.com/Hiroki11x/Papers/issues/257) |
 | CVPR 2022 | 4 | [#114](https://github.com/Hiroki11x/Papers/issues/114), [#174](https://github.com/Hiroki11x/Papers/issues/174), [#225](https://github.com/Hiroki11x/Papers/issues/225), [#226](https://github.com/Hiroki11x/Papers/issues/226) |
@@ -133,13 +133,13 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | WACV 2023 | 1 | [#349](https://github.com/Hiroki11x/Papers/issues/349) |
 | ICLR 2017 | 1 | [#87](https://github.com/Hiroki11x/Papers/issues/87) |
 | ICLR 2018 | 5 | [#11](https://github.com/Hiroki11x/Papers/issues/11), [#17](https://github.com/Hiroki11x/Papers/issues/17), [#21](https://github.com/Hiroki11x/Papers/issues/21), [#143](https://github.com/Hiroki11x/Papers/issues/143), [#191](https://github.com/Hiroki11x/Papers/issues/191) |
-| ICLR 2019 | 1 | [#124](https://github.com/Hiroki11x/Papers/issues/124) |
+| ICLR 2019 | 2 | [#124](https://github.com/Hiroki11x/Papers/issues/124), [#576](https://github.com/Hiroki11x/Papers/issues/576) |
 | ICLR 2020 | 11 | [#1](https://github.com/Hiroki11x/Papers/issues/1), [#4](https://github.com/Hiroki11x/Papers/issues/4), [#9](https://github.com/Hiroki11x/Papers/issues/9), [#12](https://github.com/Hiroki11x/Papers/issues/12), [#73](https://github.com/Hiroki11x/Papers/issues/73), [#78](https://github.com/Hiroki11x/Papers/issues/78), [#91](https://github.com/Hiroki11x/Papers/issues/91), [#128](https://github.com/Hiroki11x/Papers/issues/128), [#142](https://github.com/Hiroki11x/Papers/issues/142), [#221](https://github.com/Hiroki11x/Papers/issues/221), [#222](https://github.com/Hiroki11x/Papers/issues/222) |
 | ICLR 2021 | 10 | [#26](https://github.com/Hiroki11x/Papers/issues/26), [#51](https://github.com/Hiroki11x/Papers/issues/51), [#56](https://github.com/Hiroki11x/Papers/issues/56), [#58](https://github.com/Hiroki11x/Papers/issues/58), [#62](https://github.com/Hiroki11x/Papers/issues/62), [#76](https://github.com/Hiroki11x/Papers/issues/76), [#80](https://github.com/Hiroki11x/Papers/issues/80), [#110](https://github.com/Hiroki11x/Papers/issues/110), [#137](https://github.com/Hiroki11x/Papers/issues/137), [#338](https://github.com/Hiroki11x/Papers/issues/338) |
 | ICLR 2022 | 17 | [#144](https://github.com/Hiroki11x/Papers/issues/144), [#153](https://github.com/Hiroki11x/Papers/issues/153), [#155](https://github.com/Hiroki11x/Papers/issues/155), [#156](https://github.com/Hiroki11x/Papers/issues/156), [#157](https://github.com/Hiroki11x/Papers/issues/157), [#161](https://github.com/Hiroki11x/Papers/issues/161), [#164](https://github.com/Hiroki11x/Papers/issues/164), [#165](https://github.com/Hiroki11x/Papers/issues/165), [#178](https://github.com/Hiroki11x/Papers/issues/178), [#190](https://github.com/Hiroki11x/Papers/issues/190), [#197](https://github.com/Hiroki11x/Papers/issues/197), [#207](https://github.com/Hiroki11x/Papers/issues/207), [#214](https://github.com/Hiroki11x/Papers/issues/214), [#251](https://github.com/Hiroki11x/Papers/issues/251), [#269](https://github.com/Hiroki11x/Papers/issues/269), [#318](https://github.com/Hiroki11x/Papers/issues/318), [#415](https://github.com/Hiroki11x/Papers/issues/415) |
 | ICLR 2023 | 9 | [#160](https://github.com/Hiroki11x/Papers/issues/160), [#293](https://github.com/Hiroki11x/Papers/issues/293), [#294](https://github.com/Hiroki11x/Papers/issues/294), [#295](https://github.com/Hiroki11x/Papers/issues/295), [#297](https://github.com/Hiroki11x/Papers/issues/297), [#307](https://github.com/Hiroki11x/Papers/issues/307), [#324](https://github.com/Hiroki11x/Papers/issues/324), [#352](https://github.com/Hiroki11x/Papers/issues/352), [#358](https://github.com/Hiroki11x/Papers/issues/358) |
 | ICLR 2025 | 4 | [#390](https://github.com/Hiroki11x/Papers/issues/390), [#450](https://github.com/Hiroki11x/Papers/issues/450), [#467](https://github.com/Hiroki11x/Papers/issues/467), [#482](https://github.com/Hiroki11x/Papers/issues/482) |
-| ICLR 2026 | 5 | [#436](https://github.com/Hiroki11x/Papers/issues/436), [#448](https://github.com/Hiroki11x/Papers/issues/448), [#460](https://github.com/Hiroki11x/Papers/issues/460), [#502](https://github.com/Hiroki11x/Papers/issues/502), [#521](https://github.com/Hiroki11x/Papers/issues/521) |
+| ICLR 2026 | 6 | [#436](https://github.com/Hiroki11x/Papers/issues/436), [#448](https://github.com/Hiroki11x/Papers/issues/448), [#460](https://github.com/Hiroki11x/Papers/issues/460), [#502](https://github.com/Hiroki11x/Papers/issues/502), [#521](https://github.com/Hiroki11x/Papers/issues/521), [#574](https://github.com/Hiroki11x/Papers/issues/574) |
 | ICML 2015 | 1 | [#202](https://github.com/Hiroki11x/Papers/issues/202) |
 | ICML 2017 | 2 | [#18](https://github.com/Hiroki11x/Papers/issues/18), [#107](https://github.com/Hiroki11x/Papers/issues/107) |
 | ICML 2018 | 6 | [#3](https://github.com/Hiroki11x/Papers/issues/3), [#90](https://github.com/Hiroki11x/Papers/issues/90), [#95](https://github.com/Hiroki11x/Papers/issues/95), [#188](https://github.com/Hiroki11x/Papers/issues/188), [#227](https://github.com/Hiroki11x/Papers/issues/227), [#451](https://github.com/Hiroki11x/Papers/issues/451) |
@@ -174,8 +174,9 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | UAI 2022 | 1 | [#208](https://github.com/Hiroki11x/Papers/issues/208) |
 | UAI 2025 | 1 | [#387](https://github.com/Hiroki11x/Papers/issues/387) |
 | UAI 2026 | 1 | [#533](https://github.com/Hiroki11x/Papers/issues/533) |
-| arXiv（プレプリント） | 166 | [#8](https://github.com/Hiroki11x/Papers/issues/8), [#41](https://github.com/Hiroki11x/Papers/issues/41), [#43](https://github.com/Hiroki11x/Papers/issues/43), [#52](https://github.com/Hiroki11x/Papers/issues/52), [#53](https://github.com/Hiroki11x/Papers/issues/53), [#54](https://github.com/Hiroki11x/Papers/issues/54), [#60](https://github.com/Hiroki11x/Papers/issues/60), [#74](https://github.com/Hiroki11x/Papers/issues/74), [#77](https://github.com/Hiroki11x/Papers/issues/77), [#79](https://github.com/Hiroki11x/Papers/issues/79), [#84](https://github.com/Hiroki11x/Papers/issues/84), [#100](https://github.com/Hiroki11x/Papers/issues/100), [#112](https://github.com/Hiroki11x/Papers/issues/112), [#136](https://github.com/Hiroki11x/Papers/issues/136), [#149](https://github.com/Hiroki11x/Papers/issues/149), [#151](https://github.com/Hiroki11x/Papers/issues/151), [#152](https://github.com/Hiroki11x/Papers/issues/152), [#154](https://github.com/Hiroki11x/Papers/issues/154), [#158](https://github.com/Hiroki11x/Papers/issues/158), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#168](https://github.com/Hiroki11x/Papers/issues/168), [#169](https://github.com/Hiroki11x/Papers/issues/169), [#173](https://github.com/Hiroki11x/Papers/issues/173), [#177](https://github.com/Hiroki11x/Papers/issues/177), [#180](https://github.com/Hiroki11x/Papers/issues/180), [#186](https://github.com/Hiroki11x/Papers/issues/186), [#193](https://github.com/Hiroki11x/Papers/issues/193), [#200](https://github.com/Hiroki11x/Papers/issues/200), [#205](https://github.com/Hiroki11x/Papers/issues/205), [#210](https://github.com/Hiroki11x/Papers/issues/210), [#213](https://github.com/Hiroki11x/Papers/issues/213), [#219](https://github.com/Hiroki11x/Papers/issues/219), [#241](https://github.com/Hiroki11x/Papers/issues/241), [#245](https://github.com/Hiroki11x/Papers/issues/245), [#268](https://github.com/Hiroki11x/Papers/issues/268), [#272](https://github.com/Hiroki11x/Papers/issues/272), [#276](https://github.com/Hiroki11x/Papers/issues/276), [#277](https://github.com/Hiroki11x/Papers/issues/277), [#279](https://github.com/Hiroki11x/Papers/issues/279), [#285](https://github.com/Hiroki11x/Papers/issues/285), [#287](https://github.com/Hiroki11x/Papers/issues/287), [#289](https://github.com/Hiroki11x/Papers/issues/289), [#296](https://github.com/Hiroki11x/Papers/issues/296), [#298](https://github.com/Hiroki11x/Papers/issues/298), [#299](https://github.com/Hiroki11x/Papers/issues/299), [#303](https://github.com/Hiroki11x/Papers/issues/303), [#308](https://github.com/Hiroki11x/Papers/issues/308), [#316](https://github.com/Hiroki11x/Papers/issues/316), [#331](https://github.com/Hiroki11x/Papers/issues/331), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#351](https://github.com/Hiroki11x/Papers/issues/351), [#357](https://github.com/Hiroki11x/Papers/issues/357), [#370](https://github.com/Hiroki11x/Papers/issues/370), [#372](https://github.com/Hiroki11x/Papers/issues/372), [#374](https://github.com/Hiroki11x/Papers/issues/374), [#379](https://github.com/Hiroki11x/Papers/issues/379), [#380](https://github.com/Hiroki11x/Papers/issues/380), [#382](https://github.com/Hiroki11x/Papers/issues/382), [#384](https://github.com/Hiroki11x/Papers/issues/384), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#393](https://github.com/Hiroki11x/Papers/issues/393), [#395](https://github.com/Hiroki11x/Papers/issues/395), [#396](https://github.com/Hiroki11x/Papers/issues/396), [#398](https://github.com/Hiroki11x/Papers/issues/398), [#399](https://github.com/Hiroki11x/Papers/issues/399), [#400](https://github.com/Hiroki11x/Papers/issues/400), [#404](https://github.com/Hiroki11x/Papers/issues/404), [#408](https://github.com/Hiroki11x/Papers/issues/408), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#412](https://github.com/Hiroki11x/Papers/issues/412), [#413](https://github.com/Hiroki11x/Papers/issues/413), [#414](https://github.com/Hiroki11x/Papers/issues/414), [#418](https://github.com/Hiroki11x/Papers/issues/418), [#419](https://github.com/Hiroki11x/Papers/issues/419), [#420](https://github.com/Hiroki11x/Papers/issues/420), [#421](https://github.com/Hiroki11x/Papers/issues/421), [#422](https://github.com/Hiroki11x/Papers/issues/422), [#423](https://github.com/Hiroki11x/Papers/issues/423), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#439](https://github.com/Hiroki11x/Papers/issues/439), [#440](https://github.com/Hiroki11x/Papers/issues/440), [#441](https://github.com/Hiroki11x/Papers/issues/441), [#446](https://github.com/Hiroki11x/Papers/issues/446), [#453](https://github.com/Hiroki11x/Papers/issues/453), [#454](https://github.com/Hiroki11x/Papers/issues/454), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#459](https://github.com/Hiroki11x/Papers/issues/459), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#472](https://github.com/Hiroki11x/Papers/issues/472), [#477](https://github.com/Hiroki11x/Papers/issues/477), [#478](https://github.com/Hiroki11x/Papers/issues/478), [#479](https://github.com/Hiroki11x/Papers/issues/479), [#480](https://github.com/Hiroki11x/Papers/issues/480), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#487](https://github.com/Hiroki11x/Papers/issues/487), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#489](https://github.com/Hiroki11x/Papers/issues/489), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#493](https://github.com/Hiroki11x/Papers/issues/493), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#495](https://github.com/Hiroki11x/Papers/issues/495), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#497](https://github.com/Hiroki11x/Papers/issues/497), [#498](https://github.com/Hiroki11x/Papers/issues/498), [#500](https://github.com/Hiroki11x/Papers/issues/500), [#501](https://github.com/Hiroki11x/Papers/issues/501), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#504](https://github.com/Hiroki11x/Papers/issues/504), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#506](https://github.com/Hiroki11x/Papers/issues/506), [#508](https://github.com/Hiroki11x/Papers/issues/508), [#509](https://github.com/Hiroki11x/Papers/issues/509), [#510](https://github.com/Hiroki11x/Papers/issues/510), [#511](https://github.com/Hiroki11x/Papers/issues/511), [#512](https://github.com/Hiroki11x/Papers/issues/512), [#513](https://github.com/Hiroki11x/Papers/issues/513), [#514](https://github.com/Hiroki11x/Papers/issues/514), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#520](https://github.com/Hiroki11x/Papers/issues/520), [#523](https://github.com/Hiroki11x/Papers/issues/523), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#529](https://github.com/Hiroki11x/Papers/issues/529), [#531](https://github.com/Hiroki11x/Papers/issues/531), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#534](https://github.com/Hiroki11x/Papers/issues/534), [#536](https://github.com/Hiroki11x/Papers/issues/536), [#537](https://github.com/Hiroki11x/Papers/issues/537), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#545](https://github.com/Hiroki11x/Papers/issues/545), [#546](https://github.com/Hiroki11x/Papers/issues/546), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#550](https://github.com/Hiroki11x/Papers/issues/550), [#551](https://github.com/Hiroki11x/Papers/issues/551), [#552](https://github.com/Hiroki11x/Papers/issues/552), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#556](https://github.com/Hiroki11x/Papers/issues/556), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#558](https://github.com/Hiroki11x/Papers/issues/558), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#563](https://github.com/Hiroki11x/Papers/issues/563), [#564](https://github.com/Hiroki11x/Papers/issues/564), [#565](https://github.com/Hiroki11x/Papers/issues/565), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#569](https://github.com/Hiroki11x/Papers/issues/569), [#571](https://github.com/Hiroki11x/Papers/issues/571), [#572](https://github.com/Hiroki11x/Papers/issues/572), [#573](https://github.com/Hiroki11x/Papers/issues/573) |
+| arXiv（プレプリント） | 181 | [#8](https://github.com/Hiroki11x/Papers/issues/8), [#41](https://github.com/Hiroki11x/Papers/issues/41), [#43](https://github.com/Hiroki11x/Papers/issues/43), [#52](https://github.com/Hiroki11x/Papers/issues/52), [#53](https://github.com/Hiroki11x/Papers/issues/53), [#54](https://github.com/Hiroki11x/Papers/issues/54), [#60](https://github.com/Hiroki11x/Papers/issues/60), [#74](https://github.com/Hiroki11x/Papers/issues/74), [#77](https://github.com/Hiroki11x/Papers/issues/77), [#79](https://github.com/Hiroki11x/Papers/issues/79), [#84](https://github.com/Hiroki11x/Papers/issues/84), [#100](https://github.com/Hiroki11x/Papers/issues/100), [#112](https://github.com/Hiroki11x/Papers/issues/112), [#136](https://github.com/Hiroki11x/Papers/issues/136), [#149](https://github.com/Hiroki11x/Papers/issues/149), [#151](https://github.com/Hiroki11x/Papers/issues/151), [#152](https://github.com/Hiroki11x/Papers/issues/152), [#154](https://github.com/Hiroki11x/Papers/issues/154), [#158](https://github.com/Hiroki11x/Papers/issues/158), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#168](https://github.com/Hiroki11x/Papers/issues/168), [#169](https://github.com/Hiroki11x/Papers/issues/169), [#173](https://github.com/Hiroki11x/Papers/issues/173), [#177](https://github.com/Hiroki11x/Papers/issues/177), [#180](https://github.com/Hiroki11x/Papers/issues/180), [#186](https://github.com/Hiroki11x/Papers/issues/186), [#193](https://github.com/Hiroki11x/Papers/issues/193), [#200](https://github.com/Hiroki11x/Papers/issues/200), [#205](https://github.com/Hiroki11x/Papers/issues/205), [#210](https://github.com/Hiroki11x/Papers/issues/210), [#213](https://github.com/Hiroki11x/Papers/issues/213), [#219](https://github.com/Hiroki11x/Papers/issues/219), [#241](https://github.com/Hiroki11x/Papers/issues/241), [#245](https://github.com/Hiroki11x/Papers/issues/245), [#268](https://github.com/Hiroki11x/Papers/issues/268), [#272](https://github.com/Hiroki11x/Papers/issues/272), [#276](https://github.com/Hiroki11x/Papers/issues/276), [#277](https://github.com/Hiroki11x/Papers/issues/277), [#279](https://github.com/Hiroki11x/Papers/issues/279), [#285](https://github.com/Hiroki11x/Papers/issues/285), [#287](https://github.com/Hiroki11x/Papers/issues/287), [#289](https://github.com/Hiroki11x/Papers/issues/289), [#296](https://github.com/Hiroki11x/Papers/issues/296), [#298](https://github.com/Hiroki11x/Papers/issues/298), [#299](https://github.com/Hiroki11x/Papers/issues/299), [#303](https://github.com/Hiroki11x/Papers/issues/303), [#308](https://github.com/Hiroki11x/Papers/issues/308), [#316](https://github.com/Hiroki11x/Papers/issues/316), [#331](https://github.com/Hiroki11x/Papers/issues/331), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#351](https://github.com/Hiroki11x/Papers/issues/351), [#357](https://github.com/Hiroki11x/Papers/issues/357), [#370](https://github.com/Hiroki11x/Papers/issues/370), [#372](https://github.com/Hiroki11x/Papers/issues/372), [#374](https://github.com/Hiroki11x/Papers/issues/374), [#379](https://github.com/Hiroki11x/Papers/issues/379), [#380](https://github.com/Hiroki11x/Papers/issues/380), [#382](https://github.com/Hiroki11x/Papers/issues/382), [#384](https://github.com/Hiroki11x/Papers/issues/384), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#393](https://github.com/Hiroki11x/Papers/issues/393), [#395](https://github.com/Hiroki11x/Papers/issues/395), [#396](https://github.com/Hiroki11x/Papers/issues/396), [#398](https://github.com/Hiroki11x/Papers/issues/398), [#399](https://github.com/Hiroki11x/Papers/issues/399), [#400](https://github.com/Hiroki11x/Papers/issues/400), [#404](https://github.com/Hiroki11x/Papers/issues/404), [#408](https://github.com/Hiroki11x/Papers/issues/408), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#412](https://github.com/Hiroki11x/Papers/issues/412), [#413](https://github.com/Hiroki11x/Papers/issues/413), [#414](https://github.com/Hiroki11x/Papers/issues/414), [#418](https://github.com/Hiroki11x/Papers/issues/418), [#419](https://github.com/Hiroki11x/Papers/issues/419), [#420](https://github.com/Hiroki11x/Papers/issues/420), [#421](https://github.com/Hiroki11x/Papers/issues/421), [#422](https://github.com/Hiroki11x/Papers/issues/422), [#423](https://github.com/Hiroki11x/Papers/issues/423), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#439](https://github.com/Hiroki11x/Papers/issues/439), [#440](https://github.com/Hiroki11x/Papers/issues/440), [#441](https://github.com/Hiroki11x/Papers/issues/441), [#446](https://github.com/Hiroki11x/Papers/issues/446), [#453](https://github.com/Hiroki11x/Papers/issues/453), [#454](https://github.com/Hiroki11x/Papers/issues/454), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#459](https://github.com/Hiroki11x/Papers/issues/459), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#472](https://github.com/Hiroki11x/Papers/issues/472), [#477](https://github.com/Hiroki11x/Papers/issues/477), [#478](https://github.com/Hiroki11x/Papers/issues/478), [#479](https://github.com/Hiroki11x/Papers/issues/479), [#480](https://github.com/Hiroki11x/Papers/issues/480), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#487](https://github.com/Hiroki11x/Papers/issues/487), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#489](https://github.com/Hiroki11x/Papers/issues/489), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#493](https://github.com/Hiroki11x/Papers/issues/493), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#495](https://github.com/Hiroki11x/Papers/issues/495), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#497](https://github.com/Hiroki11x/Papers/issues/497), [#498](https://github.com/Hiroki11x/Papers/issues/498), [#500](https://github.com/Hiroki11x/Papers/issues/500), [#501](https://github.com/Hiroki11x/Papers/issues/501), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#504](https://github.com/Hiroki11x/Papers/issues/504), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#506](https://github.com/Hiroki11x/Papers/issues/506), [#508](https://github.com/Hiroki11x/Papers/issues/508), [#509](https://github.com/Hiroki11x/Papers/issues/509), [#510](https://github.com/Hiroki11x/Papers/issues/510), [#511](https://github.com/Hiroki11x/Papers/issues/511), [#512](https://github.com/Hiroki11x/Papers/issues/512), [#513](https://github.com/Hiroki11x/Papers/issues/513), [#514](https://github.com/Hiroki11x/Papers/issues/514), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#520](https://github.com/Hiroki11x/Papers/issues/520), [#523](https://github.com/Hiroki11x/Papers/issues/523), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#529](https://github.com/Hiroki11x/Papers/issues/529), [#531](https://github.com/Hiroki11x/Papers/issues/531), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#534](https://github.com/Hiroki11x/Papers/issues/534), [#536](https://github.com/Hiroki11x/Papers/issues/536), [#537](https://github.com/Hiroki11x/Papers/issues/537), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#545](https://github.com/Hiroki11x/Papers/issues/545), [#546](https://github.com/Hiroki11x/Papers/issues/546), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#550](https://github.com/Hiroki11x/Papers/issues/550), [#551](https://github.com/Hiroki11x/Papers/issues/551), [#552](https://github.com/Hiroki11x/Papers/issues/552), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#556](https://github.com/Hiroki11x/Papers/issues/556), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#558](https://github.com/Hiroki11x/Papers/issues/558), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#563](https://github.com/Hiroki11x/Papers/issues/563), [#564](https://github.com/Hiroki11x/Papers/issues/564), [#565](https://github.com/Hiroki11x/Papers/issues/565), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#569](https://github.com/Hiroki11x/Papers/issues/569), [#571](https://github.com/Hiroki11x/Papers/issues/571), [#572](https://github.com/Hiroki11x/Papers/issues/572), [#573](https://github.com/Hiroki11x/Papers/issues/573), [#577](https://github.com/Hiroki11x/Papers/issues/577), [#579](https://github.com/Hiroki11x/Papers/issues/579), [#580](https://github.com/Hiroki11x/Papers/issues/580), [#581](https://github.com/Hiroki11x/Papers/issues/581), [#582](https://github.com/Hiroki11x/Papers/issues/582), [#583](https://github.com/Hiroki11x/Papers/issues/583), [#584](https://github.com/Hiroki11x/Papers/issues/584), [#585](https://github.com/Hiroki11x/Papers/issues/585), [#586](https://github.com/Hiroki11x/Papers/issues/586), [#587](https://github.com/Hiroki11x/Papers/issues/587), [#588](https://github.com/Hiroki11x/Papers/issues/588), [#589](https://github.com/Hiroki11x/Papers/issues/589), [#590](https://github.com/Hiroki11x/Papers/issues/590), [#591](https://github.com/Hiroki11x/Papers/issues/591), [#592](https://github.com/Hiroki11x/Papers/issues/592) |
 | ACM CSCS 2022 | 1 | [#360](https://github.com/Hiroki11x/Papers/issues/360) |
+| ACML 2023 / Machine Learning (2024) | 1 | [#575](https://github.com/Hiroki11x/Papers/issues/575) |
 | Acta Applicandae Mathematicae | 1 | [#83](https://github.com/Hiroki11x/Papers/issues/83) |
 | Annals of Mathematical Sciences and Applications | 1 | [#23](https://github.com/Hiroki11x/Papers/issues/23) |
 | Applied Intelligence | 1 | [#313](https://github.com/Hiroki11x/Papers/issues/313) |
@@ -251,7 +252,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 
 # Practical Optimization
 
-## クリティカルバッチサイズ（61件）
+## クリティカルバッチサイズ（66件）
 
 詳細: [practical_optimization/01_critical_batch_size.md](practical_optimization/01_critical_batch_size.md)
 
@@ -290,6 +291,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2024-10 | [#390](https://github.com/Hiroki11x/Papers/issues/390) How Does Critical Batch Size Scale in Pre-training? | Hanlin Zhang, Depen Morwani, Nikhil Vyas, et al. (Harvard (Kempner Institute)) | ICLR 2025 | arXivコメント | CBSのデータサイズ依存性 |
 | 2024-11 | [#378](https://github.com/Hiroki11x/Papers/issues/378) Normalization Layer Per-Example Gradients are Sufficient to Predict Gradient Noise Scale in Transformers | Gavia Gray, Aman Tiwari, Shane Bergsma, Joel Hestness (Cerebras) | NeurIPS 2024 | arXivコメント | 勾配ノイズスケールの効率的推定 |
 | 2024-12 | [#402](https://github.com/Hiroki11x/Papers/issues/402) Adaptive Batch Size Schedules for Distributed Training of Language Models with Data and Model Parallelism | Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al. (Han Liu, Mladen Kolar) (Northwestern University / UChicago) | CPAL 2025 | arXivコメント | ノルムテストに基づく適応的バッチサイズスケジュール |
+| 2024-12 | [#578](https://github.com/Hiroki11x/Papers/issues/578) Adaptive Batch Size Schedules for Distributed Training of Language Models with Data and Model Parallelism | Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al. (Northwestern University / UChicago) | CPAL 2025 | arXivコメント | 2D並列対応の適応的バッチサイズ（FSDP-NORM） |
 | 2025-01 | [#392](https://github.com/Hiroki11x/Papers/issues/392) Exploring Variance Reduction in Importance Sampling for Efficient DNN Training | Takuro Kutsuna (Toyota Central R&D Labs) | SIAM Journal on Mathematics of Data Science | Web確認 | 重点サンプリングと実効ミニバッチサイズ |
 | 2025-03 | [#382](https://github.com/Hiroki11x/Papers/issues/382) Predictable Scale: Part I, Step Law -- Optimal Hyperparameter Scaling Law in Large Language Model Pretraining | Houyi Li, Wenzhen Zheng, Qiufeng Wang, et al. (StepFun) | arXiv（プレプリント） | 不明 | 最適学習率・バッチサイズのスケーリング則 |
 | 2025-05 | [#391](https://github.com/Hiroki11x/Papers/issues/391) Power Lines: Scaling Laws for Weight Decay and Batch Size in LLM Pre-training | Shane Bergsma, Nolan Dey, Gurpreet Gosal, et al. (Cerebras) | NeurIPS 2025 | arXivコメント | 重み減衰とバッチサイズのスケーリング則 |
@@ -301,6 +303,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2025-09 | [#432](https://github.com/Hiroki11x/Papers/issues/432) Fantastic Pretraining Optimizers and Where to Find Them | Kaiyue Wen, David Hall, Tengyu Ma, Percy Liang (Stanford University) | arXiv（プレプリント） | 不明 | 事前学習オプティマイザの公平なベンチマーク |
 | 2025-09 | [#433](https://github.com/Hiroki11x/Papers/issues/433) Benchmarking Optimizers for Large Language Model Pretraining | Andrei Semenov, Matteo Pagliardini, Martin Jaggi (EPFL) | arXiv（プレプリント） | 不明 | 事前学習オプティマイザのベンチマーク（バッチサイズ依存性） |
 | 2025-09 | [#464](https://github.com/Hiroki11x/Papers/issues/464) Unveiling the Role of Learning Rate Schedules via Functional Scaling Laws | Binghui Li, Fengling Chen, Zixun Huang, Lean Wang, Lei Wu (Peking University) | NeurIPS 2025 | arXivコメント | SDEに基づく学習率スケジュールのスケーリング則 |
+| 2025-09 | [#574](https://github.com/Hiroki11x/Papers/issues/574) Scaling with Collapse: Efficient and Predictable Training of LLM Families | Shane Bergsma, Bin Claire Zhang, Nolan Dey, et al. (Cerebras) | ICLR 2026 | arXivコメント | TPP固定でのAdamWタイムスケール則と損失曲線のcollapse |
 | 2025-10 | [#435](https://github.com/Hiroki11x/Papers/issues/435) Optimal Scaling Needs Optimal Norm | Oleg Filatov, Jiangtao Wang, Jan Ebert, Stefan Kesselheim (Jülich Supercomputing Centre) | arXiv（プレプリント） | 不明 | ノルム転移と最適LR・バッチサイズのスケーリング則（Scion） |
 | 2025-10 | [#449](https://github.com/Hiroki11x/Papers/issues/449) Understanding the Generalization of Stochastic Gradient Adam in Learning Neural Networks | Xuan Tang, Han Zhang, Yuan Cao, Difan Zou (HKU) | NeurIPS 2025 | arXivコメント | Adam/AdamWの汎化とバッチサイズ依存性の理論 |
 | 2025-10 | [#456](https://github.com/Hiroki11x/Papers/issues/456) The Potential of Second-Order Optimization for LLMs: A Study with Full Gauss-Newton | Natalie Abreu, Nikhil Vyas, Sham Kakade, Depen Morwani (Harvard) | arXiv（プレプリント） | 不明 | 完全Gauss-Newton法の性能上限と臨界バッチサイズ |
@@ -315,11 +318,14 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2026-08 | [#551](https://github.com/Hiroki11x/Papers/issues/551) When Do Larger Batches Help Scale LLM Reinforcement Learning? | Ziniu Li, Jinbo Wang, Guanhua Huang, et al. (Tencent Hunyuan) | arXiv（プレプリント） | 不明 | LLM強化学習におけるバッチサイズ |
 | 2026-08 | [#572](https://github.com/Hiroki11x/Papers/issues/572) When Do Larger Batches Help Scale LLM Reinforcement Learning? | Ziniu Li, Jinbo Wang, Guanhua Huang, et al. (Tencent Hunyuan) | arXiv（プレプリント） | 不明 | LLM強化学習におけるバッチサイズとスループット |
 | 2026-09 | [#550](https://github.com/Hiroki11x/Papers/issues/550) Momentum in large-batch training: Polyak enlarges the critical batch size, Nesterov improves data efficiency | Jia-Nan Wang, Zixun Huang, Kairui Li, Lei Wu (Peking Univ.) | arXiv（プレプリント） | 不明 | モメンタムとクリティカルバッチサイズ |
+| 2026-10 | [#581](https://github.com/Hiroki11x/Papers/issues/581) Why Does Adaptive Batching Help LLM Pretraining? A Perspective from Unbounded Variance | Arda Fazla, Antesh Upadhyay, Ege C. Kaya, et al. (Purdue University) | arXiv（プレプリント） | 不明 | 有界でない分散の下での適応的バッチングの理論 |
+| 2026-10 | [#586](https://github.com/Hiroki11x/Papers/issues/586) A Solvable Model of Adaptive Learning Rate Rescaling: Acceleration, Stability & Scaling | Itay Lavie, Clarissa Lauditi, Cengiz Pehlevan (Harvard University) | arXiv（プレプリント） | 不明 | 適応的学習率リスケーリング（正規化SGD）の可解モデル |
+| 2026-10 | [#592](https://github.com/Hiroki11x/Papers/issues/592) The Best Optimizer Depends on Batch Size | Xingyu Dang, Kaiyue Wen, Sadhika Malladi (Princeton / Stanford / UC San Diego) | arXiv（プレプリント） | 不明 | 最適なオプティマイザはバッチサイズで変わる |
 | 不明 | [#313](https://github.com/Hiroki11x/Papers/issues/313) A New Perspective for Understanding Generalization Gap of Deep Neural Networks Trained with Large Batch Sizes | Oyebade K. Oyedotun, Konstantinos Papadopoulos, Djamila Aouada (University of Luxembourg (SnT)) | Applied Intelligence | Semantic Scholar確認 | 大バッチ学習の汎化ギャップ |
 | 不明 | [#548](https://github.com/Hiroki11x/Papers/issues/548) On the Design of Qwen3.8-Next Architecture: Evaluation, Efficiency, and Training Stability | Qwen Team (Alibaba (Qwen)) | Tech Report (Qwen) | issue記載 | LLM事前学習でのbatch ramp-up不使用 |
 | 不明 | [#567](https://github.com/Hiroki11x/Papers/issues/567) MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement | Xiaomi LLM-Core Team (Xiaomi) | Tech Report (Xiaomi) | issue記載 | AdamW→Muown切替と大バッチRL |
 
-## 低精度学習・Muon（69件）
+## 低精度学習・Muon（79件）
 
 詳細: [practical_optimization/02_low_precision_and_muon.md](practical_optimization/02_low_precision_and_muon.md)
 
@@ -331,6 +337,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2021-11 | [#166](https://github.com/Hiroki11x/Papers/issues/166) Sharpness-aware Quantization for Deep Neural Networks | Jing Liu, Jianfei Cai, Bohan Zhuang (Monash University) | arXiv（プレプリント） | 不明 | SAMを用いた量子化学習 |
 | 2022-10 | [#330](https://github.com/Hiroki11x/Papers/issues/330) Towards Accurate Network Quantization with Equivalent Smooth Regularizer | Kirill Solodskikh, Vladimir Chikin, Ruslan Aydarkhanov, et al. (Huawei) | ECCV 2022 | issue記載 | 量子化学習の平滑正則化 |
 | 2022-11 | [#350](https://github.com/Hiroki11x/Papers/issues/350) Exploiting the Partly Scratch-off Lottery Ticket for Quantization-Aware Training | Yunshan Zhong, Gongrui Nan, Yuxin Zhang, Fei Chao, Rongrong Ji (Xiamen University) | arXiv（プレプリント） | 不明 | 量子化考慮学習（QAT）の効率化 |
+| 2024-03 | [#575](https://github.com/Hiroki11x/Papers/issues/575) Better Schedules for Low Precision Training of Deep Neural Networks | Cameron R. Wolfe, Anastasios Kyrillidis (Rice University) | ACML 2023 / Machine Learning (2024) | arXivコメント | 低精度のスケジューリング（循環的精度スケジュール） |
 | 2024-07 | [#482](https://github.com/Hiroki11x/Papers/issues/482) Surprising Effectiveness of Pretraining Ternary Language Models at Scale | Ayush Kaushal, Tejas Vaidhya, Irina Rish, et al. (Mila / Nolano AI) | ICLR 2025 | issue記載 | 三値（1.58bit）LLM事前学習 |
 | 2024-10 | [#397](https://github.com/Hiroki11x/Papers/issues/397) Understanding Adam Requires Better Rotation Dependent Assumptions | Tianyue H. Zhang, Lucas Maes, Alexia Jolicoeur-Martineau, et al. (Mila / Samsung SAIL) | NeurIPS 2025 | arXivコメント | Adamの回転依存性とSVD基底（行列前処理の背景） |
 | 2025-02 | [#476](https://github.com/Hiroki11x/Papers/issues/476) Implicit Bias of Spectral Descent and Muon on Multiclass Separable Data | Chen Fan, Mark Schmidt, Christos Thrampoulidis (UBC) | NeurIPS 2025 | arXivコメント | Muonの暗黙的バイアス |
@@ -386,6 +393,15 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2026-09 | [#566](https://github.com/Hiroki11x/Papers/issues/566) Convergence of Rotation-based Matrix Optimizers: A Unified Analysis of SOAP, Conda, and SPlus | Yiwen Sun, Huan Li, Zhouchen Lin (Peking Univ.) | arXiv（プレプリント） | 不明 | 回転ベース行列オプティマイザの収束解析 |
 | 2026-09 | [#570](https://github.com/Hiroki11x/Papers/issues/570) Muon Can Outperform Dedicated Continual Learning Methods | Sebastian George Sincari, Bogdan Alexandru Gheorghe, Antonio Barbalau | CoLLAs 2026 (Work-in-Progress Track) | arXivコメント | Muonと継続学習 |
 | 2026-09 | [#573](https://github.com/Hiroki11x/Papers/issues/573) AutoLoCo: Communication Efficient Distributed LLM Training via Adaptive Synchronization | Pengyu He, Yan Zhang, Ruien Li, Guangwen Yang (Tsinghua) | arXiv（プレプリント） | 不明 | DiLoCoの適応的同期間隔 |
+| 2026-09 | [#577](https://github.com/Hiroki11x/Papers/issues/577) Overfitting of Spectral Gradient Descent: How Matrix Geometry shapes Generalization and Implicit Bias | Guillaume Braun, Ichiro Hashimoto, Masaaki Imaizumi | arXiv（プレプリント） | 不明 | スペクトル勾配降下（Muon）の過学習と暗黙的バイアス |
+| 2026-10 | [#579](https://github.com/Hiroki11x/Papers/issues/579) Training-Loss Guarantees for Muon with Finite-Step Newton--Schulz Orthogonalization | Amartya Roy, Souvik Chakraborty (IIT Delhi) | arXiv（プレプリント） | 不明 | 有限ステップNewton–Schulz直交化を伴うMuonの訓練損失保証 |
+| 2026-10 | [#582](https://github.com/Hiroki11x/Papers/issues/582) Muon Learns Facts Better: Understanding the Role of Spectral Orthogonalization | Xuheng Li, Qiwei Di, Yuan Cao, et al. (UCLA) | arXiv（プレプリント） | 不明 | Muonのスペクトル直交化と事実知識の学習 |
+| 2026-10 | [#584](https://github.com/Hiroki11x/Papers/issues/584) MuonIO: Principled Norm-Aware Descent for Embedding Tables and Language Model Heads | Linkai Ma, Xinyu Luo, Mengbo Wang, et al. (Purdue University) | arXiv（プレプリント） | 不明 | 埋め込み層とLMヘッドのためのノルムを考慮した降下法（MuonIO） |
+| 2026-10 | [#585](https://github.com/Hiroki11x/Papers/issues/585) DGA-Muon: Decoupled Geometry-Aligned Adaptive Scaling for Muon | Wenpeng Zhang, Runsheng Yu | arXiv（プレプリント） | 不明 | Muonの幾何に整合した適応スケーリング（DGA-Muon） |
+| 2026-10 | [#588](https://github.com/Hiroki11x/Papers/issues/588) ORCA: The Annealed Spectral Conditioning Optimizer for Faster, Better LLM Training | Yuanshi Liu, Boyuan Jiang, Liang Hou, et al. (Peking University / Kuaishou) | arXiv（プレプリント） | 不明 | 焼きなまし型スペクトル条件付けオプティマイザ（ORCA） |
+| 2026-10 | [#589](https://github.com/Hiroki11x/Papers/issues/589) Optimizer Geometry Sets the Pace: Spectral Learning Dynamics in Matrix Factorization | Mahalakshmi Sabanayagam, Simon Lucey (Adelaide University) | arXiv（プレプリント） | arXivコメント | 行列分解におけるオプティマイザ幾何とスペクトル学習動態 |
+| 2026-10 | [#591](https://github.com/Hiroki11x/Papers/issues/591) How Bregman Divergences Shape Shampoo | Bing Liu, Wenjie Zhou, Chengcheng Zhao, et al. | arXiv（プレプリント） | 不明 | Bregmanダイバージェンスから見たShampoo |
+| 2026-10 | [#592](https://github.com/Hiroki11x/Papers/issues/592) The Best Optimizer Depends on Batch Size | Xingyu Dang, Kaiyue Wen, Sadhika Malladi (Princeton / Stanford / UC San Diego) | arXiv（プレプリント） | 不明 | 最適なオプティマイザはバッチサイズで変わる |
 | 不明 | [#406](https://github.com/Hiroki11x/Papers/issues/406) Duality, Weight Decay, and Metrized Deep Learning (Master's thesis) | Laker Newhouse (advised by Jeremy Bernstein, Phillip Isola) (MIT) | Thesis (MIT, Master's) | issue記載 | Muonとmetrized deep learningの体系化 |
 | 不明 | [#474](https://github.com/Hiroki11x/Papers/issues/474) How to Scale Second-Order Optimization | Charlie Chen, Shikai Qiu, Andrew Gordon Wilson, et al. (NYU) | NeurIPS 2025 | Web確認 | Shampoo/SOAP/MuonのμPスケーリング |
 | 不明 | [#483](https://github.com/Hiroki11x/Papers/issues/483) Isotropic Curvature Model for Understanding Deep Learning Optimization: Is Gradient Orthogonalization Optimal? |  | arXiv（プレプリント） | 不明 | Muon（勾配直交化）の最適性理論 |
@@ -395,7 +411,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 不明 | [#541](https://github.com/Hiroki11x/Papers/issues/541) GradientStabilizer: Fix the Norm, Not the Gradient |  | ICML 2026 | issue記載 | 勾配ノルムスパイクの安定化 |
 | 不明 | [#567](https://github.com/Hiroki11x/Papers/issues/567) MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement | Xiaomi LLM-Core Team (Xiaomi) | Tech Report (Xiaomi) | issue記載 | AdamW→Muown切替と大バッチRL |
 
-## セミシンクロナス学習（17件）
+## セミシンクロナス学習（20件）
 
 詳細: [practical_optimization/03_semi_synchronous_training.md](practical_optimization/03_semi_synchronous_training.md)
 
@@ -413,11 +429,14 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2025-10 | [#534](https://github.com/Hiroki11x/Papers/issues/534) SNOO: Step-K Nesterov Outer Optimizer - The Surprising Effectiveness of Nesterov Momentum Applied to Pseudo-Gradients | Dominik Kallusky, Vinay Rao, Vishal Nandavanam, Hao-Jun Michael Shi (Meta) | arXiv（プレプリント） | 不明 | 外側Nesterov最適化（非分散DiLoCo） |
 | 2025-12 | [#536](https://github.com/Hiroki11x/Papers/issues/536) Smoothing DiLoCo with Primal Averaging for Faster Training of LLMs | Aaron Defazio, Konstantin Mishchenko, Parameswaran Raman, et al. (Meta) | arXiv（プレプリント） | 不明 | DiLoCoとprimal averaging |
 | 2026-04 | [#520](https://github.com/Hiroki11x/Papers/issues/520) Nexus: Same Pretraining Loss, Better Downstream Generalization via Common Minima | Huanran Chen, Huaqing Zhang, Xiao Li, et al. (ByteDance) | arXiv（プレプリント） | 不明 | 内外ループ最適化と共通ミニマによる汎化 |
+| 2026-05 | [#583](https://github.com/Hiroki11x/Papers/issues/583) FedQueue: Queue-Aware Federated Learning for Cross-Facility HPC Training | Yijiang Li, Emon Dey, Zilinghan Li, et al. (Argonne National Laboratory) | arXiv（プレプリント） | Semantic Scholar確認 | キューを考慮した施設間連合学習 |
 | 2026-06 | [#530](https://github.com/Hiroki11x/Papers/issues/530) Factored Gossip DiLoCo: Reducing Blocking Communication in DiLoCo | Chamin Hewa Koneputugodage, Thalaiyasingam Ajanthan, et al. (Pluralis Research) | ICML 2026 | arXivコメント | DiLoCoの非ブロッキング通信（gossip） |
 | 2026-06 | [#557](https://github.com/Hiroki11x/Papers/issues/557) One-Step Gradient Delay is Not a Barrier for Large-Scale Asynchronous Pipeline Parallel LLM Pretraining | Philip Zmushko, Egor Petrov, Nursultan Abdullaev, et al. (Yandex) | arXiv（プレプリント） | 不明 | 非同期パイプライン並列と勾配遅延耐性 |
 | 2026-09 | [#561](https://github.com/Hiroki11x/Papers/issues/561) GeoMesh: Workload-Balanced and Sign-Compressed Geo-Distributed LLM Training | Changyong Shin, Jaerim Park, Minchul Kang, et al. | EMNLP 2026 (Findings) | arXivコメント | 地理分散学習と1bit通信圧縮 |
 | 2026-09 | [#565](https://github.com/Hiroki11x/Papers/issues/565) Application of Optimal Inexact Second-Order Acceleration to Distributed Stochastic Optimization under Statistical Similarity | Yury A. Sokolov, Maxim K. Mashtaler, Alexander V. Gasnikov, et al. | arXiv（プレプリント） | 不明 | 統計的類似性下の通信効率的分散2次最適化 |
 | 2026-09 | [#573](https://github.com/Hiroki11x/Papers/issues/573) AutoLoCo: Communication Efficient Distributed LLM Training via Adaptive Synchronization | Pengyu He, Yan Zhang, Ruien Li, Guangwen Yang (Tsinghua) | arXiv（プレプリント） | 不明 | DiLoCoの適応的同期間隔 |
+| 2026-10 | [#580](https://github.com/Hiroki11x/Papers/issues/580) Cross-Facility LLM Pre-training on HPC: Elastic Aggregation, Data Leasing, and Queue-Aware Placement | Zarè Palanciyan, Thomas van Osch, Douwe van der Wal, et al. | arXiv（プレプリント） | 不明 | 施設間（cross-facility）HPCでのLLM事前学習 |
+| 2026-10 | [#590](https://github.com/Hiroki11x/Papers/issues/590) FailBench: Evaluating Fault Tolerance Across Distributed Training Architectures | Khaled Aljbab, Amine Barrak | arXiv（プレプリント） | 不明 | 分散学習アーキテクチャ横断の耐障害性ベンチマーク |
 
 ---
 
@@ -693,7 +712,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 不明 | [#109](https://github.com/Hiroki11x/Papers/issues/109) Robustness and Regularization of Deep Neural Networks |  (ETH Zurich) | PhD Thesis (ETH Zurich) | issue記載 | 頑健性と正則化 |
 | 不明 | [#304](https://github.com/Hiroki11x/Papers/issues/304) Improving Saliency Metrics for Channel Pruning of Convolutional Neural Networks |  (Trinity College Dublin) | PhD Thesis (Trinity College Dublin) | issue記載 | チャネルプルーニング（博論） |
 
-## SGDのダイナミクスと最適化理論（29件）
+## SGDのダイナミクスと最適化理論（30件）
 
 詳細: [misc/06_sgd_dynamics_theory.md](misc/06_sgd_dynamics_theory.md)
 
@@ -704,6 +723,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2017-03 | [#18](https://github.com/Hiroki11x/Papers/issues/18) How to Escape Saddle Points Efficiently | Chi Jin, Rong Ge, Praneeth Netrapalli, et al. | ICML 2017 | Semantic Scholar確認 | 鞍点脱出 |
 | 2017-05 | [#14](https://github.com/Hiroki11x/Papers/issues/14) Gradient Descent Can Take Exponential Time to Escape Saddle Points | Simon S. Du, Chi Jin, Jason D. Lee, et al. | NeurIPS 2017 | arXivコメント | 鞍点脱出 |
 | 2017-05 | [#23](https://github.com/Hiroki11x/Papers/issues/23) On the diffusion approximation of nonconvex stochastic gradient descent | Wenqing Hu, Chris Junchi Li, Lei Li, et al. | Annals of Mathematical Sciences and Applications | Web確認 | SGDの拡散近似 |
+| 2017-11 | [#576](https://github.com/Hiroki11x/Papers/issues/576) Critical Learning Periods in Deep Neural Networks | Alessandro Achille, Matteo Rovere, Stefano Soatto (UCLA) | ICLR 2019 | Web確認 | Critical Learning Periods（学習初期の臨界期） |
 | 2018-03 | [#7](https://github.com/Hiroki11x/Papers/issues/7) The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects | Zhanxing Zhu, Jingfeng Wu, Bing Yu, et al. (Peking University) | ICML 2019 | arXivコメント | SGDの異方性ノイズとシャープミニマ脱出 |
 | 2018-12 | [#22](https://github.com/Hiroki11x/Papers/issues/22) How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective | Lei Wu, Chao Ma, Weinan E (Princeton University) | NeurIPS 2018 | issue記載 | 動的安定性とミニマ選択 |
 | 2019-03 | [#273](https://github.com/Hiroki11x/Papers/issues/273) Stabilize Deep ResNet with A Sharp Scaling Factor τ | Huishuai Zhang, Da Yu, Mingyang Yi, et al. (Microsoft Research) | Machine Learning (journal) | Web確認 | 深いResNetの安定性と収束 |
@@ -729,7 +749,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2026-02 | [#504](https://github.com/Hiroki11x/Papers/issues/504) Emergent Low-Rank Training Dynamics in MLPs with Smooth Activations | Alec S. Xu, Can Yaras, Qing Qu, Laura Balzano, et al. (Univ. of Michigan) | arXiv（プレプリント） | 不明 | 低ランク学習ダイナミクス |
 | 2026-09 | [#571](https://github.com/Hiroki11x/Papers/issues/571) Towards Understanding Momentum Acceleration in River-Valley Loss Landscape | Miao Lu, Zeyu Bian, Kaiyue Wen, et al. | arXiv（プレプリント） | 不明 | モメンタムの理論（river-valley地形） |
 
-## オプティマイザ設計（49件）
+## オプティマイザ設計（50件）
 
 詳細: [misc/07_optimizer_design.md](misc/07_optimizer_design.md)
 
@@ -783,6 +803,7 @@ GitHub Issues に記録された論文ノート全件を、**Practical Optimizat
 | 2026-02 | [#513](https://github.com/Hiroki11x/Papers/issues/513) Accelerating LLM Pre-Training through Flat-Direction Dynamics Enhancement | Shuchen Zhu, Rizhen Hu, Mingze Wang, Kun Yuan, et al. (Peking Univ.) | arXiv（プレプリント） | 不明 | 平坦方向ダイナミクスによる学習加速 |
 | 2026-06 | [#525](https://github.com/Hiroki11x/Papers/issues/525) Gradient Smoothing: Coupling Layer-wise Updates for Improved Optimization | Haoming Meng, Anton Sugolov, Vardan Papyan (Vector Institute / Univ. of Toronto) | ICML 2026 | arXivコメント | 層間の更新平滑化 |
 | 2026-06 | [#544](https://github.com/Hiroki11x/Papers/issues/544) Gradient Smoothing: Coupling Layer-wise Updates for Improved Optimization | Haoming Meng, Anton Sugolov, Vardan Papyan (Vector Institute / Univ. of Toronto) | ICML 2026 | arXivコメント | 層間の更新平滑化 |
+| 2026-10 | [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect: How does the Optimizer Shape Data Curriculum? | Simin Fan, Alireza Abdollahpoorrostam, Martin Jaggi (EPFL) | arXiv（プレプリント） | 不明 | オプティマイザ状態を考慮したオンラインデータ選択（OptiSelect） |
 | 不明 | [#281](https://github.com/Hiroki11x/Papers/issues/281) Whitened gradient descent, a new updating method for optimizers in deep neural networks |  (Shahrood University of Technology) | Journal of AI and Data Mining | issue記載 | オプティマイザ改良 |
 
 ## 学習率スケジュール・weight decay（22件）

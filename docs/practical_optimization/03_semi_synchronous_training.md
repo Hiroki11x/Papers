@@ -2,9 +2,9 @@
 
 **Local SGD / DiLoCo とその派生 / 外部オプティマイザ / 非同期SGD / 分散型 (gossip) SGD / モデル平均化**
 
-> 本ドキュメントは、[Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読書メモ（GitHub Issues）のうち、セミシンクロナス学習・通信効率の良い分散学習に分類された **17件**（SEMIタグ）に、全572件のメモから抽出した **追加2件**（[#393](https://github.com/Hiroki11x/Papers/issues/393), [#458](https://github.com/Hiroki11x/Papers/issues/458)）を加えた **計19件** を中心に整理したものである（作成日: 2026-09-30）。
+> 本ドキュメントは、[Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読書メモ（GitHub Issues）のうち、セミシンクロナス学習・通信効率の良い分散学習に分類された **20件**（SEMIタグ）に、全591件のメモから抽出した **追加2件**（[#393](https://github.com/Hiroki11x/Papers/issues/393), [#458](https://github.com/Hiroki11x/Papers/issues/458)）を加えた **計22件** を中心に整理したものである（作成日: 2026-09-30、2026-10-08 更新）。
 >
-> - 対象期間: 論文の初出 **2018-08 〜 2026-09**（issue作成は 2020-05 〜 2026-09）
+> - 対象期間: 論文の初出 **2018-08 〜 2026-10**（issue作成は 2020-05 〜 2026-10-07）
 > - 数値・主張は各 issue のメモに基づく。メモに記載がない数値は記していない。
 > - 関連姉妹ドキュメント: [01 クリティカルバッチサイズ](./01_critical_batch_size.md) / [02 低精度学習と Muon](./02_low_precision_and_muon.md)
 
@@ -14,6 +14,7 @@
 2. **何が効いているのか**: DiLoCo の利得は「分散」そのものから来るのか、それとも pseudo-gradient に対する外部 Nesterov 更新という「最適化アルゴリズム」から来るのか。
 3. **同期の構造をどう設計するか**: 同期間隔の適応化、ブロッキング通信の分解（gossip）、staleness（遅延）と圧縮の共同最適化、ストラグラー対策。
 4. **オプティマイザとの相互作用**: Muon・Lion・高モメンタム手法は、遅延・低ビット通信・分散実装に対してなぜ頑健なのか。
+5. **計算資源の現実にどう合わせるか**: 複数の HPC 施設をまたぐ学習で、ジョブキューの待ち時間やワーカーの脱落・障害をどう吸収するか。
 
 ---
 
@@ -102,6 +103,7 @@ $$
 - **半同期（周期同期）**: Local SGD / Post-local SGD（[#9](https://github.com/Hiroki11x/Papers/issues/9)）、DiLoCo、AutoLoCo（[#573](https://github.com/Hiroki11x/Papers/issues/573)）、GeoMesh（[#561](https://github.com/Hiroki11x/Papers/issues/561)）。
 - **部分同期・分散型**: gossip / decentralized SGD（[#169](https://github.com/Hiroki11x/Papers/issues/169)）、Factored Gossip DiLoCo（[#530](https://github.com/Hiroki11x/Papers/issues/530)）。
 - **非同期・遅延**: 遅延集約（[#395](https://github.com/Hiroki11x/Papers/issues/395)）、非同期パイプライン並列（[#557](https://github.com/Hiroki11x/Papers/issues/557)）。
+- **施設間・連合型**: 複数 HPC 施設のキュー待ちを前提に集約を調整する FedAvg 型（[#583](https://github.com/Hiroki11x/Papers/issues/583)）や、弾力的な集約とデータリースを組み合わせる施設間事前学習（[#580](https://github.com/Hiroki11x/Papers/issues/580)）。
 
 ---
 
@@ -140,7 +142,7 @@ $$
 - [#388](https://github.com/Hiroki11x/Papers/issues/388)（Dion, Microsoft）と追加 [#458](https://github.com/Hiroki11x/Papers/issues/458)（MuonBP）は、**Muon の分散実装における通信コスト** を削減する（詳細は [02 低精度学習と Muon](./02_low_precision_and_muon.md)）。Dion は低ランク近似＋誤差フィードバック＋分離された運動量、MuonBP はブロック直交化＋周期的な全体直交化。後者の「周期的に全体同期する」構造は Local SGD と同型である。
 - [#395](https://github.com/Hiroki11x/Papers/issues/395)（DeCo-SGD, 2025-07）は WAN 環境で staleness $\tau$ と圧縮率 $\delta$ を共同最適化し、**staleness が圧縮の悪影響を指数的に増幅する**（ノイズ項 $\frac{1-\delta}{\delta(1-\delta)^\tau}$）ことを示した。
 
-### 2.4 第4期（2026）: 同期構造の再設計・適応同期・オプティマイザとの相互作用
+### 2.4 第4期（2026）: 同期構造の再設計・適応同期・オプティマイザとの相互作用・施設間学習
 
 - [#520](https://github.com/Hiroki11x/Papers/issues/520)（Nexus, ByteDance, 2026-04）は内ループ正規化SGD＋外ループAdamWという **DiLoCo 型2ループ** を、通信削減ではなく **汎化（共通ミニマ／closeness）** のために用いた。同じ事前学習損失のまま GSM8k +15%、MATH +8%。本人は「DiLoCo や自分たちの PALSGD とも関連が強い」と評価しており、[#534](https://github.com/Hiroki11x/Papers/issues/534)/[#536](https://github.com/Hiroki11x/Papers/issues/536) の「2ループ構造は損失の最適化を速める」という立場に対して、「損失ではなく **どの解に行くか** を変える」という別の説明を与える点で興味深い。
 - [#530](https://github.com/Hiroki11x/Papers/issues/530)（Factored Gossip DiLoCo, ICML 2026）は、DiLoCo の外部同期を **計算と重ねられるパラメータ mixing（Mix1）** と **ブロッキングな outer gradient mixing（Mix2）** に分解。Streaming DiLoCo などの既存の overlap 手法が **temporal staleness** を導入するのに対し、staleness なしで通信と計算を重ねる最初の枠組みと主張する。200Mbps で GlobalM1 は利用率100%（DiLoCo 53%）。ただし最終 perplexity では DiLoCo がわずかに良く、価値は wall-clock 効率にある。
@@ -148,6 +150,12 @@ $$
 - [#561](https://github.com/Hiroki11x/Papers/issues/561)（GeoMesh, EMNLP 2026 Findings）は **ヘテロな地理分散データセンター** で、DC ごとに batch size と step 数を調整して同期タイミングを揃え、Lion と組み合わせて 1bit sign 圧縮通信でも性能劣化を抑える。
 - [#573](https://github.com/Hiroki11x/Papers/issues/573)（AutoLoCo, 2026-09）は DiLoCo の同期間隔 $H$ を **処理データ量に基づき動的に変える**。単純に変えるだけではうまくいかず、外部オプティマイザのモメンタム・LR 補正が必要（Appendix C で理論的導出）。INT8 通信を使用、Muon は未使用。
 - [#565](https://github.com/Hiroki11x/Papers/issues/565)（2026-09）は凸最適化理論側から、統計的類似性を仮定して局所ヘッセを不正確ヘッセとして使う加速2次法（AINE＋restart）で通信ラウンドを削減する。
+
+2026年後半には、アルゴリズムよりも **計算資源側の制約（施設・キュー・障害）** を正面から扱うシステム研究も登録されている。
+
+- [#583](https://github.com/Hiroki11x/Papers/issues/583)（FedQueue, Argonne, 2026-05）は複数 HPC 施設をまたぐ学習を連合学習として扱い、各施設のスケジューラのキュー遅延を予測して FedAvg 型の集約を調整する。本人は「FedAvg みたいなことをしている」「ヒューリスティクスで色々対処」とコメントしている。
+- [#580](https://github.com/Hiroki11x/Papers/issues/580)（2026-10）は施設間の LLM 事前学習を、弾力的な集約、データリース（DARL: データブロックをワーカーに期限付きで貸し出し、ハートビートが途絶えたら中央が回収）、キュー待ちを考慮した配置の組合せで実現する。[#583](https://github.com/Hiroki11x/Papers/issues/583) と同じく「キュー待ち」を設計の前提に置く点が共通する。
+- [#590](https://github.com/Hiroki11x/Papers/issues/590)（FailBench, 2026-10）は複数の分散学習アーキテクチャの耐障害性を横断比較するベンチマーク。本人は「辞書のような使い方ができそう」で、この話が本当に必要になってから読み直すのがよいかもしれない、とメモしている。
 
 ### 2.5 論文間の関係と対立点のまとめ
 
@@ -158,6 +166,7 @@ $$
 | 非同期・遅延の是非 | 非同期は不安定なので同期を保つ（[#405](https://github.com/Hiroki11x/Papers/issues/405)）、staleness は圧縮の害を増幅（[#395](https://github.com/Hiroki11x/Papers/issues/395)）、staleness を避けて overlap（[#530](https://github.com/Hiroki11x/Papers/issues/530)） | 高モメンタム系オプティマイザなら1ステップ遅延は障壁でない（[#557](https://github.com/Hiroki11x/Papers/issues/557)） |
 | 同期を緩めた際のノイズ | 有益（フラット解・実効LRの自動調整: [#9](https://github.com/Hiroki11x/Papers/issues/9), [#169](https://github.com/Hiroki11x/Papers/issues/169)） | 有害（consensus error、$M$・$H$・モデルサイズで劣化拡大: [#530](https://github.com/Hiroki11x/Papers/issues/530)） |
 | 外部学習率 | $\gamma=1$（単純平均）が標準 | ノイズに応じて $\gamma>1$ / $\gamma<1$（[#473](https://github.com/Hiroki11x/Papers/issues/473)）、$H$ を変えるなら補正が必要（[#573](https://github.com/Hiroki11x/Papers/issues/573)） |
+| 資源の不確実性への対処 | 同期を保ったまま遅いワーカーの計算を打ち切る（[#405](https://github.com/Hiroki11x/Papers/issues/405)） | キュー遅延を予測・考慮して集約や配置を変える（[#583](https://github.com/Hiroki11x/Papers/issues/583), [#580](https://github.com/Hiroki11x/Papers/issues/580)）、データを期限付きで貸し出し脱落ワーカーから回収（[#580](https://github.com/Hiroki11x/Papers/issues/580)） |
 
 ---
 
@@ -182,13 +191,16 @@ timeline
         2025-10 : SNOO 非分散 DiLoCo issue 534
                 : MuonBP ブロック周期直交化 追加 issue 458
         2025-12 : GPA primal averaging で DiLoCo を平滑化 issue 536
-    section 2026 同期構造の再設計と適応同期
+    section 2026 同期構造の再設計 適応同期 施設間学習
         2026-04 : Nexus 内外ループで共通ミニマ issue 520
+        2026-05 : FedQueue キュー考慮の施設間連合学習 issue 583
         2026-06 : Factored Gossip DiLoCo issue 530
                 : 非同期 PP と1ステップ遅延耐性 issue 557
         2026-09 : GeoMesh 地理分散と1bit通信 issue 561
                 : 統計的類似性下の加速2次法 issue 565
                 : AutoLoCo 適応的同期間隔 issue 573
+        2026-10 : 施設間 HPC 事前学習とデータリース issue 580
+                : FailBench 耐障害性ベンチマーク issue 590
 ```
 
 ---
@@ -250,6 +262,16 @@ timeline
 
 **所見**: Muon の全行列直交化は FSDP/TP と相性が悪く、「局所で近似し周期的に同期する」という Local SGD 的発想が直交化にも持ち込まれている。詳細は [02 低精度学習と Muon](./02_low_precision_and_muon.md) 参照。
 
+### F. 施設間 HPC 学習・キュー考慮・耐障害性
+
+| 論文 | 要点 |
+|---|---|
+| [#583](https://github.com/Hiroki11x/Papers/issues/583) FedQueue | スケジューラのキュー遅延を予測し、FedAvg 型の集約をヒューリスティクスで調整 |
+| [#580](https://github.com/Hiroki11x/Papers/issues/580) Cross-Facility LLM Pre-training | 弾力的な集約、データリース（DARL）、キュー待ちを考慮した配置 |
+| [#590](https://github.com/Hiroki11x/Papers/issues/590) FailBench | 分散学習アーキテクチャ横断の耐障害性ベンチマーク |
+
+**所見**: 「通信が遅い」だけでなく「いつ計算資源が使えるか分からない・途中で落ちる」ことを前提にした設計で、2026年に登録が集中している。ノートは図の転載とシステム構成の要約が中心で、収束性や最終品質に関する数値は記録されていない。アルゴリズム面では、[#583](https://github.com/Hiroki11x/Papers/issues/583) が FedAvg（= Local SGD）型の集約を用いている程度で、A〜D 群の議論（外部更新、staleness）との接続はノートの範囲では未整理である。
+
 ---
 
 ## 5. 論文一覧表（公開順）
@@ -272,11 +294,14 @@ timeline
 | 2025-10 | [#458](https://github.com/Hiroki11x/Papers/issues/458) MuonBP: Block-Periodic Orthogonalization（追加） | Ahmed Khaled, Kaan Ozkara, Tao Yu, et al. / Princeton, AWS, UMN | arXiv（プレプリント） | 不明 | E. Muon の分散実装と通信削減 |
 | 2025-12 | [#536](https://github.com/Hiroki11x/Papers/issues/536) Smoothing DiLoCo with Primal Averaging (GPA) | Aaron Defazio, Konstantin Mishchenko, et al. / Meta | arXiv（プレプリント） | 不明 | C. DiLoCo と primal averaging |
 | 2026-04 | [#520](https://github.com/Hiroki11x/Papers/issues/520) Nexus: Same Pretraining Loss, Better Downstream | Huanran Chen, et al. / ByteDance | arXiv（プレプリント） | 不明 | C. 内外ループと共通ミニマ |
+| 2026-05 | [#583](https://github.com/Hiroki11x/Papers/issues/583) FedQueue: Queue-Aware Federated Learning for Cross-Facility HPC Training | Yijiang Li, Emon Dey, Zilinghan Li, et al. / Argonne National Laboratory | arXiv（プレプリント） | Semantic Scholar確認 | F. キューを考慮した施設間連合学習 |
 | 2026-06 | [#530](https://github.com/Hiroki11x/Papers/issues/530) Factored Gossip DiLoCo | Chamin Hewa Koneputugodage, Thalaiyasingam Ajanthan, et al. / Pluralis Research | ICML 2026 | arXivコメント | B. DiLoCo の非ブロッキング通信 |
 | 2026-06 | [#557](https://github.com/Hiroki11x/Papers/issues/557) One-Step Gradient Delay is Not a Barrier | Philip Zmushko, Egor Petrov, et al. / Yandex | arXiv（プレプリント） | 不明 | D. 非同期 PP と遅延耐性 |
 | 2026-09 | [#561](https://github.com/Hiroki11x/Papers/issues/561) GeoMesh | Changyong Shin, Jaerim Park, et al. / 不明 | EMNLP 2026 (Findings) | arXivコメント | D. 地理分散と1bit通信 |
 | 2026-09 | [#565](https://github.com/Hiroki11x/Papers/issues/565) Optimal Inexact Second-Order Acceleration under Statistical Similarity | Yury A. Sokolov, et al., Alexander V. Gasnikov / 不明 | arXiv（プレプリント） | 不明 | A. 通信効率的分散2次最適化 |
 | 2026-09 | [#573](https://github.com/Hiroki11x/Papers/issues/573) AutoLoCo | Pengyu He, Yan Zhang, Ruien Li, Guangwen Yang / Tsinghua | arXiv（プレプリント） | 不明 | B. DiLoCo の適応的同期間隔 |
+| 2026-10 | [#580](https://github.com/Hiroki11x/Papers/issues/580) Cross-Facility LLM Pre-training on HPC: Elastic Aggregation, Data Leasing, and Queue-Aware Placement | Zarè Palanciyan, Thomas van Osch, Douwe van der Wal, et al. / 不明 | arXiv（プレプリント） | 不明 | F. 施設間（cross-facility）HPCでのLLM事前学習 |
+| 2026-10 | [#590](https://github.com/Hiroki11x/Papers/issues/590) FailBench: Evaluating Fault Tolerance Across Distributed Training Architectures | Khaled Aljbab, Amine Barrak / 不明 | arXiv（プレプリント） | 不明 | F. 分散学習アーキテクチャ横断の耐障害性ベンチマーク |
 
 ---
 
@@ -284,16 +309,16 @@ timeline
 
 | 採択先 | 件数 | 論文 |
 |---|---:|---|
-| arXiv（プレプリント） | 11（うち追加2） | [#169](https://github.com/Hiroki11x/Papers/issues/169), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#395](https://github.com/Hiroki11x/Papers/issues/395), [#393](https://github.com/Hiroki11x/Papers/issues/393), [#534](https://github.com/Hiroki11x/Papers/issues/534), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#536](https://github.com/Hiroki11x/Papers/issues/536), [#520](https://github.com/Hiroki11x/Papers/issues/520), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#565](https://github.com/Hiroki11x/Papers/issues/565), [#573](https://github.com/Hiroki11x/Papers/issues/573) |
+| arXiv（プレプリント） | 14（うち追加2） | [#169](https://github.com/Hiroki11x/Papers/issues/169), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#395](https://github.com/Hiroki11x/Papers/issues/395), [#393](https://github.com/Hiroki11x/Papers/issues/393), [#534](https://github.com/Hiroki11x/Papers/issues/534), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#536](https://github.com/Hiroki11x/Papers/issues/536), [#520](https://github.com/Hiroki11x/Papers/issues/520), [#583](https://github.com/Hiroki11x/Papers/issues/583), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#565](https://github.com/Hiroki11x/Papers/issues/565), [#573](https://github.com/Hiroki11x/Papers/issues/573), [#580](https://github.com/Hiroki11x/Papers/issues/580), [#590](https://github.com/Hiroki11x/Papers/issues/590) |
 | ICLR | 2 | [#9](https://github.com/Hiroki11x/Papers/issues/9)（2020）, [#165](https://github.com/Hiroki11x/Papers/issues/165)（2022） |
 | NeurIPS | 2 | [#405](https://github.com/Hiroki11x/Papers/issues/405)（2023）, [#473](https://github.com/Hiroki11x/Papers/issues/473)（2025） |
 | NeurIPS Workshop (OPT) | 1 | [#70](https://github.com/Hiroki11x/Papers/issues/70)（2020） |
 | ICML | 1 | [#530](https://github.com/Hiroki11x/Papers/issues/530)（2026） |
 | AISTATS | 1 | [#311](https://github.com/Hiroki11x/Papers/issues/311)（2023） |
 | EMNLP (Findings) | 1 | [#561](https://github.com/Hiroki11x/Papers/issues/561)（2026） |
-| **合計** | **19** | SEMI タグ17件 + 追加2件 |
+| **合計** | **22** | SEMI タグ20件 + 追加2件 |
 
-2025年以降の13件中10件がプレプリントであり、分野が急速に動いていて査読を待たずに参照されている状況がうかがえる。
+2025年以降の16件中13件がプレプリントであり、分野が急速に動いていて査読を待たずに参照されている状況がうかがえる。
 
 ---
 
@@ -462,6 +487,18 @@ timeline
 
 **本人のメモ**: Tengyu Ma らの「Same Pre-training Loss, Better Downstream」（arXiv 2210.14199）と関連。Gradient Diversity の議論は以前からあるが、pretraining と downstream を分けた点に価値がある。DiLoCo や自分たちの PALSGD（arXiv 2504.18454）とも関連が強い。
 
+### [#583] FedQueue: Queue-Aware Federated Learning for Cross-Facility HPC Training
+
+- **公開**: 2026-05（arXiv 2605.02125） / **採択先**: arXiv（プレプリント）（Semantic Scholar確認） / **著者/組織**: Yijiang Li, Emon Dey, Zilinghan Li, et al. / Argonne National Laboratory
+
+**要約**: 複数の HPC 施設をまたいだ学習を連合学習（FedAvg 的な集約）として扱い、各施設のスケジューラのキュー遅延を予測して集約を調整する。
+
+**主な知見**:
+- スケジューラのキュー遅延を予測
+- FedAvg 型の集約をヒューリスティクスで調整
+
+**本人のメモ**: 「FedAvg みたいなことをしている」「ヒューリスティクスで色々対処」。
+
 ### [#530] Factored Gossip DiLoCo: Reducing Blocking Communication in DiLoCo
 
 - **公開**: 2026-06（arXiv 2606.22768） / **採択先**: ICML 2026（arXivコメント） / **著者/組織**: Chamin Hewa Koneputugodage, Thalaiyasingam Ajanthan, et al., Alexander Long / Pluralis Research
@@ -520,6 +557,27 @@ timeline
 
 **本人のメモ**: 「モメンタムや LR の補正は何か理論的な裏付けがある？」という疑問 → Appendix C に明確な理論的分析・数理的導出があると確認。
 
+### [#580] Cross-Facility LLM Pre-training on HPC: Elastic Aggregation, Data Leasing, and Queue-Aware Placement
+
+- **公開**: 2026-10（arXiv 2610.03457） / **採択先**: arXiv（プレプリント）（不明） / **著者/組織**: Zarè Palanciyan, Thomas van Osch, Douwe van der Wal, et al. / 不明
+
+**要約**: 複数の HPC 施設をまたいだ LLM 事前学習のために、弾力的な集約、データリース、キュー待ちを考慮した配置を組み合わせたシステム。データリース（DARL）では、データブロックをワーカーに一定期間貸し出し、ハートビートが途絶えたら期限切れのブロックを中央のシステムが回収し直す。
+
+**主な知見**:
+- データを期限付きで貸し出す DARL
+- キュー待ちを考慮した配置と弾力的な集約
+
+### [#590] FailBench: Evaluating Fault Tolerance Across Distributed Training Architectures
+
+- **公開**: 2026-10（arXiv 2610.07688） / **採択先**: arXiv（プレプリント）（不明） / **著者/組織**: Khaled Aljbab, Amine Barrak / 不明
+
+**要約**: 複数の分散学習アーキテクチャについて耐障害性を比較評価するベンチマーク。ノートは図の転載とメモのみ。
+
+**主な知見**:
+- 分散学習アーキテクチャの耐障害性を横断比較
+
+**本人のメモ**: 辞書のような使い方ができそう。この話が本当に必要になってから読み直すのがよいかもしれない。
+
 ---
 
 ## 8. 横断的知見・未解決問題・実務上の示唆
@@ -540,6 +598,9 @@ timeline
 
 5. **評価軸は「ステップ効率」ではなく「wall-clock での品質」**
    [#405](https://github.com/Hiroki11x/Papers/issues/405)（ステップ数は増えるが総時間は短縮）、[#530](https://github.com/Hiroki11x/Papers/issues/530)（ステップでは DiLoCo が良いが実時間では GlobalM1 が速い）、[#395](https://github.com/Hiroki11x/Papers/issues/395)（Time-to-Accuracy）のように、通信効率の研究では最終損失よりも時間あたりの品質で評価されることが多い。論文を比較する際はこの評価軸の違いに注意が必要である。
+
+6. **「遅い通信」から「不確実な計算資源」へ**
+   施設間 HPC 学習（[#583](https://github.com/Hiroki11x/Papers/issues/583), [#580](https://github.com/Hiroki11x/Papers/issues/580)）では、**ジョブキューの待ち時間とワーカーの脱落** が主な制約として扱われ、キュー遅延の予測・キューを考慮した配置・データの期限付き貸し出しといったシステム側の工夫で吸収している。耐障害性の横断ベンチマーク（[#590](https://github.com/Hiroki11x/Papers/issues/590)）も登場しており、ストラグラー対策（[#405](https://github.com/Hiroki11x/Papers/issues/405)）の延長として、「資源が途中で消える」ことを前提にした設計と位置づけられる。
 
 ### 8.2 $H$ とバッチサイズ・CBS の関係
 
@@ -569,6 +630,7 @@ timeline
 4. **スケールに伴う劣化**: [#530](https://github.com/Hiroki11x/Papers/issues/530) はモデルが大きいほど $M$・$H$ への耐性が下がると報告。一方 [#520](https://github.com/Hiroki11x/Papers/issues/520) や Dion（[#388](https://github.com/Hiroki11x/Papers/issues/388)）は大規模ほど利得が増えるとしており、どの条件でスケールが味方・敵になるかは未整理。
 5. **model parallelism との組合せ**: gossip / DiLoCo の実験は1.5B 程度まで（[#530](https://github.com/Hiroki11x/Papers/issues/530)）。数十B以上で TP/PP と組み合わせた場合は未検証。
 6. **非同期と半同期の統一的理解**: [#557](https://github.com/Hiroki11x/Papers/issues/557)（1ステップ遅延は高モメンタムで吸収）と [#395](https://github.com/Hiroki11x/Papers/issues/395)（staleness は圧縮の害を指数的に増幅）、[#530](https://github.com/Hiroki11x/Papers/issues/530)（staleness を避ける設計）の関係。
+7. **施設間学習のアルゴリズム側の理論**: [#583](https://github.com/Hiroki11x/Papers/issues/583) はヒューリスティクス中心と本人が評しており、キュー遅延で生じる不均一な参加や遅延が、外部オプティマイザ（[#473](https://github.com/Hiroki11x/Papers/issues/473)）や staleness の議論（[#395](https://github.com/Hiroki11x/Papers/issues/395)）とどう結びつくかはノートの範囲では扱われていない。
 
 ### 8.6 実務上の示唆（メモから言える範囲）
 
@@ -576,6 +638,7 @@ timeline
 - **外部ハイパーパラメータ**: $\gamma$ と $\mu$ を実効LR $\gamma/(1-\mu)$ で合わせてチューニングし、勾配ノイズが大きい設定ほど小さめにする（[#473](https://github.com/Hiroki11x/Papers/issues/473)）。$H$ を変える場合は外部側の補正を入れる（[#573](https://github.com/Hiroki11x/Papers/issues/573)）。
 - **非同期・パイプライン並列**: AdamW ではなく Muon 系・高モメンタムのオプティマイザと EF、固定1ステップ遅延スケジュールを組み合わせる（[#557](https://github.com/Hiroki11x/Papers/issues/557)）。
 - **ストラグラー**: 非同期化せず、部分勾配同期（[#405](https://github.com/Hiroki11x/Papers/issues/405)）で10%程度のサンプルドロップまでは精度劣化がほぼない。
+- **複数 HPC 施設をまたぐ場合**: キュー待ちを前提に集約・配置を決め（[#583](https://github.com/Hiroki11x/Papers/issues/583), [#580](https://github.com/Hiroki11x/Papers/issues/580)）、脱落したワーカーのデータはリース期限切れで回収する（[#580](https://github.com/Hiroki11x/Papers/issues/580) の DARL）。耐障害性の比較が必要になったら FailBench（[#590](https://github.com/Hiroki11x/Papers/issues/590)）を参照する。
 - **単一ノードでも**: SNOO / GPA（[#534](https://github.com/Hiroki11x/Papers/issues/534), [#536](https://github.com/Hiroki11x/Papers/issues/536)）は AdamW のラッパーとして試す価値がある（GPA で約9〜10%のステップ削減）。
 
 ---
@@ -590,7 +653,7 @@ timeline
 | [#10](https://github.com/Hiroki11x/Papers/issues/10) | Which Algorithmic Choices Matter at Which Batch Sizes? (NQM) | 2019-07 | NeurIPS 2019 | モメンタム・EMA 等とバッチサイズの関係。外部モメンタムの効果を考える土台 |
 | [#52](https://github.com/Hiroki11x/Papers/issues/52) | Towards Practical Second Order Optimization for Deep Learning (Shampoo) | 2020-02 | arXiv（プレプリント） | 前処理計算を CPU で非同期化してオーバーヘッドを隠蔽 |
 | [#278](https://github.com/Hiroki11x/Papers/issues/278) | Scalable K-FAC Training with Distributed Preconditioning (DP-KFAC) | 2022-06 | IEEE TCC | K-FAC の因子計算を分散し通信を2.79–3.15倍削減 |
-| [#402](https://github.com/Hiroki11x/Papers/issues/402) | Adaptive Batch Size Schedules for Distributed Training of LMs | 2024-12 | CPAL 2025 | DDP/FSDP 下の適応バッチサイズ。AutoLoCo の適応同期と対比 |
+| [#402](https://github.com/Hiroki11x/Papers/issues/402) / [#578](https://github.com/Hiroki11x/Papers/issues/578) | Adaptive Batch Size Schedules for Distributed Training of LMs | 2024-12 | CPAL 2025 | DDP/FSDP 下の適応バッチサイズ。AutoLoCo の適応同期と対比（同一論文の重複 issue。#578 で本人は、自分の以前の研究のシステム寄りの部分（FSDP 向けの RS hook）に近い内容を詳しく書いたものと位置付け） |
 | [#428](https://github.com/Hiroki11x/Papers/issues/428) | Simple and Scalable Strategies to Continually Pre-train LLMs | 2024-03 | TMLR | 継続事前学習と LR 再ウォームアップ（[misc/08](../misc/08_lr_schedule_weight_decay.md)） |
 | [#399](https://github.com/Hiroki11x/Papers/issues/399) | Energy Consumption in Parallel Neural Network Training | 2025-08 | arXiv（プレプリント） | データ並列スケーリングのエネルギー・大バッチ効果 |
 | [#441](https://github.com/Hiroki11x/Papers/issues/441) | Power Stabilization for AI Training Datacenters | 2025-08 | arXiv（プレプリント） | 同期学習の計算/通信フェーズ交代による電力スイング。同期方式の副作用（[misc/11](../misc/11_llm_architecture_reasoning_safety.md)） |

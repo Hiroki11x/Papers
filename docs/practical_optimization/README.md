@@ -1,12 +1,12 @@
 # Practical Optimization
 
-大規模モデルの学習を実際に速く・安く回すための 3 分野をまとめたディレクトリです。対象は 134 件で、複数分野に属する論文があるため分野別件数の合計は 147 件になります。全体の目次は [../README.md](../README.md)、全件カタログは [../00_catalog.md](../00_catalog.md) を参照してください。
+大規模モデルの学習を実際に速く・安く回すための 3 分野をまとめたディレクトリです。対象は 151 件で、複数分野に属する論文があるため分野別件数の合計は 165 件になります。全体の目次は [../README.md](../README.md)、全件カタログは [../00_catalog.md](../00_catalog.md) を参照してください。
 
 | # | ドキュメント | 対象 | 件数 |
 |---|---|---|---|
-| 1 | [01_critical_batch_size.md](01_critical_batch_size.md) | クリティカルバッチサイズ（CBS）、大バッチ学習、勾配ノイズスケール、バッチサイズ/学習率スケーリング則 | 61（ユニーク 56 本） |
-| 2 | [02_low_precision_and_muon.md](02_low_precision_and_muon.md) | 低精度学習（FP8/FP4/NVFP4/量子化）、Muon と直交化・スペクトル系オプティマイザ | 69（ユニーク 66 本） |
-| 3 | [03_semi_synchronous_training.md](03_semi_synchronous_training.md) | セミシンクロナス学習（Local SGD、DiLoCo 系、外部オプティマイザ、非同期・gossip） | 17（+関連 2 件） |
+| 1 | [01_critical_batch_size.md](01_critical_batch_size.md) | クリティカルバッチサイズ（CBS）、大バッチ学習、勾配ノイズスケール、バッチサイズ/学習率スケーリング則 | 66（ユニーク 60 本） |
+| 2 | [02_low_precision_and_muon.md](02_low_precision_and_muon.md) | 低精度学習（FP8/FP4/NVFP4/量子化）、Muon と直交化・スペクトル系オプティマイザ | 79（ユニーク 76 本） |
+| 3 | [03_semi_synchronous_training.md](03_semi_synchronous_training.md) | セミシンクロナス学習（Local SGD、DiLoCo 系、外部オプティマイザ、非同期・gossip） | 20（+関連 2 件） |
 
 ## 3 分野の時系列
 
@@ -21,18 +21,18 @@
 | 2021 | 4 | 2 | 2 |
 | 2022 | 3 | 2 | 1 |
 | 2023 | 1 | 0 | 1 |
-| 2024 | 4 | 2 | 0 |
-| 2025 | 16 | 26 | 5 |
-| 2026 | 9 | 27 | 6 |
+| 2024 | 5 | 3 | 0 |
+| 2025 | 17 | 26 | 5 |
+| 2026 | 12 | 36 | 9 |
 | 不明 | 3 | 8 | 0 |
 
-- **クリティカルバッチサイズ**: Shallue et al.（[#16](https://github.com/Hiroki11x/Papers/issues/16)）が示した 3 領域構造と、McCandlish et al.（[#8](https://github.com/Hiroki11x/Papers/issues/8)）の勾配ノイズスケールが出発点です。2020 年前後に SDE とスケーリングルールの研究が続き、2024〜2026 年は LLM 時代の問いに移りました。CBS は主にデータ量でスケールするのか（[#390](https://github.com/Hiroki11x/Papers/issues/390)、[#391](https://github.com/Hiroki11x/Papers/issues/391)）、オプティマイザで CBS は変わるのか（[#456](https://github.com/Hiroki11x/Papers/issues/456)、[#553](https://github.com/Hiroki11x/Papers/issues/553)）、RL でのバッチ拡大は有効か（[#572](https://github.com/Hiroki11x/Papers/issues/572)）といった問いです。
-- **低精度・Muon**: 量子化は CNN の推論圧縮から始まり、FP8 での 20T トークン事前学習（[#442](https://github.com/Hiroki11x/Papers/issues/442)）、NVFP4 での 4bit 事前学習（[#444](https://github.com/Hiroki11x/Papers/issues/444)）へと進みました。行列オプティマイザは Shampoo（[#451](https://github.com/Hiroki11x/Papers/issues/451)）を源流とし、Muon の登場後の 2025 年後半から、理論解析・改良・ベンチマーク・ノルム制約の研究が急増しています。中心的な論点は「Muon の AdamW に対する優位はスケールで消えるか」で、[#432](https://github.com/Hiroki11x/Papers/issues/432) と [#474](https://github.com/Hiroki11x/Papers/issues/474) で結論が異なります。
-- **セミシンクロナス**: Local SGD の汎化と大規模での限界（[#9](https://github.com/Hiroki11x/Papers/issues/9)、[#70](https://github.com/Hiroki11x/Papers/issues/70)）から始まります。DiLoCo 以降は外部 Nesterov による最適化アルゴリズムとしての再解釈（[#534](https://github.com/Hiroki11x/Papers/issues/534)、[#536](https://github.com/Hiroki11x/Papers/issues/536)）へ進み、2026 年には同期間隔の適応化（[#573](https://github.com/Hiroki11x/Papers/issues/573)）、gossip 化（[#530](https://github.com/Hiroki11x/Papers/issues/530)）、遅延への頑健性とオプティマイザの関係（[#557](https://github.com/Hiroki11x/Papers/issues/557)）が扱われています。
+- **クリティカルバッチサイズ**: Shallue et al.（[#16](https://github.com/Hiroki11x/Papers/issues/16)）が示した 3 領域構造と、McCandlish et al.（[#8](https://github.com/Hiroki11x/Papers/issues/8)）の勾配ノイズスケールが出発点です。2020 年前後に SDE とスケーリングルールの研究が続き、2024〜2026 年は LLM 時代の問いに移りました。CBS は主にデータ量でスケールするのか（[#390](https://github.com/Hiroki11x/Papers/issues/390)、[#391](https://github.com/Hiroki11x/Papers/issues/391)）、オプティマイザで CBS は変わるのか（[#456](https://github.com/Hiroki11x/Papers/issues/456)、[#553](https://github.com/Hiroki11x/Papers/issues/553)）、RL でのバッチ拡大は有効か（[#572](https://github.com/Hiroki11x/Papers/issues/572)）といった問いです。2026 年 10 月には、TPP を固定すれば最適な AdamW タイムスケールがモデルサイズによらず一定になるという結果（[#574](https://github.com/Hiroki11x/Papers/issues/574)）、適応的バッチングの理論（[#581](https://github.com/Hiroki11x/Papers/issues/581)）、正規化 SGD の可解モデル（[#586](https://github.com/Hiroki11x/Papers/issues/586)）、「最適なオプティマイザはバッチサイズで変わる」という主張（[#592](https://github.com/Hiroki11x/Papers/issues/592)）が加わりました。
+- **低精度・Muon**: 量子化は CNN の推論圧縮から始まり、FP8 での 20T トークン事前学習（[#442](https://github.com/Hiroki11x/Papers/issues/442)）、NVFP4 での 4bit 事前学習（[#444](https://github.com/Hiroki11x/Papers/issues/444)）へと進みました。行列オプティマイザは Shampoo（[#451](https://github.com/Hiroki11x/Papers/issues/451)）を源流とし、Muon の登場後の 2025 年後半から、理論解析・改良・ベンチマーク・ノルム制約の研究が急増しています。2026 年 10 月には、Muon の訓練損失保証（[#579](https://github.com/Hiroki11x/Papers/issues/579)）、事実知識の学習（[#582](https://github.com/Hiroki11x/Papers/issues/582)）、埋め込み層・LM ヘッドへの拡張（[#584](https://github.com/Hiroki11x/Papers/issues/584)）、行列分解でのオプティマイザ幾何の比較（[#589](https://github.com/Hiroki11x/Papers/issues/589)）など、理論と改良の論文がさらに増えています。中心的な論点は「Muon の AdamW に対する優位はスケールで消えるか」で、[#432](https://github.com/Hiroki11x/Papers/issues/432) と [#474](https://github.com/Hiroki11x/Papers/issues/474) で結論が異なります。
+- **セミシンクロナス**: Local SGD の汎化と大規模での限界（[#9](https://github.com/Hiroki11x/Papers/issues/9)、[#70](https://github.com/Hiroki11x/Papers/issues/70)）から始まります。DiLoCo 以降は外部 Nesterov による最適化アルゴリズムとしての再解釈（[#534](https://github.com/Hiroki11x/Papers/issues/534)、[#536](https://github.com/Hiroki11x/Papers/issues/536)）へ進み、2026 年には同期間隔の適応化（[#573](https://github.com/Hiroki11x/Papers/issues/573)）、gossip 化（[#530](https://github.com/Hiroki11x/Papers/issues/530)）、遅延への頑健性とオプティマイザの関係（[#557](https://github.com/Hiroki11x/Papers/issues/557)）が扱われています。2026 年 10 月には、複数の HPC 施設をまたいだ学習（[#580](https://github.com/Hiroki11x/Papers/issues/580)、[#583](https://github.com/Hiroki11x/Papers/issues/583)）と耐障害性のベンチマーク（[#590](https://github.com/Hiroki11x/Papers/issues/590)）が加わりました。
 
 ## 3 分野のつながり
 
-- **バッチサイズとオプティマイザ**: [#456](https://github.com/Hiroki11x/Papers/issues/456) では完全 Gauss-Newton 法が CBS を大きく広げる一方、AdamW と Muon はともに約 12M トークンで頭打ちになります。[#553](https://github.com/Hiroki11x/Papers/issues/553) は、Muon（SignSVD）の前処理効果が大バッチでのみ現れることを示しています。オプティマイザ比較の結論はバッチサイズで逆転しうる、というのが両ドキュメントに共通する整理です（[#432](https://github.com/Hiroki11x/Papers/issues/432) と [#433](https://github.com/Hiroki11x/Papers/issues/433) の食い違い）。
+- **バッチサイズとオプティマイザ**: [#456](https://github.com/Hiroki11x/Papers/issues/456) では完全 Gauss-Newton 法が CBS を大きく広げる一方、AdamW と Muon はともに約 12M トークンで頭打ちになります。[#553](https://github.com/Hiroki11x/Papers/issues/553) は、Muon（SignSVD）の前処理効果が大バッチでのみ現れることを示しています。オプティマイザ比較の結論はバッチサイズで逆転しうる、というのが両ドキュメントに共通する整理です（[#432](https://github.com/Hiroki11x/Papers/issues/432) と [#433](https://github.com/Hiroki11x/Papers/issues/433) の食い違い）。[#592](https://github.com/Hiroki11x/Papers/issues/592) は題名でこの点を正面から主張していますが、ノートからはどちらの方向を支持するかまでは読み取れません。
 - **同期間隔とバッチサイズ**: Local SGD / DiLoCo の内部ステップ数 $H$ とワーカー数 $M$ は実効バッチサイズと絡むため、CBS の議論と直結します。
 - **Muon × 分散 × 低精度**: Muon の直交化の通信コスト（Dion、MuonBP [#458](https://github.com/Hiroki11x/Papers/issues/458)）、遅延への頑健性（[#557](https://github.com/Hiroki11x/Papers/issues/557)）、量子化耐性（[#521](https://github.com/Hiroki11x/Papers/issues/521)）、INT8 通信（[#573](https://github.com/Hiroki11x/Papers/issues/573)）が 3 分野の交差点にあります。
 

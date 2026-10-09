@@ -1,10 +1,10 @@
-# SGD のダイナミクスと最適化理論 サーベイ（SDE/拡散近似・ノイズ構造・鞍点脱出・収束解析・モメンタム理論・初期化/深さと勾配伝播）
+# SGD のダイナミクスと最適化理論 サーベイ（SDE/拡散近似・ノイズ構造・鞍点脱出・収束解析・モメンタム理論・初期化/深さと勾配伝播・臨界期）
 
-> 本稿は [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers/issues) の論文読みノート（GitHub issues）のうち、SGD のダイナミクスと最適化理論（トピック M06）を primary とする **29件の issue** を再構成したものである。このトピックに重複登録はない（29件 = 29本）。
+> 本稿は [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers/issues) の論文読みノート（GitHub issues）のうち、SGD のダイナミクスと最適化理論（トピック M06）を primary とする **30件の issue** を再構成したものである。このトピックに重複登録はない（30件 = 30本）。
 > - 論文の公開期間: 2014年6月（鞍点問題, Dauphin ら）〜 2026年9月（river-valley 地形でのモメンタム）
-> - issue 登録期間: 2020年5月22日 〜 2026年9月28日
+> - issue 登録期間: 2020年5月22日 〜 2026年10月1日
 > - 記述はノート（issue 本文・コメント）に基づく。数値はノートに記載されたものだけを引用している。ノートがリンクや概要の和訳だけの論文は、記述を短くしている。
-> - 関連文書: 平坦性・シャープネス・Edge of Stability は [損失地形・シャープネス](./03_loss_landscape_sharpness.md)、バッチサイズと SGD ノイズスケールは [クリティカルバッチサイズ](../practical_optimization/01_critical_batch_size.md) を参照。
+> - 関連文書: 平坦性・シャープネス・Edge of Stability は [損失地形・シャープネス](./03_loss_landscape_sharpness.md)、バッチサイズと SGD ノイズスケールは [クリティカルバッチサイズ](../practical_optimization/01_critical_batch_size.md)、低精度学習のスケジュールは [低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md) を参照。
 
 ## 概要
 
@@ -14,7 +14,7 @@
 2. **非凸最適化で GD/SGD は鞍点や悪い最小点にどう対処するのか**: 高次元で障害になるのは局所最小か鞍点か、鞍点の脱出に何反復かかるのか。
 3. **SGD はどの最小点を選び、どれくらいの速さで収束するのか**: 学習率・バッチサイズが到達可能な最小点をどう制約するか（動的安定性）、収束を保証する一般的な条件や、大域的な $L$-smoothness より実態に合う解析の枠組みは何か。
 4. **モメンタムは本当に「加速」しているのか**: SGD+M が SGD より優れる条件、平均場極限での性質、river-valley 型の地形での役割。
-5. **深いネットを学習可能にするのは何か**: 残差接続・スケーリング係数・初期化の臨界性・情報の流れの正則化が勾配伝播と収束に与える影響、学習が低ランクの部分空間で起きる理由。
+5. **深いネットを学習可能にするのは何か、学習のどの時期が決定的か**: 残差接続・スケーリング係数・初期化の臨界性・情報の流れの正則化が勾配伝播と収束に与える影響、学習が低ランクの部分空間で起きる理由、学習初期の「臨界期」に受けた欠損がその後回復しないこと。
 
 ## 目次
 
@@ -90,11 +90,15 @@ $$
 - **臨界初期化**: 無限幅極限ではネットワーク関数がガウス過程になり、重み・バイアスの分散を「臨界」に選ぶ基準が作れる。[#167](https://github.com/Hiroki11x/Papers/issues/167) は層 $l_0<l$ の前活性化に対する層 $l$ の前活性化の微分である部分ヤコビアン $\partial h^{l}/\partial h^{l_0}$ で臨界性を診断する。
 - **情報の流れの指標**: DenseNet 型スキップ接続のトポロジーを測る NN-Mass（[#102](https://github.com/Hiroki11x/Papers/issues/102)）、層ごとのバッチエントロピー（[#275](https://github.com/Hiroki11x/Papers/issues/275)）。
 
+### 1.8 臨界期（critical learning period）
+
+学習の初期に、ぼかした画像や過度に量子化した画像など劣化したデータで学習させると、その後クリーンなデータで学習を続けても性能が回復しない時期がある。これを臨界期と呼ぶ（[#576](https://github.com/Hiroki11x/Papers/issues/576)）。ノートでは、フィッシャー情報行列（FIM）が小さくなるタイミングが臨界期の終わりに対応する、とまとめている。
+
 ---
 
 ## 2. 研究の系譜・時系列
 
-### 2.1 2014–2017: 鞍点問題と脱出、拡散近似の導入
+### 2.1 2014–2017: 鞍点問題と脱出、拡散近似の導入、臨界期
 
 ノートが遡る最も古い論点は「高次元の非凸最適化は何が難しいのか」である。
 
@@ -102,6 +106,7 @@ $$
 - [#18](https://github.com/Hiroki11x/Papers/issues/18)（ICML 2017）は、摂動付き GD が次元にほぼ依存しない反復数で2次停留点に到達することを示した。[#14](https://github.com/Hiroki11x/Papers/issues/14)（NeurIPS 2017）は逆に、摂動のない GD はランダム初期化でも脱出に指数時間かかる例を作り、摂動の必要性を裏付けた。ノートの主はこの議論を解説した Off the Convex Path のブログ記事を和訳・公開している。
 - [#87](https://github.com/Hiroki11x/Papers/issues/87)（ICLR 2017）は、線形ネットの条件下で残差（スキップ）接続が凸性を促し、偽の局所最小がないことを示した。地形の側から「深さが最適化を難しくしない条件」を与えた研究で、2.3節の深さ・初期化の系譜の出発点にあたる。
 - [#23](https://github.com/Hiroki11x/Papers/issues/23)（2017年公開、AMSA 掲載）は非凸 SGD を拡散過程で近似し、確率解析によって鞍点・局所最小からの脱出のダイナミクスを説明した。シャープな最小点を抜けるには小さいバッチが有効で、学習の後半にバッチサイズを増やすと平坦な最小点に留まり汎化が良くなる、という主張は次の時期の「ノイズとミニマ選択」の議論につながる。
+- [#576](https://github.com/Hiroki11x/Papers/issues/576)（2017年公開、ICLR 2019）は、深層ネットにも臨界期があることを示した。学習初期にぼかし画像や過度に量子化した画像で学習させると回復できない欠損が残り、FIM が小さくなるタイミングが臨界期の終わりにあたる。[#23](https://github.com/Hiroki11x/Papers/issues/23) と同じく「学習のどの段階で何が起きるか」が最終的な解を左右するという見方だが、こちらはノイズではなくデータの劣化を扱う。issue 登録は 2026-10 と新しく、低精度学習のスケジュールを調べた [#575](https://github.com/Hiroki11x/Papers/issues/575)（[低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md)）から辿って読まれている。
 
 ### 2.2 2018–2020: SGD ノイズの構造とミニマ選択
 
@@ -147,6 +152,7 @@ timeline
         2017 : issue 18 摂動付きGDの効率的な鞍点脱出
              : issue 14 GDの鞍点脱出は指数時間もありうる
              : issue 23 非凸SGDの拡散近似
+             : issue 576 学習初期の臨界期
     section 2018-2020 ノイズ構造とミニマ選択
         2018 : issue 7 異方性ノイズとシャープミニマ脱出
              : issue 22 動的安定性によるミニマ選択
@@ -239,6 +245,12 @@ timeline
 - [#275](https://github.com/Hiroki11x/Papers/issues/275) バッチエントロピー正則化による学習可能性
 - [#504](https://github.com/Hiroki11x/Papers/issues/504) 滑らかな活性化の MLP の低ランク学習ダイナミクス
 
+### G. 学習初期の臨界期
+
+**要点**: 学習初期に劣化したデータ（ぼかし・過度な量子化）で学習すると回復できない欠損が残り、臨界期の終わりは FIM が小さくなるタイミングに対応する（[#576](https://github.com/Hiroki11x/Papers/issues/576)）。ノートの主は、複数エポックの画像分類の設定なので LLM でも同じことが言えるかは不明としている。
+
+- [#576](https://github.com/Hiroki11x/Papers/issues/576) 深層ネットの Critical Learning Periods
+
 ---
 
 ## 5. 論文一覧表（公開順）
@@ -252,6 +264,7 @@ timeline
 | 2017-03 | [#18](https://github.com/Hiroki11x/Papers/issues/18) How to Escape Saddle Points Efficiently | Chi Jin, Rong Ge, Praneeth Netrapalli, et al. | ICML 2017 | Semantic Scholar確認 | 鞍点脱出 |
 | 2017-05 | [#14](https://github.com/Hiroki11x/Papers/issues/14) Gradient Descent Can Take Exponential Time to Escape Saddle Points | Simon S. Du, Chi Jin, Jason D. Lee, et al. | NeurIPS 2017 | arXivコメント | 鞍点脱出 |
 | 2017-05 | [#23](https://github.com/Hiroki11x/Papers/issues/23) On the diffusion approximation of nonconvex stochastic gradient descent | Wenqing Hu, Chris Junchi Li, Lei Li, et al. | Annals of Mathematical Sciences and Applications | Web確認 | SGDの拡散近似 |
+| 2017-11 | [#576](https://github.com/Hiroki11x/Papers/issues/576) Critical Learning Periods in Deep Neural Networks | Alessandro Achille, Matteo Rovere, Stefano Soatto（UCLA） | ICLR 2019 | Web確認 | Critical Learning Periods（学習初期の臨界期） |
 | 2018-03 | [#7](https://github.com/Hiroki11x/Papers/issues/7) The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects | Zhanxing Zhu, Jingfeng Wu, Bing Yu, et al.（Peking University） | ICML 2019 | arXivコメント | SGDの異方性ノイズとシャープミニマ脱出 |
 | 2018-12 | [#22](https://github.com/Hiroki11x/Papers/issues/22) How SGD Selects the Global Minima in Over-parameterized Learning: A Dynamical Stability Perspective | Lei Wu, Chao Ma, Weinan E（Princeton University） | NeurIPS 2018 | issue記載 | 動的安定性とミニマ選択 |
 | 2019-03 | [#273](https://github.com/Hiroki11x/Papers/issues/273) Stabilize Deep ResNet with A Sharp Scaling Factor τ | Huishuai Zhang, Da Yu, Mingyang Yi, et al.（Microsoft Research） | Machine Learning (journal) | Web確認 | 深いResNetの安定性と収束 |
@@ -288,12 +301,12 @@ timeline
 | NeurIPS | 9 | NeurIPS 2014, NeurIPS 2017, NeurIPS 2018, NeurIPS 2020, NeurIPS 2022, NeurIPS 2023, NeurIPS 2024, NeurIPS 2025 | [#82](https://github.com/Hiroki11x/Papers/issues/82), [#14](https://github.com/Hiroki11x/Papers/issues/14), [#22](https://github.com/Hiroki11x/Papers/issues/22), [#24](https://github.com/Hiroki11x/Papers/issues/24), [#167](https://github.com/Hiroki11x/Papers/issues/167), [#242](https://github.com/Hiroki11x/Papers/issues/242), [#305](https://github.com/Hiroki11x/Papers/issues/305), [#535](https://github.com/Hiroki11x/Papers/issues/535), [#466](https://github.com/Hiroki11x/Papers/issues/466) |
 | arXiv（プレプリント） | 6 | arXiv（プレプリント） | [#43](https://github.com/Hiroki11x/Papers/issues/43), [#186](https://github.com/Hiroki11x/Papers/issues/186), [#370](https://github.com/Hiroki11x/Papers/issues/370), [#374](https://github.com/Hiroki11x/Papers/issues/374), [#504](https://github.com/Hiroki11x/Papers/issues/504), [#571](https://github.com/Hiroki11x/Papers/issues/571) |
 | ICML | 5 | ICML 2017, ICML 2019, ICML 2020, ICML 2021, ICML 2025 | [#18](https://github.com/Hiroki11x/Papers/issues/18), [#7](https://github.com/Hiroki11x/Papers/issues/7), [#49](https://github.com/Hiroki11x/Papers/issues/49), [#89](https://github.com/Hiroki11x/Papers/issues/89), [#376](https://github.com/Hiroki11x/Papers/issues/376) |
+| ICLR | 2 | ICLR 2017, ICLR 2019 | [#87](https://github.com/Hiroki11x/Papers/issues/87), [#576](https://github.com/Hiroki11x/Papers/issues/576) |
 | TMLR | 2 | TMLR | [#275](https://github.com/Hiroki11x/Papers/issues/275), [#333](https://github.com/Hiroki11x/Papers/issues/333) |
 | AISTATS | 1 | AISTATS 2023 | [#240](https://github.com/Hiroki11x/Papers/issues/240) |
 | Annals of Mathematical Sciences and Applications | 1 | Annals of Mathematical Sciences and Applications | [#23](https://github.com/Hiroki11x/Papers/issues/23) |
 | CVPR | 1 | CVPR 2021 | [#102](https://github.com/Hiroki11x/Papers/issues/102) |
 | Foundations of Computational Mathematics | 1 | Foundations of Computational Mathematics | [#46](https://github.com/Hiroki11x/Papers/issues/46) |
-| ICLR | 1 | ICLR 2017 | [#87](https://github.com/Hiroki11x/Papers/issues/87) |
 | JMLR | 1 | JMLR | [#369](https://github.com/Hiroki11x/Papers/issues/369) |
 | Machine Learning (journal) | 1 | Machine Learning (journal) | [#273](https://github.com/Hiroki11x/Papers/issues/273) |
 
@@ -346,6 +359,18 @@ NeurIPS が9件で最多。理論寄りのトピックらしく、FoCM・JMLR・
 - 学習の後半にバッチサイズを増やすと、平坦な最小点に捕らわれて良い汎化になる。
 
 **メモ**: 研究室の Slack で資料共有を依頼している。
+
+### [#576] Critical Learning Periods in Deep Neural Networks
+
+- 公開: 2017-11 / 採択先: ICLR 2019（Web確認。採択版タイトルは "Critical Learning Periods in Deep Networks"） / 著者・組織: Alessandro Achille, Matteo Rovere, Stefano Soatto（UCLA）
+
+**要約**: 学習初期に、ぼかした画像など劣化したデータで学習させると、その後クリーンなデータで学習しても性能が回復しない「臨界期」が深層ネットにも存在することを示した。フィッシャー情報量が小さくなるタイミングが臨界期の終わりに対応する。
+
+**主な知見**:
+- FIM が小さくなるタイミングが臨界期の終わり。
+- 臨界期の間にぼかしたデータや過度に量子化された画像で学習させられると、回復できなくなる。
+
+**メモ**: Limitation として「複数エポックの設定、画像の設定なので、LLM でも同じことが言えるかは不明」と書いている。低精度学習のスケジュールを比較した [#575](https://github.com/Hiroki11x/Papers/issues/575)（[低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md)）へのリンクがある。逆に [#575](https://github.com/Hiroki11x/Papers/issues/575) のノートのコメントには、[#575](https://github.com/Hiroki11x/Papers/issues/575) の論文が Critical Learning Period に相当する現象も確認できたと主張している、という記述がある。
 
 ### [#7] The Anisotropic Noise in Stochastic Gradient Descent: Its Behavior of Escaping from Sharp Minima and Regularization Effects
 
@@ -641,6 +666,8 @@ $$
 **7. 学習は低次元で起きる。** 勾配がヘシアン上位の小さな部分空間に入る（[#149](https://github.com/Hiroki11x/Papers/issues/149)）、初期化の不均衡が低次元多様体へのダイナミクスを決める（[#89](https://github.com/Hiroki11x/Papers/issues/89)）、滑らかな活性化では重み更新が初期化依存の $2K$ 次元部分空間に閉じる（[#504](https://github.com/Hiroki11x/Papers/issues/504)）という結果は、いずれも「学習は高次元のパラメータ空間全体では起きていない」ことを示す。[#504](https://github.com/Hiroki11x/Papers/issues/504) は ReLU では成り立たないことも示しており、活性化の滑らかさがどこまで本質かは今後の論点である。
 
 **8. 深さの問題はアーキテクチャ・初期化・正則化のどれで解くか。** 残差接続（[#87](https://github.com/Hiroki11x/Papers/issues/87)）、残差分岐のスケーリング（[#273](https://github.com/Hiroki11x/Papers/issues/273)、正規化層なしでも学習可能）、臨界初期化と LayerNorm の位置（[#167](https://github.com/Hiroki11x/Papers/issues/167)）、バッチエントロピー正則化（[#275](https://github.com/Hiroki11x/Papers/issues/275)、スキップ接続も正規化もない500層）と、同じ「深いネットを学習可能にする」問題に複数の解がある。これらは [損失地形・シャープネス](./03_loss_landscape_sharpness.md) の [#178](https://github.com/Hiroki11x/Papers/issues/178)（ウォームアップ・正規化・初期化手法は同じ条件付けの問題に対処しているという見方）と合わせて読むと整理しやすい。
+
+**9. 学習初期に何が固まるのか。** [#576](https://github.com/Hiroki11x/Papers/issues/576) は、学習初期の劣化データによる欠損が回復しないこと、臨界期の終わりが FIM の減少と対応することを示した。[損失地形・シャープネス](./03_loss_landscape_sharpness.md) の [#71](https://github.com/Hiroki11x/Papers/issues/71)（学習初期の FIM が汎化に影響する。FIM トレースを正則化すると汎化が改善）と同じく、学習初期のフィッシャーが後の結果を左右するという見方である。実務的には、学習中に数値精度を変える低精度スケジュール（[#575](https://github.com/Hiroki11x/Papers/issues/575), [低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md)）で初期を粗い精度にしてよいのか、という問いにつながる。ただしノートの主が書くとおり、複数エポックの画像の設定での結果であり、LLM でも同じことが言えるかは分かっていない。
 
 ---
 

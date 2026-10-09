@@ -467,6 +467,7 @@ timeline
 - [#486](https://github.com/Hiroki11x/Papers/issues/486) Scaling up Test-Time Compute with Latent Reasoning: A Recurrent Depth Approach — [LLM アーキテクチャ・推論・安全性](./11_llm_architecture_reasoning_safety.md)
 - [#499](https://github.com/Hiroki11x/Papers/issues/499) Optimal Learning Rate Schedules under Functional Scaling Laws: Power Decay and Warmup-Stable-Decay — [学習率スケジュール・Weight Decay](./08_lr_schedule_weight_decay.md)
 - [#568](https://github.com/Hiroki11x/Papers/issues/568) Computational depth is all you need: Towards 10^7-layer neural nets — [LLM アーキテクチャ・推論・安全性](./11_llm_architecture_reasoning_safety.md)
+- [#574](https://github.com/Hiroki11x/Papers/issues/574) Scaling with Collapse: Efficient and Predictable Training of LLM Families — [Critical Batch Size](../practical_optimization/01_critical_batch_size.md)（TPP と AdamW タイムスケール τ を揃えると LLM ファミリーの損失曲線が1本に collapse し、学習10〜30%時点で最終損失を予測できる。#377 の scaling collapse と関係）
 
 **他文書との関係**
 - データプルーニング（#416）と蒸留（#484）の手法側（Data Diet [#302](https://github.com/Hiroki11x/Papers/issues/302)、蒸留損失 [#94](https://github.com/Hiroki11x/Papers/issues/94)）は [正則化・データ拡張・圧縮](./05_regularization_augmentation_compression.md) を参照。

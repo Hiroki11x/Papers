@@ -1,8 +1,8 @@
 # 低精度学習と Muon・直交化/スペクトル系オプティマイザ：論文ノートに基づくサーベイ
 
-> 対象：GitHub リポジトリ [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読みノート（issue）のうち、低精度学習（LPM ラベル系）と行列オプティマイザに関する **69件**（うち3組は同一論文の重複ノート：[#426](https://github.com/Hiroki11x/Papers/issues/426)/[#431](https://github.com/Hiroki11x/Papers/issues/431)、[#427](https://github.com/Hiroki11x/Papers/issues/427)/[#442](https://github.com/Hiroki11x/Papers/issues/442)、[#456](https://github.com/Hiroki11x/Papers/issues/456)/[#490](https://github.com/Hiroki11x/Papers/issues/490)。実質は66論文）
-> 論文の公開時期：2018-02（Shampoo）〜 2026-09（AutoLoCo ほか）。issue の登録時期は 2020-10 〜 2026-09-30。
-> 作成日：2026-09-30。2025〜2026年の論文は執筆者の記憶ではなく、ノートの記述を根拠にまとめています。
+> 対象：GitHub リポジトリ [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers) の論文読みノート（issue）のうち、低精度学習（LPM ラベル系）と行列オプティマイザに関する **79件**（うち3組は同一論文の重複ノート：[#426](https://github.com/Hiroki11x/Papers/issues/426)/[#431](https://github.com/Hiroki11x/Papers/issues/431)、[#427](https://github.com/Hiroki11x/Papers/issues/427)/[#442](https://github.com/Hiroki11x/Papers/issues/442)、[#456](https://github.com/Hiroki11x/Papers/issues/456)/[#490](https://github.com/Hiroki11x/Papers/issues/490)。実質は76論文）
+> 論文の公開時期：2018-02（Shampoo）〜 2026-10（Bregman Shampoo、The Best Optimizer Depends on Batch Size ほか）。issue の登録時期は 2020-10 〜 2026-10-08。
+> 作成日：2026-09-30、2026-10-08 更新。2025〜2026年の論文は執筆者の記憶ではなく、ノートの記述を根拠にまとめています。
 
 ## 概要
 
@@ -19,11 +19,11 @@
 
 | Part | 件数 | 主な内容 |
 |---|---|---|
-| A 低精度学習 | 11 | 量子化の基礎/QAT、三値 LLM、FP8/NVFP4/Full-Stack FP4 事前学習、量子化耐性・安定化 |
-| B Muon・直交化/スペクトル系 | 50 | Shampoo 系の源流、Muon の理論、改良・高速化、ベンチマーク・スケーリング則、ノルム制約、応用 |
+| A 低精度学習 | 12 | 量子化の基礎/QAT、精度スケジュール、三値 LLM、FP8/NVFP4/Full-Stack FP4 事前学習、量子化耐性・安定化 |
+| B Muon・直交化/スペクトル系 | 59 | Shampoo 系の源流、Muon の理論、改良・高速化、ベンチマーク・スケーリング則、ノルム制約、応用 |
 | C 交差領域 | 8 | オプティマイザ×量子化、オプティマイザ×分散/通信 |
 
-ノートの登録は 2025年7月以降に集中しており（69件中64件）、その大半が Part B です。このノート群が、Muon 登場後の「行列オプティマイザ・ブーム」をリアルタイムに追ったアーカイブになっていることが分かります。
+ノートの登録は 2025年7月以降に集中しており（79件中74件）、その大半が Part B です。このノート群が、Muon 登場後の「行列オプティマイザ・ブーム」をリアルタイムに追ったアーカイブになっていることが分かります。
 
 ## 目次
 
@@ -32,7 +32,7 @@
 3. [Part B Muon・直交化/スペクトル系オプティマイザ：研究の系譜](#3-part-b-muon直交化スペクトル系オプティマイザ研究の系譜)
 4. [Part C 交差領域：研究の系譜](#4-part-c-交差領域研究の系譜)
 5. [サブトピック別の整理](#5-サブトピック別の整理)
-6. [論文一覧表](#6-論文一覧表全69件公開年月順)
+6. [論文一覧表](#6-論文一覧表全79件公開年月順)
 7. [採択先（ベニュー）別の集計](#7-採択先ベニュー別の集計)
 8. [各論文の詳細まとめ](#8-各論文の詳細まとめ)
 9. [横断的な知見・未解決問題・実務上の示唆](#9-横断的な知見未解決問題実務上の示唆)
@@ -99,7 +99,7 @@ $$\arg\min_{\|\Delta\|_{\mathrm{op}}\le 1}\langle G,\Delta\rangle=-UV^\top$$
 
 の解です。つまり Muon は「スペクトルノルムの幾何での最急降下」です。この見方を層ごとのノルム割り当てに一般化したのが、metrized deep learning / duality の枠組み（[#406](https://github.com/Hiroki11x/Papers/issues/406)）や **Scion**（入力層 $\ell_1\to$RMS、隠れ層 RMS$\to$RMS、出力層 RMS$\to\infty$、[#435](https://github.com/Hiroki11x/Papers/issues/435)）です。Drop-Muon（[#424](https://github.com/Hiroki11x/Papers/issues/424)）や LANTON（[#457](https://github.com/Hiroki11x/Papers/issues/457)）も LMO ベースの枠組みで定式化されています。
 
-**適用範囲の慣行.** Muon/NorMuon を適用するのは隠れ層の2次元重み行列だけで、埋め込み・出力層（LM head）・バイアス・正規化パラメータには Adam を使うのが標準です（[#430](https://github.com/Hiroki11x/Papers/issues/430) の本人メモ、MiMo-V2.6 [#567](https://github.com/Hiroki11x/Papers/issues/567) でも router を含めて AdamW）。この慣行に理論的な裏付けを与えたのが [#488](https://github.com/Hiroki11x/Papers/issues/488) です。
+**適用範囲の慣行.** Muon/NorMuon を適用するのは隠れ層の2次元重み行列だけで、埋め込み・出力層（LM head）・バイアス・正規化パラメータには Adam を使うのが標準です（[#430](https://github.com/Hiroki11x/Papers/issues/430) の本人メモ、MiMo-V2.6 [#567](https://github.com/Hiroki11x/Papers/issues/567) でも router を含めて AdamW）。この慣行に理論的な裏付けを与えたのが [#488](https://github.com/Hiroki11x/Papers/issues/488) です。逆に MuonIO [#584](https://github.com/Hiroki11x/Papers/issues/584)（2026-10）は、埋め込み層と LM head だけ AdamW が残ること自体を問題の出発点とし、そこもノルムを考慮した更新に置き換えようとしています。
 
 **SOAP と「回転＋Adam」.** SOAP は Shampoo の固有基底に回転した空間で Adam を回す手法です。Adam が座標系（基底）に依存し、SVD 基底で性能が上がるという [#397](https://github.com/Hiroki11x/Papers/issues/397) の観察が、この発想の裏付けになっています。[#471](https://github.com/Hiroki11x/Papers/issues/471) は行列ホワイトニング型の手法を **スペクトル正規化** と **分散適応（variance adaptation）** の2要素に分解しました。[#566](https://github.com/Hiroki11x/Papers/issues/566) は SOAP・Conda・SPlus などの「回転ベース」手法の収束率を統一的に証明しています。
 
@@ -107,7 +107,7 @@ $$\arg\min_{\|\Delta\|_{\mathrm{op}}\le 1}\langle G,\Delta\rangle=-UV^\top$$
 
 **weight decay とノルム制御.** Muon に全層 weight decay を加えた D-Muon は大きく改善します（[#433](https://github.com/Hiroki11x/Papers/issues/433)）。一方、2026年に入ると「weight decay は正則化ではなく、重みノルムを通じて相対更新量（angular learning rate）を間接制御しているだけ」という見方を明示したのが Hyperball [#532](https://github.com/Hiroki11x/Papers/issues/532)（2026-06）です。同じ2026年には、重みと更新のノルムを直接拘束して weight decay をなくす手法が並行して相次いでいます（SSO [#508](https://github.com/Hiroki11x/Papers/issues/508)（2026-01）、MACRO [#549](https://github.com/Hiroki11x/Papers/issues/549)（2026-05）、MD Decoupling [#528](https://github.com/Hiroki11x/Papers/issues/528)（2026-06））。本人メモにも「勾配も重みもノルムをハードに制御して wd をなくす流れが最近の流行り」とあります。
 
-**臨界バッチサイズ（CBS）.** これ以上バッチを大きくしてもステップ数が減らなくなる境界です。完全な Gauss-Newton 法は CBS を大きく広げます（[#456](https://github.com/Hiroki11x/Papers/issues/456)。ただし同論文では Muon は AdamW と同じく約12M トークンで頭打ち）。一方 MiMo-V2.6 [#567](https://github.com/Hiroki11x/Papers/issues/567) は「Muon 系は CBS を超える大バッチでもデータ効率を保つ」ことを導入理由に挙げています。CBS はベンチマーク結果のバッチサイズ依存性（[#432](https://github.com/Hiroki11x/Papers/issues/432) vs [#433](https://github.com/Hiroki11x/Papers/issues/433)）を解釈するうえでも鍵になります。
+**臨界バッチサイズ（CBS）.** これ以上バッチを大きくしてもステップ数が減らなくなる境界です。完全な Gauss-Newton 法は CBS を大きく広げます（[#456](https://github.com/Hiroki11x/Papers/issues/456)。ただし同論文では Muon は AdamW と同じく約12M トークンで頭打ち）。一方 MiMo-V2.6 [#567](https://github.com/Hiroki11x/Papers/issues/567) は「Muon 系は CBS を超える大バッチでもデータ効率を保つ」ことを導入理由に挙げています。CBS はベンチマーク結果のバッチサイズ依存性（[#432](https://github.com/Hiroki11x/Papers/issues/432) vs [#433](https://github.com/Hiroki11x/Papers/issues/433)）を解釈するうえでも鍵になります。2026-10 の [#592](https://github.com/Hiroki11x/Papers/issues/592)（The Best Optimizer Depends on Batch Size）は、この依存性そのものを題名に掲げています（ノートは題名と図、「Adaptive BS とかはやってない」というメモのみ）。
 
 **安定ランク・nuclear rank・有効ランク.** Muon を理論的に説明する際の中心的な指標です。安定ランクは $\|A\|_F^2/\|A\|_2^2$、nuclear rank は $\|G\|_*^2/\|G\|_F^2$ です。[#488](https://github.com/Hiroki11x/Papers/issues/488) は「$\text{nuclear rank}(\nabla W)\ge\text{stable rank}(A_{\ell-1})$ のとき SpecGD が GD より1ステップで多く損失を減らす」ことを示しました。MSign（[#494](https://github.com/Hiroki11x/Papers/issues/494)）は、安定ランクの急落を学習崩壊の前兆として扱っています。
 
@@ -117,11 +117,11 @@ $$\arg\min_{\|\Delta\|_{\mathrm{op}}\le 1}\langle G,\Delta\rangle=-UV^\top$$
 
 ### 2.1 時代区分
 
-実データ（公開年月）に合わせると、Part A は次の3期に分けられます。間にある 2023〜2024年前半の空白は、ノート群が LLM 時代の量子化を追い始めるまでの間隔を反映しています。
+実データ（公開年月）に合わせると、Part A は次の3期に分けられます。間にある 2023年〜2024年前半の空白（2024-03 の [#575](https://github.com/Hiroki11x/Papers/issues/575) を除く）は、ノート群が LLM 時代の量子化を追い始めるまでの間隔を反映しています。
 
 | 時期 | 特徴 | 論文 |
 |---|---|---|
-| 第1期 2021〜2022 | CNN 向けの量子化理論と QAT の工夫 | [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#330](https://github.com/Hiroki11x/Papers/issues/330), [#350](https://github.com/Hiroki11x/Papers/issues/350) |
+| 第1期 2021〜2024-03 | CNN 向けの量子化理論と QAT の工夫、学習中の精度スケジュール | [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#330](https://github.com/Hiroki11x/Papers/issues/330), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#575](https://github.com/Hiroki11x/Papers/issues/575) |
 | 第2期 2024-07〜2025-09 | LLM を「最初から低ビットで事前学習する」時代：三値、FP8、NVFP4 | [#482](https://github.com/Hiroki11x/Papers/issues/482), [#427](https://github.com/Hiroki11x/Papers/issues/427)/[#442](https://github.com/Hiroki11x/Papers/issues/442), [#444](https://github.com/Hiroki11x/Papers/issues/444) |
 | 第3期 2026 | 線形層の先へ：オプティマイザ状態・Attention の FP4 化と、量子化耐性・安定化 | [#529](https://github.com/Hiroki11x/Papers/issues/529), [#540](https://github.com/Hiroki11x/Papers/issues/540), [#541](https://github.com/Hiroki11x/Papers/issues/541) |
 
@@ -133,6 +133,7 @@ timeline
         2021-11 : SAQ 166
         2022-10 : SQR QSin 330
         2022-11 : LTS 350
+        2024-03 : 低精度スケジュール 575
     section 第2期 LLMの低ビット事前学習
         2024-07 : TriLM 三値 482
         2025-08 : Nemotron Nano 2 FP8 20T 427 442
@@ -143,7 +144,7 @@ timeline
         2026-08 : GradientStabilizer 541
 ```
 
-### 2.2 第1期：推論圧縮のための量子化と QAT の工夫（2021〜2022）
+### 2.2 第1期：推論圧縮のための量子化と QAT の工夫（2021〜2024-03）
 
 出発点は Qualcomm のホワイトペーパー [#112](https://github.com/Hiroki11x/Papers/issues/112) です。ハードウェアの観点から量子化を説明し、「PTQ なら8bit でほぼ浮動小数点並み、より低ビットには QAT が必要」という基本構図を示しました。この時期の問いは **「量子化で失われる精度を学習でどう取り戻すか」** です。3本のノートはそれぞれ別の角度からこの問いに答えています。
 
@@ -152,6 +153,8 @@ timeline
 - **学習効率の観点**：LTS [#350](https://github.com/Hiroki11x/Papers/issues/350) は、「QAT では量子化重みの大部分が数エポックで最適な量子化レベルに到達する（部分的スクラッチオフ宝くじ）」ことを発見しました。到達した重みを凍結し、更新を 30〜60%、後退パスの FLOPs を 15〜30% 削減しています。
 
 この3本はいずれも CNN と画像タスクが対象で、LLM や浮動小数点の低ビットフォーマットは登場しません。第1期はノートの本文も短く、概要の転記が中心です。
+
+第1期の終わりに位置するのが [#575](https://github.com/Hiroki11x/Papers/issues/575)（Better Schedules for Low Precision Training、ACML 2023 / Machine Learning (2024)）です。量子化を固定せず、**学習中に数値精度をスケジュールする**（cyclic precision training の系譜）という発想で、多数のスケジュールを実験的に比較しています。本人メモは「実験論文、いっぱい試した」と評し、アイデアの元は Facebook の ICLR 2021 Spotlight（[arXiv:2101.09868](https://arxiv.org/abs/2101.09868)）だとしています。また、論文中で Critical Learning Period に相当する現象も確認できたと主張している点をコメントに残しており、元論文 [#576](https://github.com/Hiroki11x/Papers/issues/576) は [SGD ダイナミクスと理論](../misc/06_sgd_dynamics_theory.md) に分類されています（第10章参照）。
 
 ### 2.3 第2期：LLM を低ビットで「事前学習」する（2024-07〜2025-09）
 
@@ -204,7 +207,7 @@ NVFP4 論文の「10T トークン・実機」と比べると、スケールと�
 - **重みだけなら約1.58bit まで下げられる**（TriLM）。ただし活性・勾配は高精度のまま、推論の効率化が主目的です。
 - **重み・活性・勾配の GEMM は 4bit（NVFP4）が実証済みの下限**（10T トークン）。成立させるには、BF16 層の残置・RHT・2D スケーリング・確率的丸めを組み合わせる必要があります。フォーマットは MXFP4 より NVFP4 が有利です。
 - **オプティマイザ状態と Attention の 4bit 化** は、分布変換と経路ごとの混合精度で「数値的には成立」しました（Full-Stack FP4）。ただし実機速度と長期学習での誤差の蓄積は未解決です。
-- 量子化誤差は **モデルの次元と学習の進行に伴って悪化する**（Full-Stack FP4 の Figure 6）。この理論的指摘から、「学習初期は低精度、後半で高精度へ戻す」動的精度切替が示唆されています。
+- 量子化誤差は **モデルの次元と学習の進行に伴って悪化する**（Full-Stack FP4 の Figure 6）。この理論的指摘から、「学習初期は低精度、後半で高精度へ戻す」動的精度切替が示唆されています。精度を学習中にスケジュールする発想自体は [#575](https://github.com/Hiroki11x/Papers/issues/575)（2024-03）がすでに実験的に検討していますが、LLM の FP4 事前学習と結びつけた検証はまだノートにありません。
 - **どのオプティマイザで学習したかが量子化耐性を決める**（[#521](https://github.com/Hiroki11x/Papers/issues/521)）という発見は、Part A と Part B を結ぶ最重要の接点です（→ Part C）。
 
 ---
@@ -213,7 +216,7 @@ NVFP4 論文の「10T トークン・実機」と比べると、スケールと�
 
 ### 3.1 時代区分
 
-Part B の50件（重複2組を含む）は、公開年月で見ると次の5期に分けられます。公開年月が不明な論文は、issue 登録月で位置づけています。
+Part B の59件（重複2組を含む）は、公開年月で見ると次の5期に分けられます。公開年月が不明な論文は、issue 登録月で位置づけています。
 
 | 時期 | 特徴 | 主な論文 |
 |---|---|---|
@@ -221,7 +224,7 @@ Part B の50件（重複2組を含む）は、公開年月で見ると次の5期
 | 第1期 2024-10〜2025-07 | Muon 登場直後：基底依存性、暗黙的バイアス、Newton–Schulz の最適化、帰納バイアス | [#397](https://github.com/Hiroki11x/Papers/issues/397), [#476](https://github.com/Hiroki11x/Papers/issues/476), [#489](https://github.com/Hiroki11x/Papers/issues/489), [#386](https://github.com/Hiroki11x/Papers/issues/386) |
 | 第2期 2025-09〜2025-11 | 爆発期：「なぜ効くか」の説明、改良版の乱立、公正なベンチマーク、μP | [#406](https://github.com/Hiroki11x/Papers/issues/406), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#474](https://github.com/Hiroki11x/Papers/issues/474), [#483](https://github.com/Hiroki11x/Papers/issues/483) |
 | 第3期 2025-12〜2026-03 | 理論の深化と安定化：有効条件、近似誤差、安定ランク、warmup、スケーリング則、スペクトル球 | [#488](https://github.com/Hiroki11x/Papers/issues/488), [#508](https://github.com/Hiroki11x/Papers/issues/508), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#519](https://github.com/Hiroki11x/Papers/issues/519) |
-| 第4期 2026-05〜2026-09 | ポスト Muon：ノルム制約と weight decay の再解釈、「一様化しすぎ」の修正、二次情報との融合、応用 | [#522](https://github.com/Hiroki11x/Papers/issues/522), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#527](https://github.com/Hiroki11x/Papers/issues/527), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#543](https://github.com/Hiroki11x/Papers/issues/543), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#570](https://github.com/Hiroki11x/Papers/issues/570) |
+| 第4期 2026-05〜2026-10 | ポスト Muon：ノルム制約と weight decay の再解釈、「一様化しすぎ」の修正、二次情報との融合、埋め込み層・LM head への拡張、応用 | [#522](https://github.com/Hiroki11x/Papers/issues/522), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#527](https://github.com/Hiroki11x/Papers/issues/527), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#543](https://github.com/Hiroki11x/Papers/issues/543), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#570](https://github.com/Hiroki11x/Papers/issues/570), [#577](https://github.com/Hiroki11x/Papers/issues/577), [#579](https://github.com/Hiroki11x/Papers/issues/579), [#582](https://github.com/Hiroki11x/Papers/issues/582), [#584](https://github.com/Hiroki11x/Papers/issues/584), [#585](https://github.com/Hiroki11x/Papers/issues/585), [#588](https://github.com/Hiroki11x/Papers/issues/588), [#589](https://github.com/Hiroki11x/Papers/issues/589), [#591](https://github.com/Hiroki11x/Papers/issues/591), [#592](https://github.com/Hiroki11x/Papers/issues/592) |
 
 ```mermaid
 timeline
@@ -279,6 +282,15 @@ timeline
                 : Muon-C 559
                 : 回転ベース最適化の収束 566
                 : Muon と継続学習 570
+                : スペクトルGDの過学習 577
+        2026-10 : 有限ステップNSの損失保証 579
+                : Muon と事実知識 582
+                : MuonIO 584
+                : DGA-Muon 585
+                : ORCA 588
+                : 行列分解のスペクトル動態 589
+                : Bregman Shampoo 591
+                : 最適オプティマイザとバッチサイズ 592
 ```
 
 （注）[#406](https://github.com/Hiroki11x/Papers/issues/406)・[#474](https://github.com/Hiroki11x/Papers/issues/474)・[#483](https://github.com/Hiroki11x/Papers/issues/483)・[#517](https://github.com/Hiroki11x/Papers/issues/517)・[#527](https://github.com/Hiroki11x/Papers/issues/527)・[#539](https://github.com/Hiroki11x/Papers/issues/539) は公開年月が記録されていないため、issue 登録月の位置に置いています。
@@ -353,7 +365,7 @@ Muon 自体（Jordan et al., 2024）のノートはありません。ただし�
 - **圧縮との両立** [#515](https://github.com/Hiroki11x/Papers/issues/515) NuMuon：Muon で学習した重みは自然に低ランクになることを踏まえ、更新に核ノルム制約を課して SVD 圧縮への耐性を高めました。[#410](https://github.com/Hiroki11x/Papers/issues/410) の「モメンタムは低ランク」という観察と合わせると、「Muon は等方的なスペクトルを作る」（[#426](https://github.com/Hiroki11x/Papers/issues/426)）という主張との関係は、ノートの範囲では整理されていない論点です。
 - [#505](https://github.com/Hiroki11x/Papers/issues/505) ARO は、タイトルは行列最適化ですが、ノートの要約はバッチランプアップと GNS の理論に焦点を当てています。対応関係はノートからは明確ではありません。
 
-### 3.6 第4期：ポスト Muon（2026-05〜2026-09）
+### 3.6 第4期：ポスト Muon（2026-05〜2026-10）
 
 #### (a) weight decay の再解釈とノルム制約
 
@@ -375,6 +387,15 @@ Hyperball [#532](https://github.com/Hiroki11x/Papers/issues/532)（[#432](https:
 - **二次情報との融合**：GO-MUON [#542](https://github.com/Hiroki11x/Papers/issues/542) は、データ依存の左右前処理マップの下での重み付きスペクトルオラクルを厳密に解きます。幾何を複数ステップ再利用する lazy 更新は「ノイズ除去ではなく、計算と統計のトレードオフ」だとしています。Quadratic Spectral Descent [#555](https://github.com/Hiroki11x/Papers/issues/555) は、本人メモによると「Muon＋K-FAC のようなイメージ」です。Full GN [#456](https://github.com/Hiroki11x/Papers/issues/456) の「層内の正確な曲率が鍵」という示唆と合わせて読むと、**Muon（幾何）と Shampoo/K-FAC（曲率）を再統合する** 流れと見ることができます（これらのノートが [#456](https://github.com/Hiroki11x/Papers/issues/456) を引用しているわけではありません）。
 - **sign との融合** OLion [#539](https://github.com/Hiroki11x/Papers/issues/539)：Lion 型のモメンタムを Newton–Schulz で直交化した後、要素ごとの sign を取り、スペクトル制約と $\ell_\infty$ 制約の交点（Hadamard 型集合）上の最急降下を近似します。モメンタム1本のメモリで AdamW/Muon と同等以上の性能を出し、AdamW で事前学習したモデルを微調整するときの optimizer mismatch も軽減します。本人メモは「Simplified SOAP、あるいは Lion on Muon」と表現しています。
 - **構造への適合** Muon-C [#559](https://github.com/Hiroki11x/Papers/issues/559)：畳み込みカーネルを平坦化するのではなく、フーリエ基底で周波数ごとのチャンネル変換行列に分けて極分解します。CIFAR-10 のフローマッチングで、4万ステップ時点の FID は 9.87（展開型 22.26、Adam 51.31）でした。
+- **NorMuon の見直し** DGA-Muon [#585](https://github.com/Hiroki11x/Papers/issues/585)（2026-10）：NorMuon [#430](https://github.com/Hiroki11x/Papers/issues/430) の問題を出発点に、幾何に整合した適応スケーリングを分離して導入します。本人メモには「NorMuon が NanoGPT の run でうまくいっていたのは、どうもノイズのおかげらしい」とあり、第2期の改良版の評価を見直す材料になっています。
+- **有効ランクの焼きなまし** ORCA [#588](https://github.com/Hiroki11x/Papers/issues/588)（2026-10）：学習前半はスペクトルランク（有効ランク、erank）を高く保つ制約をかけ、途中で解除して損失を改善します。erank を高く保ち続けると表現力が弱くなる、というのが解除の理由です。「全方向を均等に」という Muon の発想を、学習の段階に応じて緩める設計と読めます。
+- **前処理の基準の選択** Bregman Shampoo [#591](https://github.com/Hiroki11x/Papers/issues/591)（2026-10）：Shampoo で基準とする Bregman ダイバージェンスの選び方が、前処理と学習性能にどう効くかを理論と実験で調べています。ノートはこの問題設定の要約と図のみです。
+
+#### (b') 埋め込み層・LM head への拡張
+
+MuonIO [#584](https://github.com/Hiroki11x/Papers/issues/584)（2026-10、Purdue）は、Muon を使っても埋め込み層と LM head は AdamW のまま残る、という慣行（1.2節）を問題の出発点にしています。softmax の全変動（TV）安定性に基づくノルムを考慮した更新でこれらの層も置き換え、AdamW 分のメモリも削減できるとしています。
+
+本人のコメントは批判的です。埋め込みの幾何は既知で、出力層の語彙単位の正規化も Scion（[#435](https://github.com/Hiroki11x/Papers/issues/435) で使われているオプティマイザ）や SCALE で扱われており、Lau & Su も埋め込み・LM head を含む層に row-norm 系の更新を提案している。したがって新規性は主に「既知に近い更新方向に、softmax の TV 安定性に基づく説明を与えたこと」で、理論的な整理には価値があるものの、近い更新則との直接比較がないため、独立した手法としての貢献は十分に示されていない、という評価です。
 
 #### (c) 理論の精緻化：優劣の「相図」
 
@@ -383,10 +404,15 @@ Hyperball [#532](https://github.com/Hiroki11x/Papers/issues/532)（[#432](https:
 - **汎化** MiMuon [#524](https://github.com/Hiroki11x/Papers/issues/524)：特異値ギャップが小さいと直交化が特異ベクトルの摂動に敏感になり、安定性と汎化が悪化すると主張しています。「Muon は汎化に良い」とする [#455](https://github.com/Hiroki11x/Papers/issues/455)/[#426](https://github.com/Hiroki11x/Papers/issues/426) とは **反対側の主張** です。
 - **収束解析の統一** [#566](https://github.com/Hiroki11x/Papers/issues/566)：SOAP/Conda/SPlus の収束率を初めて証明し、回転を単位行列にとると、要素ごとの Adam が核ノルムでの収束率で Shampoo と同等になることを示しました（本人メモ：「実験はなく理論のみ」）。
 - **容量** [#560](https://github.com/Hiroki11x/Papers/issues/560)：FFN の幅を増やしたときに追加次元が有効なスペクトル容量としてどれだけ使われるかは、オプティマイザで異なります（Rényi エントロピーに基づく Soft/Hard Rank）。本人メモは「Muon ベースが主流になればアーキテクチャ設計も変わってくるかもしれない」としています。
+- **ノイズ構造と過学習** [#577](https://github.com/Hiroki11x/Papers/issues/577)（2026-09）：スペクトル勾配降下（Muon の理想化）の汎化と暗黙的バイアスを、ノイズ構造の異なる2つのモデルで比べます。共通のノイズ（CSM）なら Muon で対処できる一方、ばらばらのノイズ（DSM）では Muon が劣化します。汎化をめぐる [#455](https://github.com/Hiroki11x/Papers/issues/455) と [#524](https://github.com/Hiroki11x/Papers/issues/524) の対立に、「ノイズの構造次第」という条件を加える結果と読めます。
+- **有限ステップ直交化の保証** [#579](https://github.com/Hiroki11x/Papers/issues/579)（2026-10）：調整済み5ステップの Newton–Schulz 直交化とモメンタム蓄積の両方を含めた Muon に、有限時間の訓練損失保証を与えます。鍵は更新方向とのアラインメント係数 κ が 2/3 以上であることです。本人メモは「Feature Learning にはまだ一般化しておらず、NTK regime のみ」と制約を記しています。Newton–Schulz 近似を加法的誤差として扱った [#517](https://github.com/Hiroki11x/Papers/issues/517) と同じ「近似は大丈夫か」の系譜です。
+- **事実知識の学習順序** [#582](https://github.com/Hiroki11x/Papers/issues/582)（2026-10）：勾配流による解析で、通常の LLM 学習では主語より先に関係を学び、softmax のせいで関係を学んだだけで信号が小さくなり、幻覚を抑えるフェーズまでが長くなると説明します。Muon は両者を同じペースで学習させて softmax の飽和を防ぎ、Adam は埋め込み方式によって学習順序がばらばらになります。第2期の均等化仮説（3.4節 (a)）を事実知識の文脈で扱ったものと読めます。
+- **オプティマイザ幾何と特異モード** [#589](https://github.com/Hiroki11x/Papers/issues/589)（2026-10）：深層行列分解で、学習を特異モードの誕生・飽和・減衰の3相に分けて解析します。GD は深さが増すと小さなモードの成長が大きく遅れ（低ランクバイアス）、不要なモードの消去も緩やかです。SignGD と理想的 Muon は小さなモードを早く育て、不要なモードを有限時間で消します。累積 Shampoo は初期は GD に近く、勾配履歴が溜まると急速に追いつきますが、履歴の慣性でモードの消去は遅くなります。K-FAC はダンピングなしなら深さによる減速を解消しますが、正のダンピングを入れるとある閾値以下で GD のような遅い動態が戻ります。
+- **バッチサイズ依存の明示** [#592](https://github.com/Hiroki11x/Papers/issues/592)（2026-10）：題名どおり「最良のオプティマイザはバッチサイズで変わる」と主張する論文です（共著者の Kaiyue Wen は [#432](https://github.com/Hiroki11x/Papers/issues/432) の著者でもあります）。[#432](https://github.com/Hiroki11x/Papers/issues/432) と [#433](https://github.com/Hiroki11x/Papers/issues/433) の食い違いや [#553](https://github.com/Hiroki11x/Papers/issues/553) の相図と直接関わるテーマですが、ノートは題名・図と「Adaptive BS とかはやってない」というメモのみで、どの手法がどのバッチ領域で勝つかは記録されていません。
 
 #### (d) 応用：MoE・継続学習・大規模モデル
 
-- [#527](https://github.com/Hiroki11x/Papers/issues/527)（ICML 2026 WS）：MoE で専門家の利用が偏る原因を、ルータに入る隠れ状態の collapse という幾何で説明します。Depth scaling は初期の collapse を抑え、Muon は router/expert の更新を直交化して学習中の均衡を保ちます（利用を直接均等化するのではなく、更新の幾何を通じた間接的な安定化です）。
+- [#527](https://github.com/Hiroki11x/Papers/issues/527)（ICML 2026 WS）：MoE で専門家の利用が偏る原因を、ルータに入る隠れ状態の collapse という幾何で説明します。Depth scaling は初期の collapse を抑え、Muon は router/expert の更新を直交化して学習中の均衡を保ちます（利用を直接均等化するのではなく、更新の幾何を通じた間接的な安定化です）。2026-10-08 に読み返した際の本人コメントは「Representation Collapse → トークン間の隠れ状態の多様性が低下し類似度が高くなると、ルーターの出力ロジットも崩壊する」です。
 - [#543](https://github.com/Hiroki11x/Papers/issues/543)（COLM 2026）：μP+MLA+Muon の MoE で、幅方向に最適学習率を転移し、さらにトークン数方向に線形回帰で外挿します（R²=0.95）。155B（アクティブ 17B）の MoE を最小限のアブレーションで学習しました。
 - [#570](https://github.com/Hiroki11x/Papers/issues/570)（CoLLAs 2026 WIP）：LLM の継続学習で、O-LoRA や ELLA のような専用のペナルティなしに、Muon だけで破滅的忘却を十分に抑えられます。似たタスクが続いて干渉が強い場合に特に有効です。[#386](https://github.com/Hiroki11x/Papers/issues/386) の「Shampoo は忘却を抑える」を Muon と LLM で再確認した形です。
 
@@ -395,10 +421,11 @@ Hyperball [#532](https://github.com/Hiroki11x/Papers/issues/532)（[#432](https:
 | 論点 | A 側の主張 | B 側の主張 | 読み |
 |---|---|---|---|
 | 優位はスケールで消えるか | 0.1B で1.4倍 → 1.2B で1.1倍に縮む（[#432](https://github.com/Hiroki11x/Papers/issues/432)） | μP と $1/D$ weight decay を入れれば1.4倍を維持（[#474](https://github.com/Hiroki11x/Papers/issues/474)）。改善は主にデータ効率 $\rho_D\approx2$（[#503](https://github.com/Hiroki11x/Papers/issues/503)） | スケーリング規則の有無で説明できる可能性。ただしどれも約1.5B 以下 |
-| 最良の手法はどれか | 行列型（Muon/SOAP/Kron）がスカラー型に一貫して勝つ（[#432](https://github.com/Hiroki11x/Papers/issues/432)、大バッチ） | AdEMAMix/MARS が最良（[#433](https://github.com/Hiroki11x/Papers/issues/433)、小バッチ中心） | バッチサイズと LR 範囲の差（[#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による説明。[#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引は逆向きの傾向も示す）。理論的には [#553](https://github.com/Hiroki11x/Papers/issues/553) の相図 |
+| 最良の手法はどれか | 行列型（Muon/SOAP/Kron）がスカラー型に一貫して勝つ（[#432](https://github.com/Hiroki11x/Papers/issues/432)、大バッチ） | AdEMAMix/MARS が最良（[#433](https://github.com/Hiroki11x/Papers/issues/433)、小バッチ中心） | バッチサイズと LR 範囲の差（[#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による説明。[#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引は逆向きの傾向も示す）。理論的には [#553](https://github.com/Hiroki11x/Papers/issues/553) の相図。[#592](https://github.com/Hiroki11x/Papers/issues/592) が「最良の手法はバッチサイズ次第」を題名で主張（ノートに詳細なし） |
 | Muon と SOAP | 短期・大バッチでは Muon が強い | 長期・高データ比では SOAP/Kron/ADANA（[#432](https://github.com/Hiroki11x/Papers/issues/432), [#554](https://github.com/Hiroki11x/Papers/issues/554)）。分散適応の欠如が Muon の弱点（[#471](https://github.com/Hiroki11x/Papers/issues/471)） | ホライズン依存 |
 | 直交化は最適か | 全方向の均等化が本質（[#426](https://github.com/Hiroki11x/Papers/issues/426), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#437](https://github.com/Hiroki11x/Papers/issues/437)） | 完全な直交化は極限ケース（[#483](https://github.com/Hiroki11x/Papers/issues/483)）。第1方向以外は大きくすべき（[#547](https://github.com/Hiroki11x/Papers/issues/547)） | 「均質化」は正しく、「1にそろえる」は過剰 |
-| 汎化 | Muon は少数派・tail の汎化に良い（[#455](https://github.com/Hiroki11x/Papers/issues/455)） | 特異値ギャップが小さいと不安定で汎化が悪化（[#524](https://github.com/Hiroki11x/Papers/issues/524)） | 未決着 |
+| 汎化 | Muon は少数派・tail の汎化に良い（[#455](https://github.com/Hiroki11x/Papers/issues/455)） | 特異値ギャップが小さいと不安定で汎化が悪化（[#524](https://github.com/Hiroki11x/Papers/issues/524)）。ばらばらのノイズ（DSM）では Muon が劣化（[#577](https://github.com/Hiroki11x/Papers/issues/577)） | 未決着。ノイズ構造に依存する可能性（[#577](https://github.com/Hiroki11x/Papers/issues/577)） |
+| 埋め込み・LM head | Muon を使わず Adam にする慣行に理論的裏付け（[#488](https://github.com/Hiroki11x/Papers/issues/488)） | ノルムを考慮した更新で置き換えられる（[#584](https://github.com/Hiroki11x/Papers/issues/584)）。ただし本人は Scion/SCALE 等の近い更新則との直接比較がないと指摘 | 未決着 |
 | 量子化耐性 | FP 精度では Muon が最良 | PTQ 後は Muon が大きく劣化し Shampoo が最も頑健（[#521](https://github.com/Hiroki11x/Papers/issues/521)） | → Part C |
 
 ---
@@ -465,7 +492,7 @@ timeline
 
 | グループ | 論文 | 共通の問い・要点 |
 |---|---|---|
-| A1 量子化の基礎と QAT（CNN 時代） | [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#330](https://github.com/Hiroki11x/Papers/issues/330), [#350](https://github.com/Hiroki11x/Papers/issues/350) | PTQ（8bit で十分）と QAT（低ビット向け）の構図。平坦性（SAQ）、平滑正則化（SQR）、重み凍結による効率化（LTS）で QAT を改善 |
+| A1 量子化の基礎と QAT（CNN 時代） | [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#330](https://github.com/Hiroki11x/Papers/issues/330), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#575](https://github.com/Hiroki11x/Papers/issues/575) | PTQ（8bit で十分）と QAT（低ビット向け）の構図。平坦性（SAQ）、平滑正則化（SQR）、重み凍結による効率化（LTS）で QAT を改善。学習中に精度をスケジュールする（低精度スケジュールの実験的比較） |
 | A2 超低ビット（三値）LLM 事前学習 | [#482](https://github.com/Hiroki11x/Papers/issues/482) | 事前学習から三値化すれば、大規模になるほど FP16 との差が縮まる（スケーリング指数はほぼ一致） |
 | A3 FP8/FP4 による LLM 事前学習 | [#427](https://github.com/Hiroki11x/Papers/issues/427), [#442](https://github.com/Hiroki11x/Papers/issues/442), [#444](https://github.com/Hiroki11x/Papers/issues/444), [#529](https://github.com/Hiroki11x/Papers/issues/529) | FP8 で 20T、NVFP4 で 10T トークン。安定化の4要素（BF16 層・RHT・2D スケーリング・確率的丸め）。オプティマイザと Attention まで FP4 化 |
 | A4 量子化耐性・低精度学習の安定化 | [#540](https://github.com/Hiroki11x/Papers/issues/540), [#541](https://github.com/Hiroki11x/Papers/issues/541) | Softmax ヤコビアンを抑える学習で PTQ 耐性を上げる。勾配ノルムスパイクを抑えて FP16/FP4 学習の発散を減らす |
@@ -474,10 +501,10 @@ timeline
 
 | グループ | 論文 | 共通の問い・要点 |
 |---|---|---|
-| B1 源流：Shampoo 系の行列前処理と回転・基底 | [#451](https://github.com/Hiroki11x/Papers/issues/451), [#52](https://github.com/Hiroki11x/Papers/issues/52), [#397](https://github.com/Hiroki11x/Papers/issues/397), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#566](https://github.com/Hiroki11x/Papers/issues/566) | Kronecker 前処理、Adam の基底依存性と SVD 回転、オプティマイザの帰納バイアス、回転ベース手法（SOAP など）の収束の統一理論 |
-| B2 Muon の理論：なぜ・いつ効くか | [#406](https://github.com/Hiroki11x/Papers/issues/406), [#476](https://github.com/Hiroki11x/Papers/issues/476), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#560](https://github.com/Hiroki11x/Papers/issues/560) | 均等化仮説（連想記憶・不均衡データ・grokking）、暗黙的バイアス（スペクトルマージン）、有効条件（nuclear rank ≥ stable rank）、最適性（均質化 vs 完全直交化）、近似誤差、バッチの相図、汎化への反論、表現容量 |
-| B3 Muon の改良・高速化・派生手法 | [#489](https://github.com/Hiroki11x/Papers/issues/489), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#519](https://github.com/Hiroki11x/Papers/issues/519), [#522](https://github.com/Hiroki11x/Papers/issues/522), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#559](https://github.com/Hiroki11x/Papers/issues/559) | 直交化の数値計算（Polar Express、Gram NS）、低ランク化・部分更新、行ノルム/leverage の補正（NorMuon、Aurora）、層別 LR、安定ランクの回復、核ノルム制約、sign との融合（OLion）、曲率との融合（GO-MUON、QSD）、畳み込みへの拡張 |
-| B4 ベンチマーク・スケーリング則・ハイパラ転移 | [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#474](https://github.com/Hiroki11x/Papers/issues/474), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#543](https://github.com/Hiroki11x/Papers/issues/543), [#554](https://github.com/Hiroki11x/Papers/issues/554) | 公正な比較（1.4倍→1.1倍）、バッチサイズ依存、μP と $1/D$ weight decay、ノルム転移、二次法の上限と CBS、要因分解（分散適応）、オプティマイザを考慮したスケーリング則（$\rho_D$）、warmup、MoE での HP 外挿、overtraining 軸 |
+| B1 源流：Shampoo 系の行列前処理と回転・基底 | [#451](https://github.com/Hiroki11x/Papers/issues/451), [#52](https://github.com/Hiroki11x/Papers/issues/52), [#397](https://github.com/Hiroki11x/Papers/issues/397), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#591](https://github.com/Hiroki11x/Papers/issues/591) | Kronecker 前処理、Adam の基底依存性と SVD 回転、オプティマイザの帰納バイアス、回転ベース手法（SOAP など）の収束の統一理論、Shampoo の基準となる Bregman ダイバージェンスの選択 |
+| B2 Muon の理論：なぜ・いつ効くか | [#406](https://github.com/Hiroki11x/Papers/issues/406), [#476](https://github.com/Hiroki11x/Papers/issues/476), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#577](https://github.com/Hiroki11x/Papers/issues/577), [#579](https://github.com/Hiroki11x/Papers/issues/579), [#582](https://github.com/Hiroki11x/Papers/issues/582), [#589](https://github.com/Hiroki11x/Papers/issues/589) | 均等化仮説（連想記憶・不均衡データ・grokking・事実知識）、暗黙的バイアス（スペクトルマージン）、有効条件（nuclear rank ≥ stable rank）、最適性（均質化 vs 完全直交化）、近似誤差と有限ステップ NS の損失保証、バッチの相図、汎化への反論とノイズ構造（CSM/DSM）、表現容量、行列分解での特異モード動態 |
+| B3 Muon の改良・高速化・派生手法 | [#489](https://github.com/Hiroki11x/Papers/issues/489), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#519](https://github.com/Hiroki11x/Papers/issues/519), [#522](https://github.com/Hiroki11x/Papers/issues/522), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#584](https://github.com/Hiroki11x/Papers/issues/584), [#585](https://github.com/Hiroki11x/Papers/issues/585), [#588](https://github.com/Hiroki11x/Papers/issues/588) | 直交化の数値計算（Polar Express、Gram NS）、低ランク化・部分更新、行ノルム/leverage の補正（NorMuon、Aurora、DGA-Muon）、層別 LR、安定ランクの回復、核ノルム制約、sign との融合（OLion）、曲率との融合（GO-MUON、QSD）、畳み込みへの拡張、埋め込み層・LM head への拡張（MuonIO）、有効ランクの焼きなまし（ORCA） |
+| B4 ベンチマーク・スケーリング則・ハイパラ転移 | [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#474](https://github.com/Hiroki11x/Papers/issues/474), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#543](https://github.com/Hiroki11x/Papers/issues/543), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#592](https://github.com/Hiroki11x/Papers/issues/592) | 公正な比較（1.4倍→1.1倍）、バッチサイズ依存（最良の手法はバッチサイズ次第）、μP と $1/D$ weight decay、ノルム転移、二次法の上限と CBS、要因分解（分散適応）、オプティマイザを考慮したスケーリング則（$\rho_D$）、warmup、MoE での HP 外挿、overtraining 軸 |
 | B5 ノルム制約・weight decay・多様体最適化 | [#508](https://github.com/Hiroki11x/Papers/issues/508), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#549](https://github.com/Hiroki11x/Papers/issues/549) | weight decay は angular LR の間接制御にすぎないという見方。重みと更新のノルムを直接拘束（スペクトル球、超球面射影、多様体） |
 | B6 応用：MoE 負荷分散・継続学習 | [#527](https://github.com/Hiroki11x/Papers/issues/527), [#570](https://github.com/Hiroki11x/Papers/issues/570) | 更新の直交化で専門家の利用が均衡する。専用手法なしで破滅的忘却を抑える |
 
@@ -488,7 +515,7 @@ timeline
 | C1 オプティマイザ×量子化・低精度 | [#521](https://github.com/Hiroki11x/Papers/issues/521), [#423](https://github.com/Hiroki11x/Papers/issues/423), [#567](https://github.com/Hiroki11x/Papers/issues/567)（参照：[#529](https://github.com/Hiroki11x/Papers/issues/529)） | 量子化耐性はオプティマイザで決まる（Shampoo は頑健、Muon は PTQ で劣化）。圧縮オプティマイザでアンラーニングが頑健になる。Muown と MXFP4 QAT の本番統合。Newton–Schulz の FP4 実行 |
 | C2 オプティマイザ×分散学習・通信 | [#388](https://github.com/Hiroki11x/Papers/issues/388), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#561](https://github.com/Hiroki11x/Papers/issues/561), [#573](https://github.com/Hiroki11x/Papers/issues/573) | シャード環境での直交化（低ランク化、ブロック＋周期）、非同期遅延への耐性、1bit sign 通信、DiLoCo の適応的同期と INT8 |
 
-## 6. 論文一覧表（全69件、公開年月順）
+## 6. 論文一覧表（全79件、公開年月順）
 
 公開年月が不明な論文は末尾に issue 登録順で並べています。「根拠」は採択先情報の出所です（issue記載／arXivコメント／Web確認／Semantic Scholar確認／不明）。重複ノートは（重複）と表記しています。
 
@@ -500,6 +527,7 @@ timeline
 | 2021-11 | A 低精度 | [#166](https://github.com/Hiroki11x/Papers/issues/166) SAQ: Sharpness-aware Quantization for Deep Neural Networks | Jing Liu, Jianfei Cai, Bohan Zhuang / Monash University | arXiv（プレプリント） | 不明 | SAMを用いた量子化学習 |
 | 2022-10 | A 低精度 | [#330](https://github.com/Hiroki11x/Papers/issues/330) SQR/QSin: Towards Accurate Network Quantization with Equivalent Smooth Regularizer | Kirill Solodskikh, Vladimir Chikin ほか / Huawei | ECCV 2022 | issue記載 | 量子化学習の平滑正則化 |
 | 2022-11 | A 低精度 | [#350](https://github.com/Hiroki11x/Papers/issues/350) LTS（QAT宝くじ）: Exploiting the Partly Scratch-off Lottery Ticket for Quantization-Aware Training | Yunshan Zhong, Gongrui Nan, Yuxin Zhang ほか / Xiamen University | arXiv（プレプリント） | 不明 | 量子化考慮学習（QAT）の効率化 |
+| 2024-03 | A 低精度 | [#575](https://github.com/Hiroki11x/Papers/issues/575) 低精度スケジュール: Better Schedules for Low Precision Training of Deep Neural Networks | Cameron R. Wolfe, Anastasios Kyrillidis / Rice University | ACML 2023 / Machine Learning (2024) | arXivコメント | 低精度のスケジューリング（循環的精度スケジュール） |
 | 2024-07 | A 低精度 | [#482](https://github.com/Hiroki11x/Papers/issues/482) TriLM: Surprising Effectiveness of Pretraining Ternary Language Models at Scale | Ayush Kaushal, Tejas Vaidhya, Irina Rish ほか / Mila / Nolano AI | ICLR 2025 | issue記載 | 三値（1.58bit）LLM事前学習 |
 | 2024-10 | B Muon/行列 | [#397](https://github.com/Hiroki11x/Papers/issues/397) Adamの回転依存性: Understanding Adam Requires Better Rotation Dependent Assumptions | Tianyue H. Zhang, Lucas Maes ほか / Mila / Samsung SAIL | NeurIPS 2025 | arXivコメント | Adamの回転依存性とSVD基底（行列前処理の背景） |
 | 2025-02 | B Muon/行列 | [#476](https://github.com/Hiroki11x/Papers/issues/476) Muonの暗黙的バイアス: Implicit Bias of Spectral Descent and Muon on Multiclass Separable Data | Chen Fan, Mark Schmidt ほか / UBC | NeurIPS 2025 | arXivコメント | Muonの暗黙的バイアス |
@@ -555,6 +583,15 @@ timeline
 | 2026-09 | B Muon/行列 | [#566](https://github.com/Hiroki11x/Papers/issues/566) 回転ベース最適化の収束: Convergence of Rotation-based Matrix Optimizers: A Unified Analysis of SOAP, Conda, and SPlus | Yiwen Sun, Huan Li, Zhouchen Lin / Peking Univ. | arXiv（プレプリント） | 不明 | 回転ベース行列オプティマイザの収束解析 |
 | 2026-09 | B Muon/行列 | [#570](https://github.com/Hiroki11x/Papers/issues/570) Muon×継続学習: Muon Can Outperform Dedicated Continual Learning Methods | Sebastian George Sincari ほか | CoLLAs 2026 (Work-in-Progress Track) | arXivコメント | Muonと継続学習 |
 | 2026-09 | C 交差 | [#573](https://github.com/Hiroki11x/Papers/issues/573) AutoLoCo: Communication Efficient Distributed LLM Training via Adaptive Synchronization | Pengyu He, Yan Zhang, Ruien Li, Guangwen Yang / Tsinghua | arXiv（プレプリント） | 不明 | DiLoCoの適応的同期間隔 |
+| 2026-09 | B Muon/行列 | [#577](https://github.com/Hiroki11x/Papers/issues/577) スペクトルGDの過学習: Overfitting of Spectral Gradient Descent: How Matrix Geometry shapes Generalization and Implicit Bias | Guillaume Braun, Ichiro Hashimoto, Masaaki Imaizumi | arXiv（プレプリント） | 不明 | スペクトル勾配降下（Muon）の過学習と暗黙的バイアス |
+| 2026-10 | B Muon/行列 | [#579](https://github.com/Hiroki11x/Papers/issues/579) 有限ステップNSの訓練損失保証: Training-Loss Guarantees for Muon with Finite-Step Newton--Schulz Orthogonalization | Amartya Roy, Souvik Chakraborty / IIT Delhi | arXiv（プレプリント） | 不明 | 有限ステップNewton–Schulz直交化を伴うMuonの訓練損失保証 |
+| 2026-10 | B Muon/行列 | [#582](https://github.com/Hiroki11x/Papers/issues/582) Muonと事実知識: Muon Learns Facts Better: Understanding the Role of Spectral Orthogonalization | Xuheng Li, Qiwei Di, Yuan Cao, et al. / UCLA | arXiv（プレプリント） | 不明 | Muonのスペクトル直交化と事実知識の学習 |
+| 2026-10 | B Muon/行列 | [#584](https://github.com/Hiroki11x/Papers/issues/584) MuonIO: Principled Norm-Aware Descent for Embedding Tables and Language Model Heads | Linkai Ma, Xinyu Luo, Mengbo Wang, et al. / Purdue University | arXiv（プレプリント） | 不明 | 埋め込み層とLMヘッドのためのノルムを考慮した降下法（MuonIO） |
+| 2026-10 | B Muon/行列 | [#585](https://github.com/Hiroki11x/Papers/issues/585) DGA-Muon: Decoupled Geometry-Aligned Adaptive Scaling for Muon | Wenpeng Zhang, Runsheng Yu | arXiv（プレプリント） | 不明 | Muonの幾何に整合した適応スケーリング（DGA-Muon） |
+| 2026-10 | B Muon/行列 | [#588](https://github.com/Hiroki11x/Papers/issues/588) ORCA: The Annealed Spectral Conditioning Optimizer for Faster, Better LLM Training | Yuanshi Liu, Boyuan Jiang, Liang Hou, et al. / Peking University / Kuaishou | arXiv（プレプリント） | 不明 | 焼きなまし型スペクトル条件付けオプティマイザ（ORCA） |
+| 2026-10 | B Muon/行列 | [#589](https://github.com/Hiroki11x/Papers/issues/589) 行列分解のスペクトル動態: Optimizer Geometry Sets the Pace: Spectral Learning Dynamics in Matrix Factorization | Mahalakshmi Sabanayagam, Simon Lucey / Adelaide University | arXiv（プレプリント） | arXivコメント | 行列分解におけるオプティマイザ幾何とスペクトル学習動態 |
+| 2026-10 | B Muon/行列 | [#591](https://github.com/Hiroki11x/Papers/issues/591) Bregman Shampoo: How Bregman Divergences Shape Shampoo | Bing Liu, Wenjie Zhou, Chengcheng Zhao, et al. | arXiv（プレプリント） | 不明 | Bregmanダイバージェンスから見たShampoo |
+| 2026-10 | B Muon/行列 | [#592](https://github.com/Hiroki11x/Papers/issues/592) 最適オプティマイザとバッチサイズ: The Best Optimizer Depends on Batch Size | Xingyu Dang, Kaiyue Wen, Sadhika Malladi / Princeton / Stanford / UC San Diego | arXiv（プレプリント） | 不明 | 最適なオプティマイザはバッチサイズで変わる |
 | 不明（issue登録 2025-09） | B Muon/行列 | [#406](https://github.com/Hiroki11x/Papers/issues/406) Metrized DL修論: Duality, Weight Decay, and Metrized Deep Learning (Master's thesis) | Laker Newhouse (advised by Jeremy Bernstein ほか) / MIT | Thesis (MIT, Master's) | issue記載 | Muonとmetrized deep learningの体系化 |
 | 不明（issue登録 2025-11） | B Muon/行列 | [#474](https://github.com/Hiroki11x/Papers/issues/474) How to Scale 2nd-Order: How to Scale Second-Order Optimization | Charlie Chen, Shikai Qiu ほか / NYU | NeurIPS 2025 | Web確認 | Shampoo/SOAP/MuonのμPスケーリング |
 | 不明（issue登録 2025-11） | B Muon/行列 | [#483](https://github.com/Hiroki11x/Papers/issues/483) 等方曲率モデル: Isotropic Curvature Model for Understanding Deep Learning Optimization: Is Gradient Orthogonalization Optimal? | — | arXiv（プレプリント） | 不明 | Muon（勾配直交化）の最適性理論 |
@@ -568,10 +605,11 @@ timeline
 
 | 採択先 | 件数 | 該当issue |
 |---|---|---|
-| arXiv（プレプリント） | 49 | [#52](https://github.com/Hiroki11x/Papers/issues/52), [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#423](https://github.com/Hiroki11x/Papers/issues/423), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#489](https://github.com/Hiroki11x/Papers/issues/489), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#508](https://github.com/Hiroki11x/Papers/issues/508), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#529](https://github.com/Hiroki11x/Papers/issues/529), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#573](https://github.com/Hiroki11x/Papers/issues/573) |
+| arXiv（プレプリント） | 58 | [#52](https://github.com/Hiroki11x/Papers/issues/52), [#112](https://github.com/Hiroki11x/Papers/issues/112), [#166](https://github.com/Hiroki11x/Papers/issues/166), [#350](https://github.com/Hiroki11x/Papers/issues/350), [#386](https://github.com/Hiroki11x/Papers/issues/386), [#388](https://github.com/Hiroki11x/Papers/issues/388), [#410](https://github.com/Hiroki11x/Papers/issues/410), [#423](https://github.com/Hiroki11x/Papers/issues/423), [#424](https://github.com/Hiroki11x/Papers/issues/424), [#426](https://github.com/Hiroki11x/Papers/issues/426), [#430](https://github.com/Hiroki11x/Papers/issues/430), [#431](https://github.com/Hiroki11x/Papers/issues/431), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#434](https://github.com/Hiroki11x/Papers/issues/434), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#437](https://github.com/Hiroki11x/Papers/issues/437), [#455](https://github.com/Hiroki11x/Papers/issues/455), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#457](https://github.com/Hiroki11x/Papers/issues/457), [#458](https://github.com/Hiroki11x/Papers/issues/458), [#471](https://github.com/Hiroki11x/Papers/issues/471), [#483](https://github.com/Hiroki11x/Papers/issues/483), [#488](https://github.com/Hiroki11x/Papers/issues/488), [#489](https://github.com/Hiroki11x/Papers/issues/489), [#490](https://github.com/Hiroki11x/Papers/issues/490), [#494](https://github.com/Hiroki11x/Papers/issues/494), [#496](https://github.com/Hiroki11x/Papers/issues/496), [#503](https://github.com/Hiroki11x/Papers/issues/503), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#508](https://github.com/Hiroki11x/Papers/issues/508), [#515](https://github.com/Hiroki11x/Papers/issues/515), [#517](https://github.com/Hiroki11x/Papers/issues/517), [#524](https://github.com/Hiroki11x/Papers/issues/524), [#528](https://github.com/Hiroki11x/Papers/issues/528), [#529](https://github.com/Hiroki11x/Papers/issues/529), [#532](https://github.com/Hiroki11x/Papers/issues/532), [#539](https://github.com/Hiroki11x/Papers/issues/539), [#542](https://github.com/Hiroki11x/Papers/issues/542), [#547](https://github.com/Hiroki11x/Papers/issues/547), [#549](https://github.com/Hiroki11x/Papers/issues/549), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#554](https://github.com/Hiroki11x/Papers/issues/554), [#555](https://github.com/Hiroki11x/Papers/issues/555), [#557](https://github.com/Hiroki11x/Papers/issues/557), [#559](https://github.com/Hiroki11x/Papers/issues/559), [#560](https://github.com/Hiroki11x/Papers/issues/560), [#566](https://github.com/Hiroki11x/Papers/issues/566), [#573](https://github.com/Hiroki11x/Papers/issues/573), [#577](https://github.com/Hiroki11x/Papers/issues/577), [#579](https://github.com/Hiroki11x/Papers/issues/579), [#582](https://github.com/Hiroki11x/Papers/issues/582), [#584](https://github.com/Hiroki11x/Papers/issues/584), [#585](https://github.com/Hiroki11x/Papers/issues/585), [#588](https://github.com/Hiroki11x/Papers/issues/588), [#589](https://github.com/Hiroki11x/Papers/issues/589), [#591](https://github.com/Hiroki11x/Papers/issues/591), [#592](https://github.com/Hiroki11x/Papers/issues/592) |
 | NeurIPS 2025 | 3 | [#397](https://github.com/Hiroki11x/Papers/issues/397), [#474](https://github.com/Hiroki11x/Papers/issues/474), [#476](https://github.com/Hiroki11x/Papers/issues/476) |
 | Tech Report (NVIDIA) | 3 | [#427](https://github.com/Hiroki11x/Papers/issues/427), [#442](https://github.com/Hiroki11x/Papers/issues/442), [#444](https://github.com/Hiroki11x/Papers/issues/444) |
 | Blog | 2 | [#519](https://github.com/Hiroki11x/Papers/issues/519), [#522](https://github.com/Hiroki11x/Papers/issues/522) |
+| ACML 2023 / Machine Learning (2024) | 1 | [#575](https://github.com/Hiroki11x/Papers/issues/575) |
 | COLM 2026 | 1 | [#543](https://github.com/Hiroki11x/Papers/issues/543) |
 | CoLLAs 2026 (Work-in-Progress Track) | 1 | [#570](https://github.com/Hiroki11x/Papers/issues/570) |
 | ECCV 2022 | 1 | [#330](https://github.com/Hiroki11x/Papers/issues/330) |
@@ -589,8 +627,8 @@ timeline
 
 | 大分類 | 件数 |
 |---|---|
-| プレプリント（arXiv） | 49 |
-| 本会議（ICML/NeurIPS/ICLR/ECCV/COLM/EMNLP Findings） | 10 |
+| プレプリント（arXiv） | 58 |
+| 本会議（ICML/NeurIPS/ICLR/ECCV/COLM/EMNLP Findings/ACML） | 11 |
 | 技術報告・ブログ・学位論文 | 7 |
 | ワークショップ・WIPトラック | 3 |
 
@@ -600,7 +638,7 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 
 ---
 
-**━━ Part A 低精度学習（11件）━━**
+**━━ Part A 低精度学習（12件）━━**
 
 ### [#112](https://github.com/Hiroki11x/Papers/issues/112) A White Paper on Neural Network Quantization
 
@@ -654,6 +692,21 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 **主な知見**:
 - 重み更新を30〜60%、後退パスFLOPsを15〜30%削減
 - 2bit ResNet-18で精度+1.41%
+
+### [#575](https://github.com/Hiroki11x/Papers/issues/575) Better Schedules for Low Precision Training of Deep Neural Networks
+
+- **公開**: 2024-03　**採択先**: ACML 2023 / Machine Learning (2024)（根拠: arXivコメント）
+- **著者/組織**: Cameron R. Wolfe, Anastasios Kyrillidis / Rice University
+- **リンク**: [issue #575](https://github.com/Hiroki11x/Papers/issues/575) / [arXiv:2403.02243](https://arxiv.org/abs/2403.02243)
+- **分類**: A1 量子化の基礎とQAT（CNN時代） ／ 低精度のスケジューリング（循環的精度スケジュール）
+
+**要約**: 学習中に数値精度を変化させる低精度スケジュール（cyclic precision training の系譜）を、多数のスケジュールについて実験的に比較した研究。
+
+**主な知見**:
+- 精度スケジュールの網羅的な実験比較
+- Critical Learning Period に相当する現象も確認したと主張
+
+**本人のメモ**: 実験論文で、いっぱい試している。アイデアの元は Facebook の ICLR 2021 Spotlight（[arXiv:2101.09868](https://arxiv.org/abs/2101.09868)）。コメントで「Critical Learning Period も確認できたと言ってる」と、元論文 [#576](https://github.com/Hiroki11x/Papers/issues/576)（[SGD ダイナミクスと理論](../misc/06_sgd_dynamics_theory.md)）を挙げている。
 
 ### [#482](https://github.com/Hiroki11x/Papers/issues/482) Surprising Effectiveness of Pretraining Ternary Language Models at Scale
 
@@ -768,7 +821,7 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 
 ---
 
-**━━ Part B Muon・直交化/スペクトル系オプティマイザ（50件）━━**
+**━━ Part B Muon・直交化/スペクトル系オプティマイザ（59件）━━**
 
 ### [#451](https://github.com/Hiroki11x/Papers/issues/451) Shampoo: Preconditioned Stochastic Tensor Optimization
 
@@ -1420,6 +1473,132 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 - Muonのみで専用の継続学習手法に匹敵・上回る
 - 類似タスクが連続しタスク間干渉が強い場合に特に有効
 
+### [#577](https://github.com/Hiroki11x/Papers/issues/577) Overfitting of Spectral Gradient Descent: How Matrix Geometry shapes Generalization and Implicit Bias
+
+- **公開**: 2026-09　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Guillaume Braun, Ichiro Hashimoto, Masaaki Imaizumi
+- **リンク**: [issue #577](https://github.com/Hiroki11x/Papers/issues/577) / [arXiv:2609.32270](https://arxiv.org/abs/2609.32270)
+- **分類**: B2 Muonの理論：なぜ・いつ効くか ／ スペクトル勾配降下（Muon）の過学習と暗黙的バイアス
+
+**要約**: スペクトル勾配降下（Muon の理想化）の汎化と暗黙的バイアスを、ノイズ構造の異なる2つのモデルで解析。共通ノイズ（CSM）ではMuonが対処できる一方、ばらばらのノイズ（DSM）ではMuonが劣化する。
+
+**主な知見**:
+- 共通ノイズ（CSM）ではMuonが有利
+- 独立ノイズ（DSM）ではMuonが劣化
+
+### [#579](https://github.com/Hiroki11x/Papers/issues/579) Training-Loss Guarantees for Muon with Finite-Step Newton--Schulz Orthogonalization
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Amartya Roy, Souvik Chakraborty / IIT Delhi
+- **リンク**: [issue #579](https://github.com/Hiroki11x/Papers/issues/579) / [arXiv:2610.03306](https://arxiv.org/abs/2610.03306)
+- **分類**: B2 Muonの理論：なぜ・いつ効くか ／ 有限ステップNewton–Schulz直交化を伴うMuonの訓練損失保証
+
+**要約**: 5ステップのNewton–Schulz直交化とモメンタム蓄積の両方を考慮したMuonについて、有限時間の訓練損失保証を与えた理論研究。更新方向とのアラインメント（κ≥2/3）が鍵となる。
+
+**主な知見**:
+- 有限ステップNS直交化とモメンタムを含む訓練損失保証
+- アラインメント係数κが2/3以上
+
+**本人のメモ**: NTK regime に限られ、特徴学習（Feature Learning）には一般化されていない点を制約として記載。関連論文として arXiv:2608.26288 のリンクを残している。
+
+### [#582](https://github.com/Hiroki11x/Papers/issues/582) Muon Learns Facts Better: Understanding the Role of Spectral Orthogonalization
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Xuheng Li, Qiwei Di, Yuan Cao, et al. / UCLA
+- **リンク**: [issue #582](https://github.com/Hiroki11x/Papers/issues/582) / [arXiv:2610.02798](https://arxiv.org/abs/2610.02798)
+- **分類**: B2 Muonの理論：なぜ・いつ効くか ／ Muonのスペクトル直交化と事実知識の学習
+
+**要約**: Muonのスペクトル直交化が特徴学習ダイナミクスに与える影響を、事実知識の学習を題材に勾配流で解析した。通常の学習では主語より先に関係を学び、softmaxの飽和で信号が弱まって幻覚を抑えるフェーズまでが長くなるが、Muonは両者を同じペースで学習させsoftmax飽和を防ぐ。
+
+**主な知見**:
+- 通常の学習では関係を主語より先に学ぶ
+- Muonは学習のペースをそろえsoftmax飽和を防ぐ
+- Adamは埋め込み方式によって学習順序がばらばらになる
+
+### [#584](https://github.com/Hiroki11x/Papers/issues/584) MuonIO: Principled Norm-Aware Descent for Embedding Tables and Language Model Heads
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Linkai Ma, Xinyu Luo, Mengbo Wang, et al. / Purdue University
+- **リンク**: [issue #584](https://github.com/Hiroki11x/Papers/issues/584) / [arXiv:2610.02705](https://arxiv.org/abs/2610.02705)
+- **分類**: B3 Muonの改良・高速化・派生手法 ／ 埋め込み層とLMヘッドのためのノルムを考慮した降下法（MuonIO）
+
+**要約**: Muonで埋め込み層とLMヘッドだけAdamWのまま残る問題に対し、softmaxの全変動（TV）安定性に基づくノルムを考慮した更新MuonIOを提案。AdamWを置き換えることでメモリも削減できる。
+
+**主な知見**:
+- 埋め込み層・LMヘッドもMuon系の更新に置換
+- AdamWを置き換えメモリ削減
+
+**本人のメモ**: 批判的な評価。埋め込みの幾何は既知で、出力層の語彙単位正規化も Scion や SCALE で扱われている（SCALE では語彙ごとの LM-head 勾配の正規化と最終層でのモメンタムが既に検討されている）。Lau & Su も埋め込みと LM head を含む層に row-norm や centered row-norm の更新を提案している。したがって新規性は主に「既知に近い更新方向へ、softmax の TV 安定性に基づく説明を与えたこと」で、理論的整理には価値があるが、近い更新則との直接比較がないため独立した手法としての貢献は十分に示されていない。
+
+### [#585](https://github.com/Hiroki11x/Papers/issues/585) DGA-Muon: Decoupled Geometry-Aligned Adaptive Scaling for Muon
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Wenpeng Zhang, Runsheng Yu
+- **リンク**: [issue #585](https://github.com/Hiroki11x/Papers/issues/585) / [arXiv:2610.06578](https://arxiv.org/abs/2610.06578)
+- **分類**: B3 Muonの改良・高速化・派生手法 ／ Muonの幾何に整合した適応スケーリング（DGA-Muon）
+
+**要約**: NorMuonの問題を出発点に、幾何に整合した適応的スケーリングを分離して導入するMuonの改良版を提案。
+
+**主な知見**:
+- NorMuonの問題点を出発点にした改良
+
+**本人のメモ**: NorMuon が NanoGPT の run でうまくいっていたのはノイズのおかげらしい、とメモ。
+
+### [#588](https://github.com/Hiroki11x/Papers/issues/588) ORCA: The Annealed Spectral Conditioning Optimizer for Faster, Better LLM Training
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Yuanshi Liu, Boyuan Jiang, Liang Hou, et al. / Peking University / Kuaishou
+- **リンク**: [issue #588](https://github.com/Hiroki11x/Papers/issues/588) / [arXiv:2610.06116](https://arxiv.org/abs/2610.06116)
+- **分類**: B3 Muonの改良・高速化・派生手法 ／ 焼きなまし型スペクトル条件付けオプティマイザ（ORCA）
+
+**要約**: 学習前半はスペクトルランク（有効ランク）を大きく保つ制約をかけ、途中で制約を解除することで損失を改善するオプティマイザ。有効ランクを高く保ち続けると表現力が弱くなるため、制約を焼きなます。
+
+**主な知見**:
+- 前半はerankを高く保ち途中で制約を解除
+- erankを保ち続けると表現力が落ちる
+
+### [#589](https://github.com/Hiroki11x/Papers/issues/589) Optimizer Geometry Sets the Pace: Spectral Learning Dynamics in Matrix Factorization
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: arXivコメント）
+- **著者/組織**: Mahalakshmi Sabanayagam, Simon Lucey / Adelaide University
+- **リンク**: [issue #589](https://github.com/Hiroki11x/Papers/issues/589) / [arXiv:2610.04249](https://arxiv.org/abs/2610.04249)
+- **分類**: B2 Muonの理論：なぜ・いつ効くか ／ 行列分解におけるオプティマイザ幾何とスペクトル学習動態
+
+**要約**: 深層行列分解で、オプティマイザの幾何（GD、SignGD、理想的Muon、累積Shampoo、K-FAC）と深さが特異モードの学習動態に与える影響を統一的に解析。学習を誕生・飽和・減衰の3相に分け、GDは深さで小さなモードの成長が遅れ不要モードの消去も遅い一方、SignGDと理想的Muonは小さなモードを早期に成長させ不要モードを有限時間で消去することを示した。
+
+**主な知見**:
+- 学習を誕生・飽和・減衰の3相に分離
+- SignGD/Muonは小さなモードを早く育て不要モードを有限時間で消去
+- 累積Shampooは後半に急速なキャッチアップ、K-FACはダンピングで遅い動態が再出現
+
+**本人のメモ**: 「Optimizer の inductive bias」として記録。
+
+### [#591](https://github.com/Hiroki11x/Papers/issues/591) How Bregman Divergences Shape Shampoo
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Bing Liu, Wenjie Zhou, Chengcheng Zhao, et al.
+- **リンク**: [issue #591](https://github.com/Hiroki11x/Papers/issues/591) / [arXiv:2610.08534](https://arxiv.org/abs/2610.08534)
+- **分類**: B1 源流：Shampoo系行列前処理と回転・基底 ／ Bregmanダイバージェンスから見たShampoo
+
+**要約**: Shampooにおいて、基準とするBregmanダイバージェンスの選択が前処理と学習性能に与える影響を理論と実験で調べた。
+
+**主な知見**:
+- Bregmanダイバージェンスの選択がShampooの前処理を決める
+
+### [#592](https://github.com/Hiroki11x/Papers/issues/592) The Best Optimizer Depends on Batch Size
+
+- **公開**: 2026-10　**採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Xingyu Dang, Kaiyue Wen, Sadhika Malladi / Princeton / Stanford / UC San Diego
+- **リンク**: [issue #592](https://github.com/Hiroki11x/Papers/issues/592) / [arXiv:2610.08975](https://arxiv.org/abs/2610.08975)
+- **分類**: B4 ベンチマーク・スケーリング則・ハイパラ転移 ／ 最適なオプティマイザはバッチサイズで変わる
+
+**要約**: 題名のとおり、最良のオプティマイザはバッチサイズによって変わると主張する研究。適応的バッチサイズは扱っていない。ノートは題名・図とメモのみで、手法ごとの順位や数値は記録されていない。
+
+**主な知見**:
+- オプティマイザの優劣はバッチサイズに依存
+
+**本人のメモ**: 「Adaptive BS とかはやってない」とコメント。
+
 ### [#406](https://github.com/Hiroki11x/Papers/issues/406) Duality, Weight Decay, and Metrized Deep Learning (Master's thesis)
 
 - **公開**: 不明（issue登録 2025-09）　**採択先**: Thesis (MIT, Master's)（根拠: issue記載）
@@ -1494,6 +1673,8 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 - Muonは各専門家のrouter行をほぼ同じノルムで直交方向に更新
 - Muonは利用均等化を直接ではなく更新幾何を通じて間接的に安定化
 - ▸ 関連として「The Myth of Expert Specialization in MoEs」（ルーティングは幾何を反映）にコメントで言及
+
+**本人のメモ**: 2026-10-08 に読み返して追記したコメント：「Representation Collapse → トークン間の隠れ状態の多様性が低下し類似度が高くなると、ルーターの出力ロジットも崩壊する」。
 
 ### [#539](https://github.com/Hiroki11x/Papers/issues/539) OLion: Approaching the Hadamard Ideal by Intersecting Spectral and ℓ∞ Implicit Biases
 
@@ -1646,21 +1827,23 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 
 ### 9.1 横断的な知見
 
-1. **「均等化」は両分野に共通するキーワード.** Part B では、特異値の均等化（Muon）、行ノルムの均等化（NorMuon・Aurora）、専門家利用の均衡化（[#527](https://github.com/Hiroki11x/Papers/issues/527)）が性能の源泉とされています。Part A では、Hadamard 変換による外れ値エネルギーの均等化が 4bit 化の鍵です。一方で「均等化しすぎ」への反省（[#483](https://github.com/Hiroki11x/Papers/issues/483)、[#547](https://github.com/Hiroki11x/Papers/issues/547)）も同時に進んでいます。
-2. **一様な処理より、選択的な処理が勝つ.** 低精度では、BF16 層の残置（[#444](https://github.com/Hiroki11x/Papers/issues/444)）やモジュール別の精度設計（[#529](https://github.com/Hiroki11x/Papers/issues/529)）が重要でした。Muon でも、適用先を限定する（隠れ層のみ、[#488](https://github.com/Hiroki11x/Papers/issues/488)。VO+FFN で十分、[#426](https://github.com/Hiroki11x/Papers/issues/426)）ことや、ハイブリッド構成（MiMo-V2.6 の router や埋め込みは AdamW、REG の埋め込みは AdamW）が標準になっています。
+1. **「均等化」は両分野に共通するキーワード.** Part B では、特異値の均等化（Muon）、行ノルムの均等化（NorMuon・Aurora）、専門家利用の均衡化（[#527](https://github.com/Hiroki11x/Papers/issues/527)）が性能の源泉とされています。Part A では、Hadamard 変換による外れ値エネルギーの均等化が 4bit 化の鍵です。一方で「均等化しすぎ」への反省（[#483](https://github.com/Hiroki11x/Papers/issues/483)、[#547](https://github.com/Hiroki11x/Papers/issues/547)。学習の途中で有効ランクの制約を解く ORCA [#588](https://github.com/Hiroki11x/Papers/issues/588)）も同時に進んでいます。均等化の利点は事実知識の学習（関係と主語を同じペースで学ぶ、[#582](https://github.com/Hiroki11x/Papers/issues/582)）や行列分解の特異モード動態（[#589](https://github.com/Hiroki11x/Papers/issues/589)）でも論じられています。
+2. **一様な処理より、選択的な処理が勝つ.** 低精度では、BF16 層の残置（[#444](https://github.com/Hiroki11x/Papers/issues/444)）やモジュール別の精度設計（[#529](https://github.com/Hiroki11x/Papers/issues/529)）が重要でした。Muon でも、適用先を限定する（隠れ層のみ、[#488](https://github.com/Hiroki11x/Papers/issues/488)。VO+FFN で十分、[#426](https://github.com/Hiroki11x/Papers/issues/426)）ことや、ハイブリッド構成（MiMo-V2.6 の router や埋め込みは AdamW、REG の埋め込みは AdamW）が標準になっています。この標準に対して、埋め込み層と LM head もノルムを考慮した更新に置き換える MuonIO [#584](https://github.com/Hiroki11x/Papers/issues/584) が出ていますが、本人は近い更新則との直接比較がないと評価しています。
 3. **オプティマイザは解の性質を変える.** 収束速度だけでなく、量子化耐性（[#521](https://github.com/Hiroki11x/Papers/issues/521)、[#423](https://github.com/Hiroki11x/Papers/issues/423)）、忘却耐性（[#386](https://github.com/Hiroki11x/Papers/issues/386)、[#570](https://github.com/Hiroki11x/Papers/issues/570)）、圧縮耐性（[#515](https://github.com/Hiroki11x/Papers/issues/515)）、非同期耐性（[#557](https://github.com/Hiroki11x/Papers/issues/557)）、表現容量（[#560](https://github.com/Hiroki11x/Papers/issues/560)）が変わります。「FP の損失だけで最適化器を選ぶ」ことの危うさが、複数の角度から示されています。
 4. **ノルムがスケーリングの不変量.** 出力層ノルムの一定性（[#435](https://github.com/Hiroki11x/Papers/issues/435)）、weight decay の angular LR としての再解釈（[#532](https://github.com/Hiroki11x/Papers/issues/532)）、スペクトル球（[#508](https://github.com/Hiroki11x/Papers/issues/508)）、$1/D$ weight decay（[#474](https://github.com/Hiroki11x/Papers/issues/474)）はいずれも、「重みと更新のノルムを正しく制御することがハイパラ転移と安定性の本体」という方向を指しています。
-5. **バッチサイズとホライズンが優劣を決める.** 大バッチでは行列型、小バッチでは分散低減型（[#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による [#432](https://github.com/Hiroki11x/Papers/issues/432)/[#433](https://github.com/Hiroki11x/Papers/issues/433) の比較の説明、理論は [#553](https://github.com/Hiroki11x/Papers/issues/553)。ただし [#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引は逆向きの傾向も示しており、決着していません）。短いホライズンでは Muon、長いホライズンでは SOAP/ADANA（[#554](https://github.com/Hiroki11x/Papers/issues/554)）。CBS を超える領域では Muon 系が有利とする報告がある一方（[#567](https://github.com/Hiroki11x/Papers/issues/567)）、[#456](https://github.com/Hiroki11x/Papers/issues/456) では Muon の CBS は AdamW と同程度で、CBS を広げたのは完全な Gauss-Newton 法でした。
+5. **バッチサイズとホライズンが優劣を決める.** 大バッチでは行列型、小バッチでは分散低減型（[#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による [#432](https://github.com/Hiroki11x/Papers/issues/432)/[#433](https://github.com/Hiroki11x/Papers/issues/433) の比較の説明、理論は [#553](https://github.com/Hiroki11x/Papers/issues/553)。ただし [#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引は逆向きの傾向も示しており、決着していません。[#592](https://github.com/Hiroki11x/Papers/issues/592) は「最良のオプティマイザはバッチサイズで変わる」と題名で主張していますが、ノートにはどちらの傾向を支持するかの記録がありません）。短いホライズンでは Muon、長いホライズンでは SOAP/ADANA（[#554](https://github.com/Hiroki11x/Papers/issues/554)）。CBS を超える領域では Muon 系が有利とする報告がある一方（[#567](https://github.com/Hiroki11x/Papers/issues/567)）、[#456](https://github.com/Hiroki11x/Papers/issues/456) では Muon の CBS は AdamW と同程度で、CBS を広げたのは完全な Gauss-Newton 法でした。
 
 ### 9.2 未解決問題
 
 - **Muon の優位は 10B 超の事前学習でも残るか.** ノート内の比較研究（[#432](https://github.com/Hiroki11x/Papers/issues/432)、[#474](https://github.com/Hiroki11x/Papers/issues/474)、[#503](https://github.com/Hiroki11x/Papers/issues/503)）はいずれも約1.5B 以下です。大規模な実例（[#543](https://github.com/Hiroki11x/Papers/issues/543) の 155B MoE、[#557](https://github.com/Hiroki11x/Papers/issues/557) の 10B MoE）は AdamW との公正な比較を目的としていません。MiMo-V2.6（[#567](https://github.com/Hiroki11x/Papers/issues/567)）は、事前学習にはむしろ AdamW を選んでいます。
 - **Muon で学習したモデルはなぜ PTQ に弱いのか**（[#521](https://github.com/Hiroki11x/Papers/issues/521)）。等方的なスペクトル（[#426](https://github.com/Hiroki11x/Papers/issues/426)）、低ランク性（[#515](https://github.com/Hiroki11x/Papers/issues/515)）、ABC 分解の誤差伝播のどれで説明できるのか。QAT を併用すれば解消するのか（[#567](https://github.com/Hiroki11x/Papers/issues/567) は QAT を使いますが、この比較は記録されていません）。
 - **完全な直交化と均質化のどちらを採るか.** SAMuon の γ、等方曲率モデルの曲率成長率、SOAP の分散適応を統一的に扱う設計原理はまだありません（本人メモも「SAMuon と SOAP の比較がない」と指摘しています）。
-- **Muon の汎化**：[#455](https://github.com/Hiroki11x/Papers/issues/455)（良い）と [#524](https://github.com/Hiroki11x/Papers/issues/524)（特異値ギャップが小さいと悪い）の対立。
+- **Muon の汎化**：[#455](https://github.com/Hiroki11x/Papers/issues/455)（良い）と [#524](https://github.com/Hiroki11x/Papers/issues/524)（特異値ギャップが小さいと悪い）の対立。[#577](https://github.com/Hiroki11x/Papers/issues/577) はノイズが共通（CSM）なら Muon が対処でき、ばらばら（DSM）なら劣化するとしており、どちらの状況が実際の LLM 学習に近いかが論点になります。
+- **理論保証の適用範囲**：有限ステップ Newton–Schulz を含む損失保証（[#579](https://github.com/Hiroki11x/Papers/issues/579)）は NTK regime に限られ、特徴学習への一般化は未解決です（本人メモ）。
+- **改良版の評価の再現性**：NorMuon の NanoGPT での改善はノイズによるものらしい、という指摘（[#585](https://github.com/Hiroki11x/Papers/issues/585) の本人メモ）は、小規模 speedrun での改善報告をどこまで信じるかという問題を示しています。
 - **ノルム制約手法どうしの比較**：SSO・Hyperball・MD Decoupling・MACRO の違いは、本人メモでも疑問のまま残っています（[#528](https://github.com/Hiroki11x/Papers/issues/528)）。
 - **FP4 の実機検証とスケール**：Full-Stack FP4 は fake quantization、3B・64B トークンでの検証です。量子化誤差が次元と学習の進行とともに悪化するという指摘（[#529](https://github.com/Hiroki11x/Papers/issues/529)）は、10T トークン級（[#444](https://github.com/Hiroki11x/Papers/issues/444)）で FP4 の範囲を広げたときにどう効いてくるか。
-- **動的なスケジュール**：バッチサイズのスケジュール（[#435](https://github.com/Hiroki11x/Papers/issues/435) の本人メモ、[#505](https://github.com/Hiroki11x/Papers/issues/505) のランプアップ。ただし #505 のノート要約はタイトルと内容が一致しておらず未確認）、モメンタムのスケジュール（[#554](https://github.com/Hiroki11x/Papers/issues/554)）、精度の動的切替（[#529](https://github.com/Hiroki11x/Papers/issues/529)）は、いずれも萌芽段階です。
+- **動的なスケジュール**：バッチサイズのスケジュール（[#435](https://github.com/Hiroki11x/Papers/issues/435) の本人メモ、[#505](https://github.com/Hiroki11x/Papers/issues/505) のランプアップ。ただし #505 のノート要約はタイトルと内容が一致しておらず未確認）、モメンタムのスケジュール（[#554](https://github.com/Hiroki11x/Papers/issues/554)）、精度の動的切替（[#529](https://github.com/Hiroki11x/Papers/issues/529)。精度スケジュールの実験比較は [#575](https://github.com/Hiroki11x/Papers/issues/575)）、有効ランク制約の焼きなまし（[#588](https://github.com/Hiroki11x/Papers/issues/588)）は、いずれも萌芽段階です。
 - **分散オプティマイザと Muon の統合**：DiLoCo 系（[#573](https://github.com/Hiroki11x/Papers/issues/573)、Muon は未使用）や 1bit 通信（[#561](https://github.com/Hiroki11x/Papers/issues/561) は Lion）に、Muon 系をどう組み込むか。
 
 ### 9.3 実務上の示唆（ノートから読み取れるレシピ）
@@ -1715,6 +1898,8 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 | [#520](https://github.com/Hiroki11x/Papers/issues/520) | Nexus: Same Pretraining Loss, Better Downstream Generalization via Common Minima | 内外ループ最適化と共通ミニマによる汎化 | arXiv（プレプリント） | 2026-04 |
 | [#534](https://github.com/Hiroki11x/Papers/issues/534) | SNOO: Step-K Nesterov Outer Optimizer - The Surprising Effectiveness of Nesterov Momentum Applied to Pseudo-Gradients | 外側 Nesterov 最適化（非分散 DiLoCo） | arXiv（プレプリント） | 2025-10 |
 | [#538](https://github.com/Hiroki11x/Papers/issues/538) | AdaGC: Enhancing LLM Pretraining Stability via Adaptive Gradient Clipping | 学習安定化と適応的勾配クリッピング | ICML 2026 | 2025-02 |
+| [#576](https://github.com/Hiroki11x/Papers/issues/576) | Critical Learning Periods in Deep Neural Networks | Critical Learning Periods（学習初期の臨界期） | ICLR 2019 | 2017-11 |
+| [#587](https://github.com/Hiroki11x/Papers/issues/587) | OptiSelect: How does the Optimizer Shape Data Curriculum? | オプティマイザ状態を考慮したオンラインデータ選択 | arXiv（プレプリント） | 2026-10 |
 
 これらの本サーベイとの接点は次のとおりです。
 
@@ -1724,11 +1909,13 @@ Part別・公開年月順（公開年月不明はissue登録順で末尾）。�
 - [#516](https://github.com/Hiroki11x/Papers/issues/516) PoLAR は、極分解を LoRA に応用したものです。
 - [#534](https://github.com/Hiroki11x/Papers/issues/534) SNOO は、Part C の DiLoCo 系（[#573](https://github.com/Hiroki11x/Papers/issues/573)）の外側オプティマイザと関わります。
 - [#538](https://github.com/Hiroki11x/Papers/issues/538) AdaGC は、GradientStabilizer（[#541](https://github.com/Hiroki11x/Papers/issues/541)）と比較できる安定化手法です。
+- [#576](https://github.com/Hiroki11x/Papers/issues/576) Critical Learning Periods は、低精度スケジュール [#575](https://github.com/Hiroki11x/Papers/issues/575) が「同様の現象を確認した」と主張する元論文です。ノートには、Fisher 情報量が小さくなるタイミングが臨界期の終わりで、臨界期中にぼかした画像や量子化しすぎた画像で学習すると回復できなくなる、とあります。本人は「複数エポック・画像の設定なので LLM でも同じことが言えるかは不明」と限界を記しています。学習初期の低精度化（2.5節の動的精度切替）を考えるうえで注意すべき論点です（[SGD ダイナミクスと理論](../misc/06_sgd_dynamics_theory.md)）。
+- [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect は、各ステップでバッチの λ 倍の候補を用意し、現在のモデルとオプティマイザの状態（プレコンディショナ）に基づいて有用なデータだけを更新に使います。「オプティマイザの比較は一様サンプリング前提」という暗黙の仮定を問い直す点で、Part B のベンチマーク論争と関わります（[オプティマイザ設計](../misc/07_optimizer_design.md)）。
 
 関連するサーベイ文書は次のとおりです。
 
 - Adam 系・自然勾配・K-FAC などオプティマイザ設計全般（[#375](https://github.com/Hiroki11x/Papers/issues/375)、[#380](https://github.com/Hiroki11x/Papers/issues/380)、[#401](https://github.com/Hiroki11x/Papers/issues/401)、[#419](https://github.com/Hiroki11x/Papers/issues/419) など）：[オプティマイザ設計](../misc/07_optimizer_design.md)
 - PTQ・QAT・量子化による圧縮（Part A の [#112](https://github.com/Hiroki11x/Papers/issues/112)、[#350](https://github.com/Hiroki11x/Papers/issues/350)、[#521](https://github.com/Hiroki11x/Papers/issues/521) など）：[正則化・データ拡張・圧縮](../misc/05_regularization_augmentation_compression.md)
 - weight decay・学習率スケジュール・warmup（Part B の B5、[#497](https://github.com/Hiroki11x/Papers/issues/497)、[#496](https://github.com/Hiroki11x/Papers/issues/496)）：[学習率スケジュールと weight decay](../misc/08_lr_schedule_weight_decay.md)
-- 臨界バッチサイズとバッチスケーリング（[#389](https://github.com/Hiroki11x/Papers/issues/389)、[#456](https://github.com/Hiroki11x/Papers/issues/456)、[#553](https://github.com/Hiroki11x/Papers/issues/553)）：[臨界バッチサイズ](./01_critical_batch_size.md)
+- 臨界バッチサイズとバッチスケーリング（[#389](https://github.com/Hiroki11x/Papers/issues/389)、[#456](https://github.com/Hiroki11x/Papers/issues/456)、[#553](https://github.com/Hiroki11x/Papers/issues/553)、[#592](https://github.com/Hiroki11x/Papers/issues/592)）：[臨界バッチサイズ](./01_critical_batch_size.md)
 - DiLoCo 系の外側オプティマイザ（[#534](https://github.com/Hiroki11x/Papers/issues/534)、[#573](https://github.com/Hiroki11x/Papers/issues/573)）：[半同期分散学習](./03_semi_synchronous_training.md)

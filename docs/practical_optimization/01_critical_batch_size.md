@@ -1,11 +1,11 @@
 # クリティカルバッチサイズ（Critical Batch Size）・大バッチ学習・勾配ノイズスケール・バッチサイズ／学習率スケーリング則 サーベイ
 
-> 本稿は [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers/issues) の論文読みノート（GitHub issues）のうち、クリティカルバッチサイズ（CBS）関連として分類された **61件の issue**（重複登録を含む。ユニーク論文としては56本）を再構成したサーベイである。各論文の記述はノート（issue本文・コメント）に基づいており、数値はノートに記載されたものだけを引用している。
+> 本稿は [Hiroki11x/Papers](https://github.com/Hiroki11x/Papers/issues) の論文読みノート（GitHub issues）のうち、クリティカルバッチサイズ（CBS）関連として分類された **66件の issue**（重複登録を含む。ユニーク論文としては60本）を再構成したサーベイである。各論文の記述はノート（issue本文・コメント）に基づいており、数値はノートに記載されたものだけを引用している。
 
 ## 概要
 
-- **対象**: 61 issue（重複5組: [#34](https://github.com/Hiroki11x/Papers/issues/34)=[#42](https://github.com/Hiroki11x/Papers/issues/42)、[#157](https://github.com/Hiroki11x/Papers/issues/157)=[#207](https://github.com/Hiroki11x/Papers/issues/207)、[#16](https://github.com/Hiroki11x/Papers/issues/16)=[#403](https://github.com/Hiroki11x/Papers/issues/403)、[#81](https://github.com/Hiroki11x/Papers/issues/81)=[#404](https://github.com/Hiroki11x/Papers/issues/404)（AAAI版とarXiv版）、[#551](https://github.com/Hiroki11x/Papers/issues/551)=[#572](https://github.com/Hiroki11x/Papers/issues/572)）
-- **期間**: 論文の初出は 2017年6月（Gradient Diversity）〜 2026年9月（Polyak/Nesterov とCBS）。issue登録は 2020年5月〜2026年9月。
+- **対象**: 66 issue（重複6組: [#34](https://github.com/Hiroki11x/Papers/issues/34)=[#42](https://github.com/Hiroki11x/Papers/issues/42)、[#157](https://github.com/Hiroki11x/Papers/issues/157)=[#207](https://github.com/Hiroki11x/Papers/issues/207)、[#16](https://github.com/Hiroki11x/Papers/issues/16)=[#403](https://github.com/Hiroki11x/Papers/issues/403)、[#81](https://github.com/Hiroki11x/Papers/issues/81)=[#404](https://github.com/Hiroki11x/Papers/issues/404)（AAAI版とarXiv版）、[#551](https://github.com/Hiroki11x/Papers/issues/551)=[#572](https://github.com/Hiroki11x/Papers/issues/572)、[#402](https://github.com/Hiroki11x/Papers/issues/402)=[#578](https://github.com/Hiroki11x/Papers/issues/578)）
+- **期間**: 論文の初出は 2017年6月（Gradient Diversity）〜 2026年10月（The Best Optimizer Depends on Batch Size ほか）。issue登録は 2020年5月〜2026年10月8日。
 - **この分野の問い**:
   1. バッチサイズ $B$ を大きくすると、どこまで「ステップ数が $1/B$ に減る」完全スケーリングが続くのか（= クリティカルバッチサイズはどこか）。
   2. その境界は何で決まるのか——勾配ノイズ（$B_\text{noise}$）、目標損失 $L$、データ量 $D$、モデルサイズ $N$、オプティマイザ、アーキテクチャのどれか。
@@ -102,7 +102,7 @@ SDE 系の理論は 2025–2026年に再び存在感を増している。
 
 - **2次法のダンピング**: 最小ダンピング係数は $\eta/B$ に比例する（[#44](https://github.com/Hiroki11x/Papers/issues/44)）。
 - **Adam の $\beta_2$**: 勾配の「半減期」をトークン数で一定に保つようにスケーリングする（[#381](https://github.com/Hiroki11x/Papers/issues/381)）。直観的には、$\beta_2^{\,t} = 1/2$ となるステップ数 $t$ にバッチ当たりトークン数を掛けた値を固定する。
-- **AdamW のタイムスケール**: $T_\text{EMA} = B/(\eta\lambda D)$ がトークン/パラメータ比のべき乗則 $T_\text{EMA} \propto \text{TPP}^{-0.527}$ に従う（[#391](https://github.com/Hiroki11x/Papers/issues/391)）。
+- **AdamW のタイムスケール**: $T_\text{EMA} = B/(\eta\lambda D)$ がトークン/パラメータ比のべき乗則 $T_\text{EMA} \propto \text{TPP}^{-0.527}$ に従う（[#391](https://github.com/Hiroki11x/Papers/issues/391)）。同じ Cerebras のグループの [#574](https://github.com/Hiroki11x/Papers/issues/574) は、TPP を固定すれば最適なタイムスケール $\tau$ はモデルサイズによらず一定で、損失曲線が1本の普遍曲線に collapse することを示した。
 
 ### 1.5 CBS の「何に依存するか」— 3つの見方
 
@@ -183,7 +183,7 @@ LLM 事前学習の計算最適化が主戦場になり、[#173](https://github.
 - **Surge Phenomenon（[#389](https://github.com/Hiroki11x/Papers/issues/389)、2024-05, NeurIPS 2024）**: Adam 系では最適LRがバッチに対して単調増加せず、$B_\text{noise}$ でピークに達して下降する。$B_\text{noise}$ は学習の進行とともに大きくなり、平方根則は小バッチでのみ成立する。McCandlish の $\epsilon_\text{opt}(B)$ の Adam 版として位置づけられる。本人は「Adam の $B_\text{noise}$ はフィッティング推定なのでオンラインで求めるのは難しい」と実用上の限界を指摘している。
 - **How Does CBS Scale in Pre-training?（[#390](https://github.com/Hiroki11x/Papers/issues/390)、2024-10, ICLR 2025）**: 85M〜1.2B のモデルで $N$ と $D$ の影響を**制御実験で初めて分離**した。Chinchilla 設定では CBS が増えるが、$D$ 固定で $N$ を変えても CBS はほぼ不変、$N$ 固定で $D$ を増やすと CBS は顕著に増える。結論は「**CBS は主にデータサイズに依存し、モデルサイズにはほとんど依存しない**」で、無限幅理論と最小二乗回帰の解析で裏付けた。
 - **Normalization-layer GNS（[#378](https://github.com/Hiroki11x/Papers/issues/378)、2024-11, NeurIPS 2024）**: GNS 測定のコスト問題を解消した（LayerNorm だけで全体GNSを予測、ゼロオーバーヘッドカーネル、GNS に基づく動的バッチで学習を高速化）。[#8](https://github.com/Hiroki11x/Papers/issues/8) の「$B_\text{noise}$ を安く測りたい」という課題への実用的な回答である。
-- **ノルムテストによる適応バッチ（[#402](https://github.com/Hiroki11x/Papers/issues/402)、2024-12, CPAL 2025）**: GNS 推定ではなくノルムテストで逐次バッチを増やし、DDP/FSDP に実装した。MicroLlama-300M〜OpenLlama-3B で固定バッチより低い検証損失を達成し、ヒューリスティックなバッチウォームアップと同等以上。Adam への収束保証も与えた。
+- **ノルムテストによる適応バッチ（[#402](https://github.com/Hiroki11x/Papers/issues/402)、2024-12, CPAL 2025）**: GNS 推定ではなくノルムテストで逐次バッチを増やし、DDP/FSDP に実装した。MicroLlama-300M〜OpenLlama-3B で固定バッチより低い検証損失を達成し、ヒューリスティックなバッチウォームアップと同等以上。Adam への収束保証も与えた。同じ論文は2026年10月に [#578](https://github.com/Hiroki11x/Papers/issues/578) として再登録されており、本人は「Muon は使っていない」とし、自分の以前の研究のシステム寄りの部分（FSDP 向けの RS hook）を詳しく書いたもの「という位置付けかな」とコメントしている。
 - **重点サンプリングと実効ミニバッチサイズ（[#392](https://github.com/Hiroki11x/Papers/issues/392)、2025-01, SIAM Journal on Mathematics of Data Science）**: IS の分散低減を「実効ミニバッチサイズの増加」と等価とみなし、それに応じて LR を自動スケーリングする。分散低減＝実効バッチ拡大という GNS 的見方の応用である。
 - **Step Law（[#382](https://github.com/Hiroki11x/Papers/issues/382)、2025-03）**: 3700以上の条件・約100万 H800 GPU時間。損失は LR・BS に対して凸で、最適 LR は $N$ と $D$ の両方に、**最適 BS は主に $D$ に**依存する。本人は「バッチ固定で BS ごとに LR を大量に調べた研究であり、スケジュールは warmup＋コサイン減衰の固定最終学習率」とメモしており、バッチスケジュールを扱っていない点を押さえている。
 - **Power Lines（[#391](https://github.com/Hiroki11x/Papers/issues/391)、2025-05, NeurIPS 2025）**: 約400実験（111M〜3.3B、µP）。$B_\text{opt} \propto D^{0.383}$、$B_\text{crit} \propto D_\text{min}^{0.462}$ がモデルサイズによらず成立するとした。従来 $B_\text{opt}$/$B_\text{crit}$ は計算量 $C$ や損失 $L$ に依存するとされてきたが、根本的には $D$ に依存する、と**明示的に [#173](https://github.com/Hiroki11x/Papers/issues/173) の見方を更新**している。LR減衰下でも使える $B_\text{crit}$ 推定法を提案し、時間優先なら「小さいモデルを多くのデータで学習する方が速い」というパレート上の結論も導いた。
@@ -196,7 +196,8 @@ Muon/SOAP 等の行列オプティマイザの台頭とともに、NQM（[#10](h
 - **オプティマイザ・ベンチマークの食い違い**:
   - **Fantastic Pretraining Optimizers（[#432](https://github.com/Hiroki11x/Papers/issues/432)）** は、既報の「2倍速」は主にベースラインの過小チューニングによるもので、行列系の高速化は0.1Bで約1.4倍、1.2Bで約1.1倍に減衰するとした。
   - **Benchmarking Optimizers（[#433](https://github.com/Hiroki11x/Papers/issues/433)）** は、順位がバッチサイズで入れ替わる（小バッチでは D-Muon/SOAP、大バッチでは Signum・MARS・Lion が伸びる）ことを示し、大規模設定では AdEMAMix と MARS が最良とした。
-  - [#432](https://github.com/Hiroki11x/Papers/issues/432) の著者は関連研究の節でこの食い違いを「**主にバッチサイズの差**（[#432](https://github.com/Hiroki11x/Papers/issues/432) は 0.4M トークン以上、[#433](https://github.com/Hiroki11x/Papers/issues/433) の最も詳細にチューニングされた 130M 実験は 0.02〜0.1M）による」と説明しており、ノートにはこの議論が転記されている。[#433](https://github.com/Hiroki11x/Papers/issues/433) の 720M・1M トークンバッチの実験は設定が近いが、LR スイープ範囲が異なる（4e-3〜8e-3 vs 1e-3〜2e-3）とも述べている。分散低減型（MARS, AdEMAMix）はノイズの大きい小バッチで利点があり、大バッチでは行列型（Muon）が優位になる、という解釈である。**「オプティマイザの優劣はバッチサイズ（=ノイズ領域）込みでしか語れない」**ことを示す好例になっている。
+  - [#432](https://github.com/Hiroki11x/Papers/issues/432) の著者は関連研究の節でこの食い違いを「**主にバッチサイズの差**（[#432](https://github.com/Hiroki11x/Papers/issues/432) は 0.4M トークン以上、[#433](https://github.com/Hiroki11x/Papers/issues/433) の最も詳細にチューニングされた 130M 実験は 0.02〜0.1M）による」と説明しており、ノートにはこの議論が転記されている。[#433](https://github.com/Hiroki11x/Papers/issues/433) の 720M・1M トークンバッチの実験は設定が近いが、LR スイープ範囲が異なる（4e-3〜8e-3 vs 1e-3〜2e-3）とも述べている。分散低減型（MARS, AdEMAMix）はノイズの大きい小バッチで利点があり、大バッチでは行列型（Muon）が優位になる、という解釈である。**「オプティマイザの優劣はバッチサイズ（=ノイズ領域）込みでしか語れない」**ことを示す好例になっている。この論点は2026年10月に、[#432](https://github.com/Hiroki11x/Papers/issues/432) と共著者（Kaiyue Wen）が重なる [#592](https://github.com/Hiroki11x/Papers/issues/592)「The Best Optimizer Depends on Batch Size」で題名そのものになった（§2.7 参照）。
+- **Scaling with Collapse（[#574](https://github.com/Hiroki11x/Papers/issues/574)、2025-09, ICLR 2026）**: Power Lines（[#391](https://github.com/Hiroki11x/Papers/issues/391)）と同じ Cerebras のグループ。TPP（1パラメータあたりのトークン数）を固定すると、最適な AdamW タイムスケール $\tau$ はモデルサイズによらず一定になり、損失曲線が1本の普遍曲線に collapse する。実運用上の利点は2つで、(i) 小規模モデル（例: 100M級）で同じ TPP のまま $\tau$ をスイープして選んだ値を大規模モデル（例: 3.9B以上）へ zero-shot で転送できる、(ii) 大規模側でバッチサイズや学習率をスイープするときも、学習の10〜30%時点の曲線を小規模モデルの参照曲線に重ねて最終損失を予測できる。$\tau$ を制御していれば曲線の順位が途中で入れ替わらないため、早い段階でスイープを打ち切れる。[#391](https://github.com/Hiroki11x/Papers/issues/391) が $T_\text{EMA}$ の TPP 依存則を与えたのに対し、それを「転送と早期打ち切り」に使う段階へ進めた位置づけと読める。本人は「すごい、何で知らなかったんだろう」とコメントしている。
 - **Full Gauss-Newton（[#456](https://github.com/Hiroki11x/Papers/issues/456)）**: 45M/150M モデルで、目標損失3.25到達ステップは GN 54 / SOAP 292 / Muon 864。AdamW・Muon は約12Mトークンのバッチで頭打ちになる一方、GN は40Mでも改善が続く（**CBS の大幅拡大**）。[#390](https://github.com/Hiroki11x/Papers/issues/390) と同じ Harvard グループ（Vyas, Kakade, Morwani）で、「CBS はデータで決まる」と「CBS はオプティマイザで動く」の両面を同じグループが示している点が興味深い。
 - **FOP（[#401](https://github.com/Hiroki11x/Papers/issues/401)、AAAI 2026）**: 大バッチでは KFAC の Fisher が劣条件化して強いダンピングが必要になり、曲率の利点が消える。そこで2サブバッチの差分勾配を Fisher 直交射影して活用し、バッチ50,000の CIFAR-10 でも最速で目標精度に達した。本人が [#42](https://github.com/Hiroki11x/Papers/issues/42) で重要と述べた「大バッチ×2次最適化」の方向に連なる研究である。
 - **ALTO（[#461](https://github.com/Hiroki11x/Papers/issues/461)、NeurIPS 2025）**: LAMB に勾配差分 EMA を加えて谷沿いに平坦な極小値を探索する。大バッチでは $\beta_1$ 大・$\alpha$ 負が有効だった。
@@ -215,6 +216,9 @@ Muon/SOAP 等の行列オプティマイザの台頭とともに、NQM（[#10](h
 - **三峰性マスク拡散（[#514](https://github.com/Hiroki11x/Papers/issues/514)）**: SDE 再パラメータ化でバッチ変更時のハイパラ再調整を不要にした。
 - **Phases of Muon（[#553](https://github.com/Hiroki11x/Papers/issues/553)）**: 大バッチでは SignSVD（Muon の近似）がデータ共分散に対して平方根前処理として働き、小バッチでは小さい固有モードが SGD 的になって収束が遅れる。**Muon の利点はバッチサイズ領域依存**であることを理論的に示し、[#432](https://github.com/Hiroki11x/Papers/issues/432)/[#433](https://github.com/Hiroki11x/Papers/issues/433) の食い違いに理論的な背景を与える。
 - **Polyak vs Nesterov（[#550](https://github.com/Hiroki11x/Papers/issues/550)）**: Polyak momentum は CBS を拡大し、Nesterov は大バッチでのデータ効率を改善する。本人は「小さい toy 設定での話」と注意書きしている。[#10](https://github.com/Hiroki11x/Papers/issues/10)、[#372](https://github.com/Hiroki11x/Papers/issues/372)、[#403](https://github.com/Hiroki11x/Papers/issues/403) の「モメンタムと大バッチ」の系譜の最新形である。
+- **正規化SGDの可解モデル（[#586](https://github.com/Hiroki11x/Papers/issues/586)、2026-10）**: 勾配正規化（norm-SGD）は勾配の減衰に応じて実効学習率を自動的に引き上げ、学習初期の収束を大きく加速する。しかし実効学習率の上昇はやがて安定性限界（Edge of Stability 等）に達して加速が崩壊する。可解モデルでこれを解析し、モデル幅やバッチサイズに対する計算効率の最適条件を導いた。ノートには「**CBS を境に EoSS と EoS が切り替わる**」とあり、CBS を最適化の安定性レジームの境界として捉える見方を加える。
+- **適応的バッチングの理論（[#581](https://github.com/Hiroki11x/Papers/issues/581)、2026-10）**: 勾配ノイズの分散が有界でない状況を仮定すると、LLM 事前学習で適応的にバッチを増やすことが有効な理由を説明できる、とする。理論は SGD、実験は Adam で行っている。本人は「経験則が多く、特に使えるものはないかも」と評価しており、[#402](https://github.com/Hiroki11x/Papers/issues/402)/[#578](https://github.com/Hiroki11x/Papers/issues/578) や [#500](https://github.com/Hiroki11x/Papers/issues/500) と並ぶ「バッチランプ・適応バッチを支持する理論」の1本だが、実用上の新しい処方は読み取れていない。
+- **The Best Optimizer Depends on Batch Size（[#592](https://github.com/Hiroki11x/Papers/issues/592)、2026-10）**: 題名どおり、オプティマイザの優劣がバッチサイズに依存すると主張する研究で、§2.6 の [#432](https://github.com/Hiroki11x/Papers/issues/432)/[#433](https://github.com/Hiroki11x/Papers/issues/433) の食い違いを「バッチサイズ差」で説明する見方に直接関わる。ただしノートは題名の主張と図の転載、および「適応的バッチサイズ（Adaptive BS）などはやっていない」というメモのみで、どのオプティマイザがどのバッチ領域で勝つのか、[#432](https://github.com/Hiroki11x/Papers/issues/432) の説明や [#433](https://github.com/Hiroki11x/Papers/issues/433) 内の逆向きの傾向と整合するのかは、ノートからは判断できない。
 - **実運用（テックレポート）**:
   - **Qwen3.8-Next（[#548](https://github.com/Hiroki11x/Papers/issues/548)）** はバッチランプアップを使っていない（Kimi K2 も同様）。本人は「Muon 登場以降の特徴かもしれないが、Qwen の実験は LR warmup も含めて batch ramp-up 時に noisy に見える」と所感を述べている。
   - **MAI-Thinking-1（[#562](https://github.com/Hiroki11x/Papers/issues/562)）** は AdamW（FP32状態）で、**全フェーズ一貫して134Mトークンの固定グローバルバッチ**（ramp-up なし）、30Tトークン・GB200 8,192基で学習している。
@@ -259,12 +263,13 @@ timeline
         2024 : Surge Phenomenon - issue 389
              : CBS scales with data - issue 390
              : LayerNorm GNS - issue 378
-             : Norm-test adaptive batch - issue 402
+             : Norm-test adaptive batch - issues 402 and 578
         2025 H1 : Step Law - issue 382
                 : Power Lines - issue 391
         2025 H2 : Small Batch LM Training - issue 381
                 : Optimizer benchmarks - issues 432 and 433
                 : Functional Scaling Law - issue 464
+                : Scaling with Collapse AdamW timescale - issue 574
                 : Optimal Norm Scion - issue 435
                 : Full Gauss-Newton CBS - issue 456
                 : Stochastic Adam generalization - issue 449
@@ -278,6 +283,9 @@ timeline
              : Larger batches in LLM RL - issues 551 and 572
              : Polyak enlarges CBS - issue 550
              : Qwen and MiMo tech reports - issues 548 and 567
+             : Adaptive batching under unbounded variance - issue 581
+             : Solvable norm-SGD model EoS and CBS - issue 586
+             : Best optimizer depends on batch size - issue 592
 ```
 
 ---
@@ -321,7 +329,7 @@ timeline
 
 ### C. データ並列の実証とCBSのスケーリング則
 
-**要点**: 「CBS は何でスケールするか」を大規模実験で決める研究群。3領域の普遍性（[#16](https://github.com/Hiroki11x/Papers/issues/16)/[#403](https://github.com/Hiroki11x/Papers/issues/403)）から始まり、損失依存（[#173](https://github.com/Hiroki11x/Papers/issues/173)）を経て、データ量依存（[#390](https://github.com/Hiroki11x/Papers/issues/390)、[#391](https://github.com/Hiroki11x/Papers/issues/391)、[#382](https://github.com/Hiroki11x/Papers/issues/382)）が 2024–2025年のコンセンサスになった。HPC 観点（[#399](https://github.com/Hiroki11x/Papers/issues/399)）は、エネルギーの面からも CBS 超えが無駄であることを示す。
+**要点**: 「CBS は何でスケールするか」を大規模実験で決める研究群。3領域の普遍性（[#16](https://github.com/Hiroki11x/Papers/issues/16)/[#403](https://github.com/Hiroki11x/Papers/issues/403)）から始まり、損失依存（[#173](https://github.com/Hiroki11x/Papers/issues/173)）を経て、データ量依存（[#390](https://github.com/Hiroki11x/Papers/issues/390)、[#391](https://github.com/Hiroki11x/Papers/issues/391)、[#382](https://github.com/Hiroki11x/Papers/issues/382)）が 2024–2025年のコンセンサスになった。HPC 観点（[#399](https://github.com/Hiroki11x/Papers/issues/399)）は、エネルギーの面からも CBS 超えが無駄であることを示す。[#574](https://github.com/Hiroki11x/Papers/issues/574) は [#391](https://github.com/Hiroki11x/Papers/issues/391) の AdamW タイムスケール則を、TPP 固定での $\tau$ の zero-shot 転送と損失曲線の collapse による最終損失予測に発展させた。
 
 | issue | 論文（短縮） | CBS/最適バッチの依存 |
 |---|---|---|
@@ -331,10 +339,11 @@ timeline
 | [#382](https://github.com/Hiroki11x/Papers/issues/382) | Step Law | 最適BSは主に $D$、最適LRは $N,D$ |
 | [#391](https://github.com/Hiroki11x/Papers/issues/391) | Power Lines | $B_\text{opt}\propto D^{0.383}$、$B_\text{crit}\propto D_\text{min}^{0.462}$ |
 | [#399](https://github.com/Hiroki11x/Papers/issues/399) | Energy Consumption in Parallel Training | ResNet50 は GBS≈8192 超で劣化、FourCastNet は GBS>4〜64 |
+| [#574](https://github.com/Hiroki11x/Papers/issues/574) | Scaling with Collapse | TPP 固定なら最適 AdamW タイムスケール $\tau$ はモデルサイズに不変、損失曲線が collapse |
 
 ### D. 学習率–バッチサイズのスケーリング則とSDE/理論
 
-**要点**: バッチを変えたときに LR（と $\beta_2$、ノルム）をどう変えるか。SGD は線形、適応手法は平方根（[#44](https://github.com/Hiroki11x/Papers/issues/44)）という古典的な対応に対し、Adam のサージ現象（[#389](https://github.com/Hiroki11x/Papers/issues/389)）、Scion の $B^{0.62}$（[#435](https://github.com/Hiroki11x/Papers/issues/435)）、$\beta_2$ の半減期則（[#381](https://github.com/Hiroki11x/Papers/issues/381)）が加わった。理論面では SDE/カーネル回帰（[#464](https://github.com/Hiroki11x/Papers/issues/464)）、ランダム特徴モデルの最適制御（[#500](https://github.com/Hiroki11x/Papers/issues/500)）、行列最小二乗（[#553](https://github.com/Hiroki11x/Papers/issues/553)）がスケジュールやバッチランプまで扱うようになった。
+**要点**: バッチを変えたときに LR（と $\beta_2$、ノルム）をどう変えるか。SGD は線形、適応手法は平方根（[#44](https://github.com/Hiroki11x/Papers/issues/44)）という古典的な対応に対し、Adam のサージ現象（[#389](https://github.com/Hiroki11x/Papers/issues/389)）、Scion の $B^{0.62}$（[#435](https://github.com/Hiroki11x/Papers/issues/435)）、$\beta_2$ の半減期則（[#381](https://github.com/Hiroki11x/Papers/issues/381)）が加わった。理論面では SDE/カーネル回帰（[#464](https://github.com/Hiroki11x/Papers/issues/464)）、ランダム特徴モデルの最適制御（[#500](https://github.com/Hiroki11x/Papers/issues/500)）、行列最小二乗（[#553](https://github.com/Hiroki11x/Papers/issues/553)）がスケジュールやバッチランプまで扱うようになった。正規化SGDの可解モデル（[#586](https://github.com/Hiroki11x/Papers/issues/586)）は、CBS を境に EoSS と EoS が切り替わるという安定性の観点を加えている。
 
 | issue | 論文（短縮） | 主な則 |
 |---|---|---|
@@ -346,10 +355,11 @@ timeline
 | [#500](https://github.com/Hiroki11x/Papers/issues/500) | Optimal LR Schedules for Random Feature Model | WSD 最適（hard phase）、後半バッチランプ |
 | [#514](https://github.com/Hiroki11x/Papers/issues/514) | Tri-Modal Masked Diffusion | SDE 再パラメータ化でバッチ非依存化 |
 | [#553](https://github.com/Hiroki11x/Papers/issues/553) | Phases of Muon | 大バッチで SignSVD は平方根前処理 |
+| [#586](https://github.com/Hiroki11x/Papers/issues/586) | Solvable Model of Adaptive LR Rescaling | norm-SGD は実効LRを自動で上げ初期を加速、安定性限界で崩壊。CBS で EoSS と EoS が切り替わる |
 
 ### E. オプティマイザ（モメンタム・前処理・二次法）とCBS
 
-**要点**: **CBS はオプティマイザで動く**。前処理（[#10](https://github.com/Hiroki11x/Papers/issues/10)）、モメンタム（[#372](https://github.com/Hiroki11x/Papers/issues/372)、[#550](https://github.com/Hiroki11x/Papers/issues/550)）、完全 Gauss-Newton（[#456](https://github.com/Hiroki11x/Papers/issues/456)）はいずれも CBS を拡大する方向に働く（ただし [#456](https://github.com/Hiroki11x/Papers/issues/456) では Muon の CBS は AdamW と同程度の約12Mトークンで頭打ち）。大バッチ専用の最適化（CLARS [#81](https://github.com/Hiroki11x/Papers/issues/81)/[#404](https://github.com/Hiroki11x/Papers/issues/404)、FOP [#401](https://github.com/Hiroki11x/Papers/issues/401)）は、層別正規化や曲率・差分勾配の活用で大バッチの失敗を避ける。ベンチマーク（[#432](https://github.com/Hiroki11x/Papers/issues/432)、[#433](https://github.com/Hiroki11x/Papers/issues/433)）は「どのバッチ領域で比べたか」で結論が変わることを示した。
+**要点**: **CBS はオプティマイザで動く**。前処理（[#10](https://github.com/Hiroki11x/Papers/issues/10)）、モメンタム（[#372](https://github.com/Hiroki11x/Papers/issues/372)、[#550](https://github.com/Hiroki11x/Papers/issues/550)）、完全 Gauss-Newton（[#456](https://github.com/Hiroki11x/Papers/issues/456)）はいずれも CBS を拡大する方向に働く（ただし [#456](https://github.com/Hiroki11x/Papers/issues/456) では Muon の CBS は AdamW と同程度の約12Mトークンで頭打ち）。大バッチ専用の最適化（CLARS [#81](https://github.com/Hiroki11x/Papers/issues/81)/[#404](https://github.com/Hiroki11x/Papers/issues/404)、FOP [#401](https://github.com/Hiroki11x/Papers/issues/401)）は、層別正規化や曲率・差分勾配の活用で大バッチの失敗を避ける。ベンチマーク（[#432](https://github.com/Hiroki11x/Papers/issues/432)、[#433](https://github.com/Hiroki11x/Papers/issues/433)）は「どのバッチ領域で比べたか」で結論が変わることを示し、[#592](https://github.com/Hiroki11x/Papers/issues/592) はそれを題名に掲げている（ノートは題名と図のみで、詳細は未記録）。
 
 | issue | 論文（短縮） | CBS との関係 |
 |---|---|---|
@@ -361,18 +371,20 @@ timeline
 | [#433](https://github.com/Hiroki11x/Papers/issues/433) | Benchmarking Optimizers for LLM Pretraining | 順位がバッチサイズで入れ替わる |
 | [#456](https://github.com/Hiroki11x/Papers/issues/456) | Full Gauss-Newton for LLMs | AdamW/Muon は約12Mで頭打ち、GN は40Mでも改善 |
 | [#550](https://github.com/Hiroki11x/Papers/issues/550) | Polyak enlarges CBS, Nesterov improves data efficiency | モメンタム種別で役割が異なる（toy 設定） |
+| [#592](https://github.com/Hiroki11x/Papers/issues/592) | The Best Optimizer Depends on Batch Size | 最良のオプティマイザはバッチサイズで変わる（適応的バッチサイズは扱わない） |
 
 ### F. 適応的バッチサイズ・バッチランプ・スケジュール
 
-**要点**: GNS や損失が学習中に変化する（[#8](https://github.com/Hiroki11x/Papers/issues/8)、[#389](https://github.com/Hiroki11x/Papers/issues/389)）なら、バッチも学習中に変えるべきだ、という流れ。基準としては最適バッチ式（[#20](https://github.com/Hiroki11x/Papers/issues/20)）、ノルムテスト（[#402](https://github.com/Hiroki11x/Papers/issues/402)）、勾配多様性（[#414](https://github.com/Hiroki11x/Papers/issues/414)）、多信号（[#478](https://github.com/Hiroki11x/Papers/issues/478)）がある（曲率×GNS 理論とされる [#505](https://github.com/Hiroki11x/Papers/issues/505) はノート要約と題名の対応が未確認）。一方、フロンティアのテックレポート（[#548](https://github.com/Hiroki11x/Papers/issues/548)、[#562](https://github.com/Hiroki11x/Papers/issues/562)）はランプを使わない固定バッチを採用している。
+**要点**: GNS や損失が学習中に変化する（[#8](https://github.com/Hiroki11x/Papers/issues/8)、[#389](https://github.com/Hiroki11x/Papers/issues/389)）なら、バッチも学習中に変えるべきだ、という流れ。基準としては最適バッチ式（[#20](https://github.com/Hiroki11x/Papers/issues/20)）、ノルムテスト（[#402](https://github.com/Hiroki11x/Papers/issues/402)/[#578](https://github.com/Hiroki11x/Papers/issues/578)）、勾配多様性（[#414](https://github.com/Hiroki11x/Papers/issues/414)）、多信号（[#478](https://github.com/Hiroki11x/Papers/issues/478)）があり、有界でない勾配分散の仮定から適応バッチの有効性を説明する理論（[#581](https://github.com/Hiroki11x/Papers/issues/581)）も出ている（曲率×GNS 理論とされる [#505](https://github.com/Hiroki11x/Papers/issues/505) はノート要約と題名の対応が未確認）。一方、フロンティアのテックレポート（[#548](https://github.com/Hiroki11x/Papers/issues/548)、[#562](https://github.com/Hiroki11x/Papers/issues/562)）はランプを使わない固定バッチを採用している。
 
 | issue | 論文（短縮） | バッチの決め方 |
 |---|---|---|
 | [#20](https://github.com/Hiroki11x/Papers/issues/20) | Adaptive Learning of the Optimal Batch Size | 最適バッチ式を反復ごとに推定 |
 | [#134](https://github.com/Hiroki11x/Papers/issues/134) | Automated LR Scheduler for Large-batch | 適応ウォームアップ＋減衰（LR側） |
-| [#402](https://github.com/Hiroki11x/Papers/issues/402) | Adaptive Batch Size Schedules (DDP/FSDP-Norm) | ノルムテスト |
+| [#402](https://github.com/Hiroki11x/Papers/issues/402) / [#578](https://github.com/Hiroki11x/Papers/issues/578) | Adaptive Batch Size Schedules (DDP/FSDP-Norm) | ノルムテスト |
 | [#414](https://github.com/Hiroki11x/Papers/issues/414) | DiveBatch | 勾配多様性に比例して増加 |
 | [#478](https://github.com/Hiroki11x/Papers/issues/478) | DEBA | 勾配分散・勾配ノルム変動・損失変動 |
+| [#581](https://github.com/Hiroki11x/Papers/issues/581) | Why Does Adaptive Batching Help LLM Pretraining? | 有界でない分散の仮定で適応的バッチ増加を正当化（理論は SGD、実験は Adam） |
 | [#505](https://github.com/Hiroki11x/Papers/issues/505) | ARO | 理論ベースのランプアップ（ノート要約による。題名との対応は未確認） |
 | [#562](https://github.com/Hiroki11x/Papers/issues/562) | MAI-Thinking-1 | 固定134Mトークン、ramp-up なし |
 | [#548](https://github.com/Hiroki11x/Papers/issues/548) | Qwen3.8-Next | batch ramp-up 不使用 |
@@ -395,7 +407,7 @@ timeline
 
 ## 5. 論文一覧表（公開順）
 
-全61件を初出（`first_public`）順に並べた。初出不明の3件は末尾に置き、issue登録月を併記した。「根拠」は採択先情報の出どころである（issue記載 / arXivコメント / Web確認 / Semantic Scholar確認 / 不明）。
+全66件を初出（`first_public`）順に並べた。初出不明の3件は末尾に置き、issue登録月を併記した。「根拠」は採択先情報の出どころである（issue記載 / arXivコメント / Web確認 / Semantic Scholar確認 / 不明）。
 
 | 公開年月 | 論文 (issueリンク) | 著者/組織 | 採択先 | 根拠 | サブトピック |
 |---|---|---|---|---|---|
@@ -432,6 +444,7 @@ timeline
 | 2024-10 | [#390](https://github.com/Hiroki11x/Papers/issues/390) How Does Critical Batch Size Scale in Pre-training? | Hanlin Zhang, Depen Morwani, Nikhil Vyas, et al. / Harvard (Kempner Institute) | ICLR 2025 | arXivコメント | CBSのデータサイズ依存性 |
 | 2024-11 | [#378](https://github.com/Hiroki11x/Papers/issues/378) Normalization Layer Per-Example Gradients are Sufficient to Predict Gradient Noise Scale in Transformers | Gavia Gray, Aman Tiwari, Shane Bergsma, Joel Hestness / Cerebras | NeurIPS 2024 | arXivコメント | 勾配ノイズスケールの効率的推定 |
 | 2024-12 | [#402](https://github.com/Hiroki11x/Papers/issues/402) Adaptive Batch Size Schedules for Distributed Training of Language Models with Data and Model Parallelism | Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al. (Han Liu, Mladen Kolar) / Northwestern University / UChicago | CPAL 2025 | arXivコメント | ノルムテストに基づく適応的バッチサイズスケジュール |
+| 2024-12 | [#578](https://github.com/Hiroki11x/Papers/issues/578) Adaptive Batch Size Schedules for Distributed Training of Language Models with Data and Model Parallelism | Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al. / Northwestern University / UChicago | CPAL 2025 | arXivコメント | 2D並列対応の適応的バッチサイズ（FSDP-NORM） |
 | 2025-01 | [#392](https://github.com/Hiroki11x/Papers/issues/392) Exploring Variance Reduction in Importance Sampling for Efficient DNN Training | Takuro Kutsuna / Toyota Central R&D Labs | SIAM Journal on Mathematics of Data Science | Web確認 | 重点サンプリングと実効ミニバッチサイズ |
 | 2025-03 | [#382](https://github.com/Hiroki11x/Papers/issues/382) Predictable Scale: Part I, Step Law -- Optimal Hyperparameter Scaling Law in Large Language Model Pretraining | Houyi Li, Wenzhen Zheng, Qiufeng Wang, et al. / StepFun | arXiv（プレプリント） | 不明 | 最適学習率・バッチサイズのスケーリング則 |
 | 2025-05 | [#391](https://github.com/Hiroki11x/Papers/issues/391) Power Lines: Scaling Laws for Weight Decay and Batch Size in LLM Pre-training | Shane Bergsma, Nolan Dey, Gurpreet Gosal, et al. / Cerebras | NeurIPS 2025 | arXivコメント | 重み減衰とバッチサイズのスケーリング則 |
@@ -443,6 +456,7 @@ timeline
 | 2025-09 | [#432](https://github.com/Hiroki11x/Papers/issues/432) Fantastic Pretraining Optimizers and Where to Find Them | Kaiyue Wen, David Hall, Tengyu Ma, Percy Liang / Stanford University | arXiv（プレプリント） | 不明 | 事前学習オプティマイザの公平なベンチマーク |
 | 2025-09 | [#433](https://github.com/Hiroki11x/Papers/issues/433) Benchmarking Optimizers for Large Language Model Pretraining | Andrei Semenov, Matteo Pagliardini, Martin Jaggi / EPFL | arXiv（プレプリント） | 不明 | 事前学習オプティマイザのベンチマーク（バッチサイズ依存性） |
 | 2025-09 | [#464](https://github.com/Hiroki11x/Papers/issues/464) Unveiling the Role of Learning Rate Schedules via Functional Scaling Laws | Binghui Li, Fengling Chen, Zixun Huang, Lean Wang, Lei Wu / Peking University | NeurIPS 2025 | arXivコメント | SDEに基づく学習率スケジュールのスケーリング則 |
+| 2025-09 | [#574](https://github.com/Hiroki11x/Papers/issues/574) Scaling with Collapse: Efficient and Predictable Training of LLM Families | Shane Bergsma, Bin Claire Zhang, Nolan Dey, et al. / Cerebras | ICLR 2026 | arXivコメント | TPP固定でのAdamWタイムスケール則と損失曲線のcollapse |
 | 2025-10 | [#435](https://github.com/Hiroki11x/Papers/issues/435) Optimal Scaling Needs Optimal Norm | Oleg Filatov, Jiangtao Wang, Jan Ebert, Stefan Kesselheim / Jülich Supercomputing Centre | arXiv（プレプリント） | 不明 | ノルム転移と最適LR・バッチサイズのスケーリング則（Scion） |
 | 2025-10 | [#449](https://github.com/Hiroki11x/Papers/issues/449) Understanding the Generalization of Stochastic Gradient Adam in Learning Neural Networks | Xuan Tang, Han Zhang, Yuan Cao, Difan Zou / HKU | NeurIPS 2025 | arXivコメント | Adam/AdamWの汎化とバッチサイズ依存性の理論 |
 | 2025-10 | [#456](https://github.com/Hiroki11x/Papers/issues/456) The Potential of Second-Order Optimization for LLMs: A Study with Full Gauss-Newton | Natalie Abreu, Nikhil Vyas, Sham Kakade, Depen Morwani / Harvard | arXiv（プレプリント） | 不明 | 完全Gauss-Newton法の性能上限と臨界バッチサイズ |
@@ -457,6 +471,9 @@ timeline
 | 2026-08 | [#551](https://github.com/Hiroki11x/Papers/issues/551) When Do Larger Batches Help Scale LLM Reinforcement Learning? | Ziniu Li, Jinbo Wang, Guanhua Huang, et al. / Tencent Hunyuan | arXiv（プレプリント） | 不明 | LLM強化学習におけるバッチサイズ |
 | 2026-08 | [#572](https://github.com/Hiroki11x/Papers/issues/572) When Do Larger Batches Help Scale LLM Reinforcement Learning? | Ziniu Li, Jinbo Wang, Guanhua Huang, et al. / Tencent Hunyuan | arXiv（プレプリント） | 不明 | LLM強化学習におけるバッチサイズとスループット |
 | 2026-09 | [#550](https://github.com/Hiroki11x/Papers/issues/550) Momentum in large-batch training: Polyak enlarges the critical batch size, Nesterov improves data efficiency | Jia-Nan Wang, Zixun Huang, Kairui Li, Lei Wu / Peking Univ. | arXiv（プレプリント） | 不明 | モメンタムとクリティカルバッチサイズ |
+| 2026-10 | [#581](https://github.com/Hiroki11x/Papers/issues/581) Why Does Adaptive Batching Help LLM Pretraining? A Perspective from Unbounded Variance | Arda Fazla, Antesh Upadhyay, Ege C. Kaya, et al. / Purdue University | arXiv（プレプリント） | 不明 | 有界でない分散の下での適応的バッチングの理論 |
+| 2026-10 | [#586](https://github.com/Hiroki11x/Papers/issues/586) A Solvable Model of Adaptive Learning Rate Rescaling: Acceleration, Stability & Scaling | Itay Lavie, Clarissa Lauditi, Cengiz Pehlevan / Harvard University | arXiv（プレプリント） | 不明 | 適応的学習率リスケーリング（正規化SGD）の可解モデル |
+| 2026-10 | [#592](https://github.com/Hiroki11x/Papers/issues/592) The Best Optimizer Depends on Batch Size | Xingyu Dang, Kaiyue Wen, Sadhika Malladi / Princeton / Stanford / UC San Diego | arXiv（プレプリント） | 不明 | 最適なオプティマイザはバッチサイズで変わる |
 | 不明（issue登録 2022-10） | [#313](https://github.com/Hiroki11x/Papers/issues/313) A New Perspective for Understanding Generalization Gap of Deep Neural Networks Trained with Large Batch Sizes | Oyebade K. Oyedotun, Konstantinos Papadopoulos, Djamila Aouada / University of Luxembourg (SnT) | Applied Intelligence | Semantic Scholar確認 | 大バッチ学習の汎化ギャップ |
 | 不明（issue登録 2026-08） | [#548](https://github.com/Hiroki11x/Papers/issues/548) On the Design of Qwen3.8-Next Architecture: Evaluation, Efficiency, and Training Stability | Qwen Team / Alibaba (Qwen) | Tech Report (Qwen) | issue記載 | LLM事前学習でのbatch ramp-up不使用 |
 | 不明（issue登録 2026-09） | [#567](https://github.com/Hiroki11x/Papers/issues/567) MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement | Xiaomi LLM-Core Team / Xiaomi | Tech Report (Xiaomi) | issue記載 | AdamW→Muown切替と大バッチRL |
@@ -465,24 +482,24 @@ timeline
 
 ## 6. 採択先（ベニュー）別の集計
 
-同一論文の重複 issue はそれぞれ1件として数えている（例: [#16](https://github.com/Hiroki11x/Papers/issues/16) と [#403](https://github.com/Hiroki11x/Papers/issues/403) はどちらも JMLR）。[#81](https://github.com/Hiroki11x/Papers/issues/81)（AAAI 2021）と [#404](https://github.com/Hiroki11x/Papers/issues/404)（arXiv 版）は同一内容だが、登録された版に従って別系列に数えた。
+同一論文の重複 issue はそれぞれ1件として数えている（例: [#16](https://github.com/Hiroki11x/Papers/issues/16) と [#403](https://github.com/Hiroki11x/Papers/issues/403) はどちらも JMLR、[#402](https://github.com/Hiroki11x/Papers/issues/402) と [#578](https://github.com/Hiroki11x/Papers/issues/578) はどちらも CPAL 2025）。[#81](https://github.com/Hiroki11x/Papers/issues/81)（AAAI 2021）と [#404](https://github.com/Hiroki11x/Papers/issues/404)（arXiv 版）は同一内容だが、登録された版に従って別系列に数えた。
 
 | ベニュー系列 | 件数 | 内訳（ベニュー） | 該当issue |
 |---|---|---|---|
-| ICLR | 6 | ICLR 2018 ×1、ICLR 2019 ×1、ICLR 2020 ×1、ICLR 2022 ×2、ICLR 2025 ×1 | [#21](https://github.com/Hiroki11x/Papers/issues/21), [#9](https://github.com/Hiroki11x/Papers/issues/9), [#124](https://github.com/Hiroki11x/Papers/issues/124), [#157](https://github.com/Hiroki11x/Papers/issues/157), [#207](https://github.com/Hiroki11x/Papers/issues/207), [#390](https://github.com/Hiroki11x/Papers/issues/390) |
+| ICLR | 7 | ICLR 2018 ×1、ICLR 2019 ×1、ICLR 2020 ×1、ICLR 2022 ×2、ICLR 2025 ×1、ICLR 2026 ×1 | [#21](https://github.com/Hiroki11x/Papers/issues/21), [#9](https://github.com/Hiroki11x/Papers/issues/9), [#124](https://github.com/Hiroki11x/Papers/issues/124), [#157](https://github.com/Hiroki11x/Papers/issues/157), [#207](https://github.com/Hiroki11x/Papers/issues/207), [#390](https://github.com/Hiroki11x/Papers/issues/390), [#574](https://github.com/Hiroki11x/Papers/issues/574) |
 | NeurIPS | 10 | NeurIPS 2019 ×1、NeurIPS 2022 ×2、NeurIPS 2024 ×2、NeurIPS 2025 ×5 | [#10](https://github.com/Hiroki11x/Papers/issues/10), [#326](https://github.com/Hiroki11x/Papers/issues/326), [#322](https://github.com/Hiroki11x/Papers/issues/322), [#389](https://github.com/Hiroki11x/Papers/issues/389), [#378](https://github.com/Hiroki11x/Papers/issues/378), [#391](https://github.com/Hiroki11x/Papers/issues/391), [#381](https://github.com/Hiroki11x/Papers/issues/381), [#464](https://github.com/Hiroki11x/Papers/issues/464), [#449](https://github.com/Hiroki11x/Papers/issues/449), [#461](https://github.com/Hiroki11x/Papers/issues/461) |
 | ICML | 5 | ICML 2018 ×1、ICML 2020 ×4 | [#3](https://github.com/Hiroki11x/Papers/issues/3), [#125](https://github.com/Hiroki11x/Papers/issues/125), [#34](https://github.com/Hiroki11x/Papers/issues/34), [#36](https://github.com/Hiroki11x/Papers/issues/36), [#42](https://github.com/Hiroki11x/Papers/issues/42) |
 | AISTATS | 2 | AISTATS 2018 ×1、AISTATS 2020 ×1 | [#13](https://github.com/Hiroki11x/Papers/issues/13), [#2](https://github.com/Hiroki11x/Papers/issues/2) |
 | AAAI | 2 | AAAI 2021 ×1、AAAI 2026 ×1 | [#81](https://github.com/Hiroki11x/Papers/issues/81), [#401](https://github.com/Hiroki11x/Papers/issues/401) |
 | JMLR | 3 | JMLR ×3 | [#16](https://github.com/Hiroki11x/Papers/issues/16), [#403](https://github.com/Hiroki11x/Papers/issues/403), [#44](https://github.com/Hiroki11x/Papers/issues/44) |
 | その他ジャーナル（IEEE Access / Applied Intelligence / Neural Networks / SIAM） | 4 | IEEE Access ×1、Applied Intelligence ×1、Neural Networks (Elsevier) ×1、SIAM Journal on Mathematics of Data Science ×1 | [#37](https://github.com/Hiroki11x/Papers/issues/37), [#313](https://github.com/Hiroki11x/Papers/issues/313), [#346](https://github.com/Hiroki11x/Papers/issues/346), [#392](https://github.com/Hiroki11x/Papers/issues/392) |
-| その他会議（CPAL） | 1 | CPAL 2025 ×1 | [#402](https://github.com/Hiroki11x/Papers/issues/402) |
+| その他会議（CPAL） | 2 | CPAL 2025 ×2 | [#402](https://github.com/Hiroki11x/Papers/issues/402), [#578](https://github.com/Hiroki11x/Papers/issues/578) |
 | ワークショップ（NeurIPS/ICML併設） | 2 | ICML 2021 Workshop (AutoML) ×1、NeurIPS 2020 Workshop (OPT) ×1 | [#20](https://github.com/Hiroki11x/Papers/issues/20), [#134](https://github.com/Hiroki11x/Papers/issues/134) |
 | 技術報告（企業テックレポート） | 3 | Tech Report (Microsoft AI) ×1、Tech Report (Qwen) ×1、Tech Report (Xiaomi) ×1 | [#562](https://github.com/Hiroki11x/Papers/issues/562), [#548](https://github.com/Hiroki11x/Papers/issues/548), [#567](https://github.com/Hiroki11x/Papers/issues/567) |
-| arXiv（プレプリント） | 23 | arXiv（プレプリント） ×23 | [#8](https://github.com/Hiroki11x/Papers/issues/8), [#173](https://github.com/Hiroki11x/Papers/issues/173), [#404](https://github.com/Hiroki11x/Papers/issues/404), [#41](https://github.com/Hiroki11x/Papers/issues/41), [#169](https://github.com/Hiroki11x/Papers/issues/169), [#372](https://github.com/Hiroki11x/Papers/issues/372), [#382](https://github.com/Hiroki11x/Papers/issues/382), [#399](https://github.com/Hiroki11x/Papers/issues/399), [#414](https://github.com/Hiroki11x/Papers/issues/414), [#419](https://github.com/Hiroki11x/Papers/issues/419), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#478](https://github.com/Hiroki11x/Papers/issues/478), [#500](https://github.com/Hiroki11x/Papers/issues/500), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#506](https://github.com/Hiroki11x/Papers/issues/506), [#514](https://github.com/Hiroki11x/Papers/issues/514), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#551](https://github.com/Hiroki11x/Papers/issues/551), [#572](https://github.com/Hiroki11x/Papers/issues/572), [#550](https://github.com/Hiroki11x/Papers/issues/550) |
-| **合計** | **61** | | |
+| arXiv（プレプリント） | 26 | arXiv（プレプリント） ×26 | [#8](https://github.com/Hiroki11x/Papers/issues/8), [#173](https://github.com/Hiroki11x/Papers/issues/173), [#404](https://github.com/Hiroki11x/Papers/issues/404), [#41](https://github.com/Hiroki11x/Papers/issues/41), [#169](https://github.com/Hiroki11x/Papers/issues/169), [#372](https://github.com/Hiroki11x/Papers/issues/372), [#382](https://github.com/Hiroki11x/Papers/issues/382), [#399](https://github.com/Hiroki11x/Papers/issues/399), [#414](https://github.com/Hiroki11x/Papers/issues/414), [#419](https://github.com/Hiroki11x/Papers/issues/419), [#432](https://github.com/Hiroki11x/Papers/issues/432), [#433](https://github.com/Hiroki11x/Papers/issues/433), [#435](https://github.com/Hiroki11x/Papers/issues/435), [#456](https://github.com/Hiroki11x/Papers/issues/456), [#478](https://github.com/Hiroki11x/Papers/issues/478), [#500](https://github.com/Hiroki11x/Papers/issues/500), [#505](https://github.com/Hiroki11x/Papers/issues/505), [#506](https://github.com/Hiroki11x/Papers/issues/506), [#514](https://github.com/Hiroki11x/Papers/issues/514), [#553](https://github.com/Hiroki11x/Papers/issues/553), [#551](https://github.com/Hiroki11x/Papers/issues/551), [#572](https://github.com/Hiroki11x/Papers/issues/572), [#550](https://github.com/Hiroki11x/Papers/issues/550), [#581](https://github.com/Hiroki11x/Papers/issues/581), [#586](https://github.com/Hiroki11x/Papers/issues/586), [#592](https://github.com/Hiroki11x/Papers/issues/592) |
+| **合計** | **66** | | |
 
-採択先の根拠の内訳: issue記載 11件、arXivコメント 19件、Web確認 3件、Semantic Scholar確認 5件、不明 23件。
+採択先の根拠の内訳: issue記載 11件、arXivコメント 21件、Web確認 3件、Semantic Scholar確認 5件、不明 26件。
 
 ---
 
@@ -1023,6 +1040,7 @@ timeline
 - **採択先**: CPAL 2025（根拠: arXivコメント）
 - **著者/組織**: Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al. (Han Liu, Mladen Kolar)（Northwestern University / UChicago）
 - **サブトピック**: ノルムテストに基づく適応的バッチサイズスケジュール ／ 本稿の分類: F. 適応的バッチサイズ・バッチランプ・スケジュール
+- **重複**: #578 と同一論文。
 
 **要約**: LLM事前学習向けに、GNS推定ではなくノルムテスト（バッチ内勾配分散がバッチ勾配ノルムのη²倍以下か）に基づいて逐次バッチサイズを増やす適応スケジュールを提案。DDP/FSDPで分散推定を行うDDP-Norm・FSDP-Normを実装し、Adamに対する収束保証も与えた。
 
@@ -1031,6 +1049,24 @@ timeline
 - MicroLlama-300M〜OpenLlama-3Bで固定バッチ（4096/8192）より低い検証損失
 - ヒューリスティックなバッチウォームアップと同等以上の性能を自動で達成
 - 初期は小バッチ・後半は大バッチへ自動移行し、損失スパイクを抑制
+
+### [#578] Adaptive Batch Size Schedules for Distributed Training of Language Models with Data and Model Parallelism
+
+- **issue**: [#578](https://github.com/Hiroki11x/Papers/issues/578)（登録 2026-10-05）
+- **公開**: 2024-12（[arXiv:2412.21124](https://arxiv.org/abs/2412.21124)）
+- **採択先**: CPAL 2025（根拠: arXivコメント）
+- **著者/組織**: Tim Tsz-Kit Lau, Weijian Li, Chenwei Xu, et al.（Northwestern University / UChicago）
+- **サブトピック**: 2D並列対応の適応的バッチサイズ（FSDP-NORM） ／ 本稿の分類: F. 適応的バッチサイズ・バッチランプ・スケジュール
+- **重複**: #402 と同一論文。
+
+**要約**: #402と同一論文。ノルムテスト（全勾配のノルムに対するバッチ勾配の分散の比で近似の精度を判定）を拡張し、閾値条件を満たすように次ステップのバッチサイズを自動で計算・変更する。各ワーカー上のミニバッチ勾配から全体の勾配分散を効率よく推定するDDP-NORM / FSDP-NORMをPyTorch FSDP上に実装し、パラメータがシャードされた2D並列環境でも低オーバーヘッドで動作させた。
+
+**主な知見**:
+
+- ノルムテストで次ステップのバッチサイズを自動決定
+- FSDPのシャード環境でも勾配分散を低コストに推定
+
+> **メモ**: Muonは使っていない。自分の以前の研究のシステム寄りの部分（FSDP向けのRS hook）に近い内容を詳しく書いたもの、という位置付け。
 
 ### [#392] Exploring Variance Reduction in Importance Sampling for Efficient DNN Training
 
@@ -1211,6 +1247,24 @@ timeline
 - 定数LRでη/Bに依存するノイズ項から線形スケーリング則を導出
 - スケーリング効率はWSD > 指数減衰 > 定数
 - FSL最適化スケジュールは経験的に良いWSDに類似
+
+### [#574] Scaling with Collapse: Efficient and Predictable Training of LLM Families
+
+- **issue**: [#574](https://github.com/Hiroki11x/Papers/issues/574)（登録 2026-10-01）
+- **公開**: 2025-09（[arXiv:2509.25087](https://arxiv.org/abs/2509.25087)）
+- **採択先**: ICLR 2026（根拠: arXivコメント）
+- **著者/組織**: Shane Bergsma, Bin Claire Zhang, Nolan Dey, et al.（Cerebras）
+- **サブトピック**: TPP固定でのAdamWタイムスケール則と損失曲線のcollapse ／ 本稿の分類: C. データ並列の実証とCBSのスケーリング則
+
+**要約**: TPP（1パラメータあたりのトークン数）を固定すると最適なAdamWタイムスケールτはモデルサイズによらず一定になり、損失曲線が1本の普遍曲線にcollapseすることを示した。小規模モデルで選んだτを大規模モデルにzero-shotで転送でき、学習の10〜30%時点で参照曲線に重ねて最終損失を予測し、スイープを早期打ち切りできる。
+
+**主な知見**:
+
+- 最適τはTPPのみに依存しモデルサイズに依らない
+- 損失曲線のcollapseを使い学習10〜30%で最終損失を予測
+- τを制御すれば曲線の順位が途中で入れ替わらない
+
+> **メモ**: 「すごい、何で知らなかったんだろう」とコメント。ノートの例では、100M級でTPPを固定（例: TPP=234）してτをスイープし、3.9B以上へそのまま適用する運用が説明されている。
 
 ### [#435] Optimal Scaling Needs Optimal Norm
 
@@ -1445,6 +1499,55 @@ timeline
 
 > **メモ**: 小さいtoy設定での話である点に注意。
 
+### [#581] Why Does Adaptive Batching Help LLM Pretraining? A Perspective from Unbounded Variance
+
+- **issue**: [#581](https://github.com/Hiroki11x/Papers/issues/581)（登録 2026-10-06）
+- **公開**: 2026-10（[arXiv:2610.02355](https://arxiv.org/abs/2610.02355)）
+- **採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Arda Fazla, Antesh Upadhyay, Ege C. Kaya, et al.（Purdue University）
+- **サブトピック**: 有界でない分散の下での適応的バッチングの理論 ／ 本稿の分類: F. 適応的バッチサイズ・バッチランプ・スケジュール
+
+**要約**: 勾配ノイズの分散が有界でない状況を仮定すると、適応的にバッチサイズを増やすことがLLM事前学習で有効である理由を説明できることを示した。理論はSGD、実験はAdamで行う。
+
+**主な知見**:
+
+- 有界でない分散の仮定で適応的バッチングの利点を説明
+- 理論はSGD、実験はAdam
+
+> **メモ**: 経験則が多く、特に使えるものはないかもしれない、とコメント。
+
+### [#586] A Solvable Model of Adaptive Learning Rate Rescaling: Acceleration, Stability & Scaling
+
+- **issue**: [#586](https://github.com/Hiroki11x/Papers/issues/586)（登録 2026-10-06）
+- **公開**: 2026-10（[arXiv:2610.06701](https://arxiv.org/abs/2610.06701)）
+- **採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Itay Lavie, Clarissa Lauditi, Cengiz Pehlevan（Harvard University）
+- **サブトピック**: 適応的学習率リスケーリング（正規化SGD）の可解モデル ／ 本稿の分類: D. 学習率–バッチサイズのスケーリング則とSDE/理論
+
+**要約**: 正規化SGD（norm-SGD）を理論の対象とする。勾配正規化は勾配の減衰に応じて実効学習率を自動的に引き上げ初期収束を加速するが、実効学習率の上昇は最終的に安定性限界（Edge of Stability等）に達して加速が崩壊する。可解モデルでこれを解析し、モデル幅やバッチサイズに対する計算最適条件を導いた。
+
+**主な知見**:
+
+- norm-SGDは実効学習率を自動的に上げ初期を加速
+- 安定性限界で加速が崩壊
+- 臨界バッチサイズを境にEoSSとEoSが切り替わる
+
+### [#592] The Best Optimizer Depends on Batch Size
+
+- **issue**: [#592](https://github.com/Hiroki11x/Papers/issues/592)（登録 2026-10-08）
+- **公開**: 2026-10（[arXiv:2610.08975](https://arxiv.org/abs/2610.08975)）
+- **採択先**: arXiv（プレプリント）（根拠: 不明）
+- **著者/組織**: Xingyu Dang, Kaiyue Wen, Sadhika Malladi（Princeton / Stanford / UC San Diego）
+- **サブトピック**: 最適なオプティマイザはバッチサイズで変わる ／ 本稿の分類: E. オプティマイザ（モメンタム・前処理・二次法）とCBS
+
+**要約**: 題名のとおり、最良のオプティマイザはバッチサイズによって変わると主張する研究。適応的バッチサイズは扱っていない。ノートは題名・図の転載と短いメモのみで、具体的な順位や数値は記録されていない。
+
+**主な知見**:
+
+- オプティマイザの優劣はバッチサイズに依存
+
+> **メモ**: 「Adaptive BS とかはやってない」とコメント。
+
 ### [#313] A New Perspective for Understanding Generalization Gap of Deep Neural Networks Trained with Large Batch Sizes
 
 - **issue**: [#313](https://github.com/Hiroki11x/Papers/issues/313)（登録 2022-10-27）
@@ -1503,7 +1606,7 @@ timeline
 2. **CBS は学習の進行（損失低下）とともに増える。** McCandlish（[#8](https://github.com/Hiroki11x/Papers/issues/8)）、Kaplan（[#173](https://github.com/Hiroki11x/Papers/issues/173)）、Surge（[#389](https://github.com/Hiroki11x/Papers/issues/389)）が一致している（ARO [#505](https://github.com/Hiroki11x/Papers/issues/505) のノート要約は逆に「GNS は後半に下がる」としており、題名との対応にも疑義があるため根拠に含めない）。これがバッチランプ／適応的バッチ（[#402](https://github.com/Hiroki11x/Papers/issues/402)、[#414](https://github.com/Hiroki11x/Papers/issues/414)、[#500](https://github.com/Hiroki11x/Papers/issues/500)）の根拠になっている。
 3. **LLM 事前学習では、CBS/最適バッチは主にデータ量 $D$ でスケールし、モデルサイズ $N$ にはほぼ依存しない。** [#390](https://github.com/Hiroki11x/Papers/issues/390)、[#391](https://github.com/Hiroki11x/Papers/issues/391)、[#382](https://github.com/Hiroki11x/Papers/issues/382)、[#435](https://github.com/Hiroki11x/Papers/issues/435) が独立に支持し、LoRA 微調整（[#506](https://github.com/Hiroki11x/Papers/issues/506)）でも同じ傾向が出ている。指数は Power Lines で $B_\text{opt}\propto D^{0.383}$・$B_\text{crit}\propto D_\text{min}^{0.462}$、Scion で $B^*\propto D^{0.45}$ で、どちらも 0.4〜0.5 付近である。
 4. **学習率の単純な線形則・平方根則は「小バッチ側の近似」にすぎない。** Shallue（[#403](https://github.com/Hiroki11x/Papers/issues/403)）の「一般には成立しない」から、Surge（[#389](https://github.com/Hiroki11x/Papers/issues/389)）の「$B_\text{noise}$ 以降は最適LRが下がる」、[#419](https://github.com/Hiroki11x/Papers/issues/419) の「大バッチでは $\sqrt{B}$ 則の普遍曲線が崩れる」、[#506](https://github.com/Hiroki11x/Papers/issues/506) の「増加後に減少」までが一貫している。**バッチを変えたら LR を再チューニングする**ことが最も確実な処方で、[#572](https://github.com/Hiroki11x/Papers/issues/572) の「Align, then Accelerate」もこれに当たる。
-5. **CBS はオプティマイザで動く。** 前処理（[#10](https://github.com/Hiroki11x/Papers/issues/10)）、モメンタム（[#372](https://github.com/Hiroki11x/Papers/issues/372)、[#403](https://github.com/Hiroki11x/Papers/issues/403)、[#550](https://github.com/Hiroki11x/Papers/issues/550)）、Gauss-Newton（[#456](https://github.com/Hiroki11x/Papers/issues/456)）はいずれも CBS を広げる（同じ [#456](https://github.com/Hiroki11x/Papers/issues/456) で Muon は AdamW と同程度に頭打ちで、行列系オプティマイザ一般が CBS を広げるとは言えない）。したがって「オプティマイザ A は B より速い」という主張はバッチ領域込みでしか意味を持たない（[#432](https://github.com/Hiroki11x/Papers/issues/432) vs [#433](https://github.com/Hiroki11x/Papers/issues/433)、[#553](https://github.com/Hiroki11x/Papers/issues/553)）。
+5. **CBS はオプティマイザで動く。** 前処理（[#10](https://github.com/Hiroki11x/Papers/issues/10)）、モメンタム（[#372](https://github.com/Hiroki11x/Papers/issues/372)、[#403](https://github.com/Hiroki11x/Papers/issues/403)、[#550](https://github.com/Hiroki11x/Papers/issues/550)）、Gauss-Newton（[#456](https://github.com/Hiroki11x/Papers/issues/456)）はいずれも CBS を広げる（同じ [#456](https://github.com/Hiroki11x/Papers/issues/456) で Muon は AdamW と同程度に頭打ちで、行列系オプティマイザ一般が CBS を広げるとは言えない）。したがって「オプティマイザ A は B より速い」という主張はバッチ領域込みでしか意味を持たない（[#432](https://github.com/Hiroki11x/Papers/issues/432) vs [#433](https://github.com/Hiroki11x/Papers/issues/433)、[#553](https://github.com/Hiroki11x/Papers/issues/553)。[#592](https://github.com/Hiroki11x/Papers/issues/592) はこれを題名として主張しているが、ノートには詳細がない）。
 6. **ハイパーパラメータのチューニング不足が多くの「発見」を生んできた。** 大バッチの汎化劣化（[#403](https://github.com/Hiroki11x/Papers/issues/403)）、小バッチの不安定性（[#381](https://github.com/Hiroki11x/Papers/issues/381) による Xiao (2024) への反論）、新オプティマイザの2倍速（[#432](https://github.com/Hiroki11x/Papers/issues/432)）、LoRA 派生手法の優位（[#506](https://github.com/Hiroki11x/Papers/issues/506)）のいずれについても、「公平にチューニングすると消える／縮む」という報告がある。
 
 ### 8.2 対立する主張・未整理の矛盾
@@ -1516,8 +1619,8 @@ timeline
 | **大バッチの汎化** | チューニングすれば劣化しない（[#403](https://github.com/Hiroki11x/Papers/issues/403)）、確率性は不要（[#157](https://github.com/Hiroki11x/Papers/issues/157)） | 厳密チューニング後も小〜中バッチが優位（[#42](https://github.com/Hiroki11x/Papers/issues/42)）、LRスケーリングでは解消しない（[#313](https://github.com/Hiroki11x/Papers/issues/313)）、大バッチ Adam は理論的に汎化失敗（[#449](https://github.com/Hiroki11x/Papers/issues/449)） | 予算の定義（step 予算 vs epoch 予算、[#403](https://github.com/Hiroki11x/Papers/issues/403)）と明示的正則化の有無（[#157](https://github.com/Hiroki11x/Papers/issues/157)）で結論が変わる。なお LLM 事前学習（1エポック未満）では汎化ギャップより CBS（計算効率）が主題になっている |
 | **Adam の LR–バッチ関係** | 平方根則（[#44](https://github.com/Hiroki11x/Papers/issues/44)、[#572](https://github.com/Hiroki11x/Papers/issues/572)）、Scion で $B^{0.62}$（[#435](https://github.com/Hiroki11x/Papers/issues/435)） | サージ（$B_\text{noise}$ 以降減少）（[#389](https://github.com/Hiroki11x/Papers/issues/389)、[#506](https://github.com/Hiroki11x/Papers/issues/506)） | 平方根則は $B<B_\text{noise}$ の近似。$\sqrt{B}$ 則の根拠が「分散支配」ではなく「平均二乗支配」である可能性（[#419](https://github.com/Hiroki11x/Papers/issues/419)）も未整理 |
 | **小バッチ vs 大バッチの効率** | 小バッチ（最小1）が FLOP あたり同等以上、勾配蓄積は無駄（[#381](https://github.com/Hiroki11x/Papers/issues/381)） | 大バッチ＋前処理/2次法で反復数削減（[#42](https://github.com/Hiroki11x/Papers/issues/42) の本人コメント、[#456](https://github.com/Hiroki11x/Papers/issues/456)、[#401](https://github.com/Hiroki11x/Papers/issues/401)） | 前者は「CBS 以下で FLOP 効率を最大化」、後者は「CBS 自体を拡大して壁時計時間を削る」。目的関数（FLOP vs 時間 vs エネルギー [#399](https://github.com/Hiroki11x/Papers/issues/399)）の違いである。[#391](https://github.com/Hiroki11x/Papers/issues/391) の時間/計算パレートが両者を統一する枠組みになる |
-| **バッチランプの要否** | 理論的に最適（[#500](https://github.com/Hiroki11x/Papers/issues/500)）、GNS の時間変化が支持（[#8](https://github.com/Hiroki11x/Papers/issues/8)。[#505](https://github.com/Hiroki11x/Papers/issues/505) のノート要約も支持するとされるが未確認）、適応手法が固定バッチより良い（[#402](https://github.com/Hiroki11x/Papers/issues/402)、[#378](https://github.com/Hiroki11x/Papers/issues/378)） | フロンティアモデルは使わない（Qwen・Kimi K2 [#548](https://github.com/Hiroki11x/Papers/issues/548)、MAI 固定134M [#562](https://github.com/Hiroki11x/Papers/issues/562)） | 本人仮説は「Muon 登場以降の特徴かもしれない」「ramp-up 時の実験が noisy」。Muon 系が CBS を広げる（[#567](https://github.com/Hiroki11x/Papers/issues/567) の導入理由）ならランプの利得が縮む、という仮説は検証に値する |
-| **オプティマイザ比較** | 行列系（Muon/SOAP/Kron）が一貫して優位（[#432](https://github.com/Hiroki11x/Papers/issues/432)） | AdEMAMix/MARS が最良（[#433](https://github.com/Hiroki11x/Papers/issues/433)） | [#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による説明: 主にバッチサイズ差（0.4M+ vs 0.02〜0.1M トークン）と LR スイープ範囲の差。[#553](https://github.com/Hiroki11x/Papers/issues/553) の「SignSVD の前処理効果は大バッチで出る」がこれを理論的に支持する。ただし [#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引（小バッチで D-Muon/SOAP、大バッチで Signum・MARS・Lion が伸びる）は逆向きの傾向も示す |
+| **バッチランプの要否** | 理論的に最適（[#500](https://github.com/Hiroki11x/Papers/issues/500)）、有界でない勾配分散の下で適応バッチが有効（[#581](https://github.com/Hiroki11x/Papers/issues/581)。本人評は「経験則が多い」）、GNS の時間変化が支持（[#8](https://github.com/Hiroki11x/Papers/issues/8)。[#505](https://github.com/Hiroki11x/Papers/issues/505) のノート要約も支持するとされるが未確認）、適応手法が固定バッチより良い（[#402](https://github.com/Hiroki11x/Papers/issues/402)/[#578](https://github.com/Hiroki11x/Papers/issues/578)、[#378](https://github.com/Hiroki11x/Papers/issues/378)） | フロンティアモデルは使わない（Qwen・Kimi K2 [#548](https://github.com/Hiroki11x/Papers/issues/548)、MAI 固定134M [#562](https://github.com/Hiroki11x/Papers/issues/562)） | 本人仮説は「Muon 登場以降の特徴かもしれない」「ramp-up 時の実験が noisy」。Muon 系が CBS を広げる（[#567](https://github.com/Hiroki11x/Papers/issues/567) の導入理由）ならランプの利得が縮む、という仮説は検証に値する |
+| **オプティマイザ比較** | 行列系（Muon/SOAP/Kron）が一貫して優位（[#432](https://github.com/Hiroki11x/Papers/issues/432)） | AdEMAMix/MARS が最良（[#433](https://github.com/Hiroki11x/Papers/issues/433)） | [#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による説明: 主にバッチサイズ差（0.4M+ vs 0.02〜0.1M トークン）と LR スイープ範囲の差。[#553](https://github.com/Hiroki11x/Papers/issues/553) の「SignSVD の前処理効果は大バッチで出る」がこれを理論的に支持する。ただし [#433](https://github.com/Hiroki11x/Papers/issues/433) 内のバッチ掃引（小バッチで D-Muon/SOAP、大バッチで Signum・MARS・Lion が伸びる）は逆向きの傾向も示す。[#592](https://github.com/Hiroki11x/Papers/issues/592)（[#432](https://github.com/Hiroki11x/Papers/issues/432) と共著者が重なる）は「最良のオプティマイザはバッチサイズで変わる」と題名で主張するが、どちら向きの傾向を支持するかはノートからは分からない |
 
 ### 8.3 実務上の示唆
 
@@ -1526,7 +1629,7 @@ timeline
 3. **CBS を超えるなら、オプティマイザを変える。** 前処理・モメンタム・2次法は CBS を広げる（[#10](https://github.com/Hiroki11x/Papers/issues/10)、[#550](https://github.com/Hiroki11x/Papers/issues/550)、[#456](https://github.com/Hiroki11x/Papers/issues/456)）。ただし [#456](https://github.com/Hiroki11x/Papers/issues/456) では Muon の CBS は AdamW と同じく約12Mトークンで頭打ちで、CBS を大きく広げたのは完全 Gauss-Newton 法だった。[#553](https://github.com/Hiroki11x/Papers/issues/553) も Muon（SignSVD）の前処理効果が大バッチで現れることを示すにとどまり、CBS 自体の拡大は示していない。MiMo-V2.6（[#567](https://github.com/Hiroki11x/Papers/issues/567)）は「Muon 系は CBS を超える大バッチでもデータ効率を保つ」として超大バッチ RL の前に Muown へ切り替えたが、これは技術報告側の主張であり、上の実験結果とは整合しきっていない。小バッチ側では分散低減型（MARS, AdEMAMix）が相対的に有利になる（[#432](https://github.com/Hiroki11x/Papers/issues/432) の著者による説明）。
 4. **ウォームアップとバッチランプ。** ウォームアップは大バッチ初期の上層勾配分散の小ささへの対処と解釈でき、層別適応LR（CLARS）で不要にできる（[#404](https://github.com/Hiroki11x/Papers/issues/404)）。バッチランプは理論的には後半に増やすのが最適（[#500](https://github.com/Hiroki11x/Papers/issues/500)）で、ノルムテストのような自動ランプはヒューリスティックなランプと同等以上（[#402](https://github.com/Hiroki11x/Papers/issues/402)）。ただしフロンティアの実運用は固定バッチを選んでいる（[#548](https://github.com/Hiroki11x/Papers/issues/548)、[#562](https://github.com/Hiroki11x/Papers/issues/562)）。LR スケジュールは WSD が理論的にも効率的（[#464](https://github.com/Hiroki11x/Papers/issues/464)、[#500](https://github.com/Hiroki11x/Papers/issues/500)）。
 5. **目的関数を明示する。** FLOP 効率（小バッチが有利、[#381](https://github.com/Hiroki11x/Papers/issues/381)）、壁時計時間（CBS 付近〜CBS を広げる手法が有利）、エネルギー（少ないGPUの方が効率的な場面が多い、[#399](https://github.com/Hiroki11x/Papers/issues/399)）、RL の time-to-target（スループット向上率とサンプルペナルティの比較、[#551](https://github.com/Hiroki11x/Papers/issues/551)/[#572](https://github.com/Hiroki11x/Papers/issues/572)）で最適バッチは異なる。[#391](https://github.com/Hiroki11x/Papers/issues/391) の時間/計算パレートのように、トレードオフとして提示するのが望ましい。
-6. **評価の公平性。** 新手法の比較ではバッチサイズと LR を手法ごとに調整する（[#506](https://github.com/Hiroki11x/Papers/issues/506)、[#432](https://github.com/Hiroki11x/Papers/issues/432)）。学習率減衰中に学習曲線が交差するため、中間チェックポイントでの比較は誤判定を生む（[#432](https://github.com/Hiroki11x/Papers/issues/432)）。
+6. **評価の公平性。** 新手法の比較ではバッチサイズと LR を手法ごとに調整する（[#506](https://github.com/Hiroki11x/Papers/issues/506)、[#432](https://github.com/Hiroki11x/Papers/issues/432)）。学習率減衰中に学習曲線が交差するため、中間チェックポイントでの比較は誤判定を生む（[#432](https://github.com/Hiroki11x/Papers/issues/432)）。一方 [#574](https://github.com/Hiroki11x/Papers/issues/574) は、TPP を固定し AdamW タイムスケール $\tau$ を制御していれば曲線の順位が途中で入れ替わらず、学習の10〜30%時点で最終損失を予測してスイープを打ち切れるとしている。両者は「何を揃えれば途中比較が許されるか」という同じ問いへの答えとして読める。
 
 ### 8.4 未解決問題（ノートから浮かぶ研究課題）
 
@@ -1536,6 +1639,8 @@ timeline
 - **大バッチ×2次最適化の汎化。** 本人が [#42](https://github.com/Hiroki11x/Papers/issues/42) で述べた「2次最適化が flat な領域から速く抜け出す性質が汎化を悪化させているか」の検証。FOP（[#401](https://github.com/Hiroki11x/Papers/issues/401)）、ALTO（[#461](https://github.com/Hiroki11x/Papers/issues/461)）、確率的 Adam の理論（[#449](https://github.com/Hiroki11x/Papers/issues/449)）が手がかりになる。
 - **バッチランプを使わない実運用の理由。** Muon 系で CBS が広がるためか、ランプ時の LR/ウォームアップ設計が難しい（noisy）ためか（[#548](https://github.com/Hiroki11x/Papers/issues/548) の本人所感）。[#435](https://github.com/Hiroki11x/Papers/issues/435) でも動的バッチは未検証とメモされている。
 - **勾配分散が学習中に増える現象の意味。** [#41](https://github.com/Hiroki11x/Papers/issues/41) の観察（小LRほど分散大）と、GNS 増大・CBS 増大・学習後半の大バッチ化（[#414](https://github.com/Hiroki11x/Papers/issues/414) の「後半で勾配が揃う」説明）の関係は、直観的な説明が食い違っている。
+- **CBS と安定性レジームの関係。** [#586](https://github.com/Hiroki11x/Papers/issues/586) は正規化SGDの可解モデルで CBS を境に EoSS と EoS が切り替わるとするが、Adam・Muon 系や LLM 規模でも同じ境界として現れるのか、GNS に基づく CBS（[#8](https://github.com/Hiroki11x/Papers/issues/8)）と一致するのかは未検証。
+- **適応バッチの理論と実用の距離。** [#581](https://github.com/Hiroki11x/Papers/issues/581) は理論が SGD、実験が Adam で、本人も実用上の処方は乏しいと評価している。Adam・Muon 系での適応バッチの理論はまだない。
 - **RL・微調整・マルチモーダルでの CBS。** RL では生成スループットというシステム項が入り、事前学習の CBS とは別物になる（[#551](https://github.com/Hiroki11x/Papers/issues/551) の本人メモ）。LoRA（[#506](https://github.com/Hiroki11x/Papers/issues/506)）や拡散モデル（[#514](https://github.com/Hiroki11x/Papers/issues/514)）でも同種のデータ依存則が成り立つかは限られた検証しかない。
 
 ---
@@ -1552,12 +1657,12 @@ timeline
 - [損失地形とシャープネス](../misc/03_loss_landscape_sharpness.md): シャープな極小値と大バッチ汎化の議論（[サブトピック A](#a-大バッチの汎化ギャップとsgdノイズ)）
 - [汎化と暗黙的バイアス](../misc/04_generalization_implicit_bias.md): SGD の暗黙的正則化と汎化
 - [オプティマイザ設計](../misc/07_optimizer_design.md): Adam 系・行列系オプティマイザの設計（[サブトピック E](#e-オプティマイザモメンタム前処理二次法とcbs)）
-- [低精度学習と Muon](./02_low_precision_and_muon.md): Muon 系オプティマイザとバッチサイズ（[#432](https://github.com/Hiroki11x/Papers/issues/432)、[#433](https://github.com/Hiroki11x/Papers/issues/433)、[#553](https://github.com/Hiroki11x/Papers/issues/553)、[#567](https://github.com/Hiroki11x/Papers/issues/567) などは両方の文書に関係する）
+- [低精度学習と Muon](./02_low_precision_and_muon.md): Muon 系オプティマイザとバッチサイズ（[#432](https://github.com/Hiroki11x/Papers/issues/432)、[#433](https://github.com/Hiroki11x/Papers/issues/433)、[#553](https://github.com/Hiroki11x/Papers/issues/553)、[#567](https://github.com/Hiroki11x/Papers/issues/567)、[#592](https://github.com/Hiroki11x/Papers/issues/592) などは両方の文書に関係する）
 - [半同期・分散学習](./03_semi_synchronous_training.md): Local SGD・分散型 SGD（[#9](https://github.com/Hiroki11x/Papers/issues/9)、[#169](https://github.com/Hiroki11x/Papers/issues/169) は両方の文書に関係する）
 
 ### 9.2 関連する個別論文
 
-本稿の対象（CBS カテゴリ）には含まれないが、CBS・大バッチ学習と関連の深い論文（61件）。スケーリング則・LR スケジュール・オプティマイザ・汎化理論などに分類されている。初出順に並べた。
+本稿の対象（CBS カテゴリ）には含まれないが、CBS・大バッチ学習と関連の深い論文（62件）。スケーリング則・LR スケジュール・オプティマイザ・汎化理論などに分類されている。初出順に並べた。
 
 - [#5](https://github.com/Hiroki11x/Papers/issues/5) Optimization Methods for Large-Scale Machine Learning（2016-06、SIAM Review）— 大規模最適化のサーベイ
 - [#14](https://github.com/Hiroki11x/Papers/issues/14) Gradient Descent Can Take Exponential Time to Escape Saddle Points（2017-05、NeurIPS 2017）— 鞍点脱出
@@ -1620,3 +1725,4 @@ timeline
 - [#543](https://github.com/Hiroki11x/Papers/issues/543) Let's Scale Step by Step: Compute-Efficient Hyperparameter Transfer for Large-Scale Mixture-of-Experts（2026-08、COLM 2026）— μP＋Muonによる学習率転送
 - [#556](https://github.com/Hiroki11x/Papers/issues/556) Layers Matter: Why Continual Learning Regularization Should Be Layer-Adaptive（2026-08、arXiv（プレプリント））— 継続学習の層適応正則化
 - [#554](https://github.com/Hiroki11x/Papers/issues/554) Optimizer Memory Schedules for Outscaling the Overtraining Axis（2026-09、arXiv（プレプリント））— 過学習（overtraining）領域でのオプティマイザ比較
+- [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect: How does the Optimizer Shape Data Curriculum?（2026-10、arXiv（プレプリント））— バッチサイズの λ 倍の候補からオプティマイザ状態に基づいてデータを選ぶ（[オプティマイザ設計](../misc/07_optimizer_design.md)）

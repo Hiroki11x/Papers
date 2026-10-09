@@ -699,3 +699,5 @@ ICML・NeurIPS・ICLR の3大会議で計16件と過半を占める。プレプ�
 - [#510](https://github.com/Hiroki11x/Papers/issues/510) Gradient Regularized Natural Gradients — [オプティマイザ設計](./07_optimizer_design.md)
 - [#513](https://github.com/Hiroki11x/Papers/issues/513) Accelerating LLM Pre-Training through Flat-Direction Dynamics Enhancement — [オプティマイザ設計](./07_optimizer_design.md)
 - [#571](https://github.com/Hiroki11x/Papers/issues/571) Towards Understanding Momentum Acceleration in River-Valley Loss Landscape — [SGD のダイナミクスと最適化理論](./06_sgd_dynamics_theory.md)
+- [#576](https://github.com/Hiroki11x/Papers/issues/576) Critical Learning Periods in Deep Neural Networks — [SGD のダイナミクスと最適化理論](./06_sgd_dynamics_theory.md)（FIM が小さくなるタイミングが臨界期の終わりに対応。学習初期のフィッシャーという点で [#71](https://github.com/Hiroki11x/Papers/issues/71) と関係）
+- [#586](https://github.com/Hiroki11x/Papers/issues/586) A Solvable Model of Adaptive Learning Rate Rescaling: Acceleration, Stability & Scaling — [クリティカルバッチサイズ](../practical_optimization/01_critical_batch_size.md)（norm-SGD の可解モデル。実効学習率の上昇が安定性限界で加速を崩壊させ、臨界バッチサイズを境に EoSS と EoS が切り替わる）

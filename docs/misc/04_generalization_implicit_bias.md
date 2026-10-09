@@ -1086,6 +1086,8 @@ SGD の暗黙的バイアスは flat minima 選好や $\mathrm{tr}(H)$ 最小化
 - [#394](https://github.com/Hiroki11x/Papers/issues/394) Large Learning Rates Simultaneously Achieve Robustness to Spurious Correlations and Compressibility — [01_ood_generalization](./01_ood_generalization.md)（大学習率とスプリアス相関への頑健性）
 - [#425](https://github.com/Hiroki11x/Papers/issues/425) Low Rank Gradients and Where to Find Them — [07_optimizer_design](./07_optimizer_design.md)（勾配の低ランク構造の理論）
 - [#463](https://github.com/Hiroki11x/Papers/issues/463) A Unified Stability Analysis of SAM vs SGD: Role of Data Coherence and Emergence of Simplicity Bias — [03_loss_landscape_sharpness](./03_loss_landscape_sharpness.md)（汎化とシャープネス（線形安定性））
+- [#577](https://github.com/Hiroki11x/Papers/issues/577) Overfitting of Spectral Gradient Descent: How Matrix Geometry shapes Generalization and Implicit Bias — [02_low_precision_and_muon](../practical_optimization/02_low_precision_and_muon.md)（スペクトル勾配降下（Muon の理想化）の汎化と暗黙的バイアス。共通ノイズでは有利、独立ノイズでは劣化）
+- [#589](https://github.com/Hiroki11x/Papers/issues/589) Optimizer Geometry Sets the Pace: Spectral Learning Dynamics in Matrix Factorization — [02_low_precision_and_muon](../practical_optimization/02_low_precision_and_muon.md)（深層行列分解でのオプティマイザ幾何と特異モードの学習動態。GD の低ランクバイアスに対し、SignGD/Muon は不要モードを有限時間で消去）
 
 Practical Optimization の文書との関係:
 

@@ -767,6 +767,8 @@ records から Python スクリプトで生成した表（35件。重複2組を�
 - [#487](https://github.com/Hiroki11x/Papers/issues/487) Llasa: Scaling Train-Time and Inference-Time Compute for Llama-based Speech Synthesis — [09 スケーリング則](./09_scaling_laws.md)（音声合成のスケーリング）
 - [#511](https://github.com/Hiroki11x/Papers/issues/511) Learning Rate Matters: Vanilla LoRA May Suffice for LLM Fine-tuning — [08 学習率スケジュール・weight decay](./08_lr_schedule_weight_decay.md)（LoRA 微調整の学習率）
 - [#516](https://github.com/Hiroki11x/Papers/issues/516) PoLAR: Polar-Decomposed Low-Rank Adapter Representation — [07 オプティマイザ設計](./07_optimizer_design.md)（極分解に基づく LoRA）
+- [#582](https://github.com/Hiroki11x/Papers/issues/582) Muon Learns Facts Better: Understanding the Role of Spectral Orthogonalization — [02 低精度学習と Muon](../practical_optimization/02_low_precision_and_muon.md)（事実知識の学習では関係を主語より先に学び、softmax 飽和で幻覚を抑えるフェーズまでが長くなるが、Muon は両者を同じペースで学習させる）
+- [#587](https://github.com/Hiroki11x/Papers/issues/587) OptiSelect: How does the Optimizer Shape Data Curriculum? — [07 オプティマイザ設計](./07_optimizer_design.md)（オプティマイザの前処理行列に基づくオンラインデータ選択。optimizer state とデータの関係という点で [#545](https://github.com/Hiroki11x/Papers/issues/545) と近い）
 
 **Practical Optimization 文書との関係**:
 

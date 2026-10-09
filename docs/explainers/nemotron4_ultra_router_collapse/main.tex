@@ -1,0 +1,542 @@
+% !TEX program = lualatex
+% 技術ノート: Nemotron-4 Ultra の初期 MoE 層におけるルーター崩壊
+% ビルド: latexmk -lualatex main.tex
+\documentclass[a4paper,11pt]{ltjsarticle}
+
+\usepackage{luatexja}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,shapes.geometric}
+\usepackage[most]{tcolorbox}
+\usepackage[margin=24mm]{geometry}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../../../experiments/router_collapse_toy/figures/}}
+
+% ---------- 色 ----------
+\definecolor{cR}{HTML}{D62728}
+\definecolor{cB}{HTML}{1F77B4}
+\definecolor{cG}{HTML}{2CA02C}
+\definecolor{cO}{HTML}{FF7F0E}
+\definecolor{cP}{HTML}{9467BD}
+
+% ---------- 定理環境 ----------
+\theoremstyle{definition}
+\newtheorem{definition}{定義}[section]
+\newtheorem{remark}[definition]{注意}
+\theoremstyle{plain}
+\newtheorem{proposition}[definition]{命題}
+\renewcommand{\proofname}{証明}
+
+% ---------- 囲み ----------
+\newtcolorbox{pointbox}[1][]{enhanced,breakable,colback=blue!3,colframe=blue!50!black,
+  fonttitle=\bfseries,title={#1},left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{intuitionbox}[1][直観]{enhanced,breakable,colback=green!3,colframe=green!40!black,
+  fonttitle=\bfseries,title={#1},left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{cautionbox}[1][注意]{enhanced,breakable,colback=orange!4,colframe=orange!70!black,
+  fonttitle=\bfseries,title={#1},left=2mm,right=2mm,top=1mm,bottom=1mm}
+
+% ---------- 記号 ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\DeclareMathOperator{\TopK}{TopK}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\corr}{corr}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\T}{^{\top}}
+\newcommand{\Ver}{\textsf{\textcolor{cG}{[確認済み]}}}
+\newcommand{\Obs}{\textsf{\textcolor{cB}{[観測報告]}}}
+\newcommand{\Hyp}{\textsf{\textcolor{cO}{[仮説]}}}
+\newcommand{\Toy}{\textsf{\textcolor{cP}{[トイ実験]}}}
+
+\title{Nemotron-4 Ultra の初期 MoE 層におけるルーター崩壊\\[2mm]
+\large 問題設定・仮説・トイモデルによる検証と切り分け計画}
+\author{技術ノート（社内議論用，2026 年 10 月 8 日時点）}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Nemotron-4 Ultra の事前学習で，最初の数個の Mixture-of-Experts（MoE）層において
+(i) 専門家の FC1/FC2 の重み勾配がほぼゼロになる，
+(ii) 専門家ごとのルーター重みベクトルが互いにほぼ同じ向きを向く（コサイン類似度の崩壊），
+という現象が報告されている．
+本ノートは，この分野の背景知識がない読者を想定して MoE とルーティングの仕組みから説明し，
+実装を確認した事実と，観測報告と，仮説とを区別して整理する．
+中心となる仮説は，\emph{ルーター入力のトークン平均方向 $\mu$ が強い層では，
+割当が特徴量と無関係なとき全専門家のルーター勾配が $\pm\mu$ に揃い，
+さらに Ultra のゲート（sigmoid スコアにバイアスを足して選択）がその共通成分に敏感なため，
+ルーティングが実質的にランダムな固定点に落ちる}，というものである．
+この機構が原理的に起こりうることを，MacBook Pro 上で動く小さなトイモデルで再現した．
+トイモデルでは，生のコサイン類似度は健全な場合と崩壊した場合でほぼ同じ値（約 0.75）になり，
+指標として区別できなかった．
+一方，ロジットのうちトークンに依存する成分の割合や，割当とトークン種類の相互情報量は明確に区別した．
+介入としては，ルーター入力の中心化とルーターの Muon 化が崩壊を解消し，
+logit 空間の選択だけでは解消しなかった．
+最後に，実機のチェックポイントで仮説を切り分けるための安価な解析計画を示す．
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section{はじめに：背景知識}
+% =====================================================================
+
+\subsection{言語モデルと残差ストリーム}
+大規模言語モデルは，文章をトークン（単語の断片）の列に分け，各トークンを $d$ 次元のベクトルに埋め込む．
+このベクトルは層を通るたびに少しずつ書き換えられる．各層は入力 $x$ を受け取り，
+変化分 $\Delta(x)$ を足し戻す（$x \leftarrow x + \Delta(x)$）．
+この「足し戻される通り道」を\textbf{残差ストリーム}と呼ぶ．
+浅い層の残差ストリームは，まだ埋め込み（どのトークンか）の情報が支配的で，
+文脈の情報は深い層ほど多く混ざる．
+
+\subsection{Mixture-of-Experts（MoE）}
+MoE 層は，多数の小さな全結合ネットワーク（\textbf{専門家}，expert）を並べ，
+\emph{トークンごとに一部の専門家だけ}を動かす仕組みである（図~\ref{fig:moe}）．
+どの専門家を使うかは\textbf{ルーター}が決める．
+ルーターは行列 $R\in\R^{E\times d}$（$E$ は専門家数）で，その第 $i$ 行 $r_i$ が
+「専門家 $i$ の担当方向」に当たる．トークン $x$ に対するスコア（ロジット）は
+$z_i = r_i\T x$ で，スコアの高い上位 $k$ 個の専門家が選ばれる（top-$k$ 選択）．
+選ばれた専門家の出力は，ゲート重み $p_i$ で重み付けして足される．
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=6mm and 10mm,
+  box/.style={draw,rounded corners,minimum height=7mm,align=center,font=\small},
+  ex/.style={box,fill=cB!10,minimum width=12mm},
+  exon/.style={box,fill=cO!25,minimum width=12mm,very thick},
+  >=Stealth]
+\node[box,fill=gray!10] (x) {トークン $x$};
+\node[box,fill=cG!12,right=of x] (r) {ルーター\\$z=Rx$};
+\node[box,right=of r] (tk) {top-$k$ 選択\\ゲート $p_i$};
+\node[exon,right=14mm of tk,yshift=14mm] (e1) {専門家 1};
+\node[ex,below=2mm of e1] (e2) {専門家 2};
+\node[exon,below=2mm of e2] (e3) {専門家 3};
+\node[ex,below=2mm of e3] (e4) {$\cdots$ $E$};
+\node[box,fill=gray!10,right=14mm of e2,yshift=-5mm] (sum) {$\sum_{i\in T} p_i f_i(x)$};
+\draw[->] (x)--(r); \draw[->] (r)--(tk);
+\draw[->,very thick,cO] (tk.east)--(e1.west);
+\draw[->,very thick,cO] (tk.east)--(e3.west);
+\draw[->,gray!50,dashed] (tk.east)--(e2.west);
+\draw[->,gray!50,dashed] (tk.east)--(e4.west);
+\draw[->,cO,very thick] (e1.east)--(sum.west);
+\draw[->,cO,very thick] (e3.east)--(sum.west);
+\end{tikzpicture}
+\caption{MoE 層の基本形．ルーターがトークンごとに上位 $k$ 個の専門家（橙）を選び，
+その出力をゲート重みで足し合わせる．選ばれなかった専門家（灰）は計算しない．}
+\label{fig:moe}
+\end{figure}
+
+\subsection{負荷分散（load balancing）}
+放っておくと，ルーターは少数の専門家ばかり選ぶようになり，残りの専門家が学習されない．
+これを防ぐ方法は大きく二つある．
+\begin{itemize}[leftmargin=*]
+\item \textbf{補助損失（aux loss）}：偏りに罰則をかける損失を足し，勾配でルーターを均等化する．
+\item \textbf{バイアス法}：専門家ごとのバイアス $b_i$ を選択時のスコアに足し，
+  混んでいる専門家の $b_i$ を下げ，空いている専門家の $b_i$ を上げる．勾配は使わない．
+  DeepSeek-V3 のバイアス更新や，Ultra が使う \textbf{Quantile Balancing（QB）}がこれに当たる．
+  QB はバッチ全体のスコア分布の分位点から，各専門家がちょうど $k/E$ の割合のトークンを受け持つように $b$ を決め直す．
+\end{itemize}
+重要なのは，バイアス法は\emph{選択の偏りだけ}を直し，ルーター重み $R$ を
+「互いに違う向き」にする圧力は一切かけない点である．
+
+\subsection{本ノートで使う主な用語}
+\begin{description}[leftmargin=*,font=\normalfont\bfseries]
+\item[ロジット $z$ とスコア $s$] $z_i=r_i\T x$，$s_i=\sigma(z_i)=1/(1+e^{-z_i})$（sigmoid）．
+\item[コサイン類似度] 二つのベクトルの向きの近さ．$\cos(r_i,r_j)=r_i\T r_j/(\norm{r_i}\norm{r_j})$．1 なら同じ向き．
+\item[MaxVio] 最も混んでいる専門家の負荷 / 平均負荷．1 なら完全に均等（1 を引く流儀もあるので注意）．
+\item[勾配がゼロ] その重みを変えても損失が変わらない状態．学習が止まる．
+\end{description}
+
+% =====================================================================
+\section{Nemotron-4 Ultra の MoE 層}
+% =====================================================================
+Ultra は 164 層のハイブリッドモデルで，そのうち 68 層が MoE 層である．
+以下は \texttt{nemotron4/scripts/ultra/phase1.sh} と Megatron の実装で確認した構成である \Ver．
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+項目 & 値 \\ \midrule
+隠れ次元 $d$ & 10240 \\
+専門家数 $E$ / 選択数 $k$ & 512 / 10 \\
+Latent MoE & $10240\to3072$ に落としてから専門家を通し，$3072\to10240$ に戻す \\
+専門家 & FC1 $3072\to10240$，squared ReLU（tanh クランプ 16），FC2 $10240\to3072$ \\
+Shared expert & 全トークンが通る全幅の MLP（$10240\to10240\to10240$） \\
+ShortcutMoE & ルーターと routed experts は\emph{一つ前の層への入力}を見る \\
+スコア関数 & sigmoid，選択は $s+b$（\textbf{スコア空間のバイアス}），ゲートは $3.16\,s_i/\sum_{j\in T}s_j$ \\
+負荷分散 & global-batch QB（1000 bin，毎ステップ $b$ を置換），aux loss 0 \\
+ルーターの最適化 & Adam（Muon 対象外），lr $2\times10^{-4}$，$\epsilon=10^{-16}$，weight decay 0.25 \\
+実装 & 本番は Transformer Engine の fused router（\texttt{--moe-router-fusion}） \\
+\bottomrule
+\end{tabular}
+\caption{Ultra の MoE 構成（抜粋）．}
+\label{tab:config}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=4mm and 6mm,
+  box/.style={draw,rounded corners,minimum height=6.5mm,align=center,font=\footnotesize},
+  >=Stealth]
+\node[box,fill=gray!10] (xp) {一つ前の層への入力\\（残差ストリーム）};
+\node[box,fill=gray!10,below=12mm of xp] (xc) {直前の層の出力};
+\node[box,fill=cG!12,right=of xp] (n1) {RMSNorm};
+\node[box,fill=cG!20,right=of n1,yshift=6mm] (rt) {ルーター $R$\\$512\times10240$};
+\node[box,right=of rt] (sel) {$\sigma(z)+b$ で top-10\\ゲート $p\propto\sigma(z)$};
+\node[box,fill=cB!10,right=of n1,yshift=-6mm] (dn) {$10240\to3072$};
+\node[box,fill=cB!20,right=22mm of dn] (exp) {専門家 $\times10$\\FC1 $\to\phi\cdot p\to$ FC2};
+\node[box,fill=cB!10,right=of exp] (up) {Norm, $3072\to10240$};
+\node[box,fill=cP!15,below=8mm of exp] (sh) {shared expert\\（全幅）};
+\node[box,fill=gray!10,right=of up,yshift=-8mm] (out) {和 $\to$\\次の層};
+\draw[->] (xp)--(n1); \draw[->] (n1)--(rt); \draw[->] (n1)--(dn);
+\draw[->] (rt)--(sel); \draw[->] (sel)--(exp);
+\draw[->] (dn)--(exp); \draw[->] (exp)--(up); \draw[->] (up)--(out);
+\draw[->] (xc)--(sh); \draw[->] (sh)--(out);
+\end{tikzpicture}}
+\caption{Ultra の MoE 層（ShortcutMoE + latent MoE）．ルーターは全幅（10240 次元）の入力を見る．
+ゲート $p$ は FC1 と FC2 の間で掛かる．shared expert は latent を通らない．}
+\label{fig:ultra}
+\end{figure}
+
+% =====================================================================
+\section{観測された問題}
+% =====================================================================
+
+\subsection{FC1/FC2 の勾配ゼロ \Obs}
+本番 run で，最初の 2 つの MoE 層の専門家の FC1/FC2 の重み勾配がほぼゼロになる．
+学習開始から 4k--8k ステップ程度で現れたと報告されている．
+
+\subsection{ルーター重みのコサイン類似度の崩壊 \Obs}
+社内 Slack の議論（10 月 5--8 日）で，次の観測が共有された．
+\begin{itemize}[leftmargin=*]
+\item 専門家ごとのルーター行 $r_i$ が互いに高いコサイン類似度を持つ．最初の MoE 層で特に強い．
+\item aux loss，QB，4FFN（MoE の前に dense 層を足した構成）のいずれでも起きる．
+\item 本番の QB run では，学習が進むほど類似した専門家が増える．
+\item MaxVio は極端ではない．つまり負荷はそれなりに均等である．
+\item DeepSeek-V3 型バイアス + 系列 aux loss のアブレーションでは，崩壊した層で
+  選ばれた専門家のスコアの合計が全体の約 2\% だった（完全に一様なら $10/512\approx1.95\%$）．バイアスも互いに似ていた．
+\item Nano では MaxVio が暴れないため，同じ調査はまだ行われていない．
+\end{itemize}
+
+\begin{cautionbox}[raw コサイン $\neq$ 機能的な崩壊]
+観測されているのは「ルーター重みの向きが揃っている」ことだけである．
+これは「ルーティング判断が揃っている」ことや「専門家が機能的に冗長である」こととは別の量で，
+まだ測られていない．後のトイ実験（\S\ref{sec:toy}）では，
+健全に専門化したモデルでも raw コサインが 0.74 になった．
+\end{cautionbox}
+
+% =====================================================================
+\section{数理的な定式化}
+% =====================================================================
+
+\subsection{ルーティングと勾配 \Ver}
+トークン $x$ に対し，
+\begin{equation}
+z = Rx,\quad s=\sigma(z),\quad T=\TopK_k(s+b),\quad
+p_i = \alpha\,\frac{s_i}{\sum_{j\in T}s_j}\ (i\in T),\quad \alpha=3.16.
+\end{equation}
+専門家 $i$ の中では $h=W_1u$，$a=\phi(h)$，出力 $W_2(p_i a)$（$u$ は latent 入力，$\phi$ は squared ReLU）．
+上流からの勾配を $g$ とすると
+\begin{equation}
+\nabla W_2 = p_i\,a\,g\T,\qquad
+\nabla W_1 = p_i\,\big(\phi'(h)\odot W_2\T g\big)\,u\T,\qquad
+g_i:=\frac{\partial L}{\partial p_i}=a\T W_2\T g.
+\label{eq:expgrad}
+\end{equation}
+FC1 と FC2 の勾配はどちらも $p_i$ に比例する．また $h\le0$（dead ReLU）なら $a=\phi'=0$ となり，
+$g_i=0$，つまりルーターにもその専門家を改善する信号が届かない．
+
+ルーターへの勾配は，正規化 $p=\alpha s/S$（$S=\sum_{j\in T}s_j$，$q_i=s_i/S$）を通って
+\begin{equation}
+\delta_j := \frac{\partial L}{\partial z_j}
+= s_j(1-s_j)\cdot\frac{\alpha}{S}\Big(g_j-\sum_{i\in T}q_i g_i\Big)\quad(j\in T),
+\qquad \nabla r_j=\sum_t \delta_{t,j}\,x_t .
+\label{eq:routergrad}
+\end{equation}
+選ばれなかった専門家には勾配が流れない．括弧の中は「専門家 $j$ が平均より良いか悪いか」を表す．
+
+\subsection{勾配の分解：なぜランダムな割当で重みが揃うのか \Hyp}
+Slack では「違うトークンを受け取っているのに，なぜ収束するのか」という疑問が出た．
+これは次の分解で説明できる．ルーター入力を $x_t=\mu+\tilde x_t$
+（$\mu$ はトークン平均，$\tilde x_t$ はそこからのずれ，共分散 $\Sigma$）と書く．
+
+\begin{proposition}[ランダム割当での勾配の向き]\label{prop:grad}
+専門家 $j$ に割り当てられた $n$ 個のトークンについて，$\delta_t$ が $\tilde x_t$ と独立で
+平均 $\bar\delta$，分散 $\varsigma^2$ を持つとする（割当が特徴量と無関係な状況）．
+異方性を $\kappa=\norm{\mu}^2/\tr\Sigma$ と置くと，
+\[
+\nabla r_j=\underbrace{\Big(\textstyle\sum_t\delta_t\Big)\mu}_{A}+\underbrace{\textstyle\sum_t\delta_t\tilde x_t}_{B},\qquad
+\frac{\E\norm{A}^2}{\E\norm{A}^2+\E\norm{B}^2}
+=\frac{(n\bar\delta^2+\varsigma^2)\kappa}{(n\bar\delta^2+\varsigma^2)\kappa+\bar\delta^2+\varsigma^2}
+\xrightarrow{n\to\infty}1\quad(\bar\delta\ne0,\ \kappa>0).
+\]
+\end{proposition}
+\begin{proof}
+$\E\norm{A}^2=\E[(\sum\delta_t)^2]\norm{\mu}^2=(n^2\bar\delta^2+n\varsigma^2)\norm{\mu}^2$．
+独立性から $\E\norm{B}^2=\sum_t\E[\delta_t^2]\E\norm{\tilde x_t}^2=n(\bar\delta^2+\varsigma^2)\tr\Sigma$，
+交差項の期待値は 0．両者の比をとればよい．
+\end{proof}
+
+\begin{intuitionbox}
+$A$ はトークン数 $n$ に比例して積み上がるが，$B$ は向きがばらばらなので $\sqrt n$ でしか育たない．
+だから割当がランダムなら，\emph{どの専門家の勾配も $\pm\mu$ の方向を向く}．
+符号は「その専門家が平均より良いか悪いか」（$\bar\delta$）で決まる．
+Philip の「良い専門家は近づき，悪い専門家は遠ざかる」はこの符号のことで，方向自体は全員共通である．
+つまり「ランダムな割当」と「ルーター重みが揃う」は矛盾ではなく，同じ現象の表と裏である．
+割当が特徴量に依存していれば $\delta_t$ と $\tilde x_t$ が相関し，$B$ も $n$ に比例して育つ．
+\end{intuitionbox}
+
+$\mu$ 方向の成分は，どのトークンでもほぼ同じ値をロジットに足すので，
+\textbf{専門家ごとの暗黙のバイアス}として働く．勾配で学習される per-expert バイアスがないため，
+「この専門家を全体的に増やす・減らす」という勾配は $\mu$ 方向を通るしかない．
+
+\subsection{共通シフトは Ultra のゲートでは中立でない \Ver{}/\Hyp}
+softmax なら，全専門家のロジットに同じ定数 $c$ を足しても選択もゲートも変わらない．
+しかし Ultra の選択規則 $\sigma(z_i+c)+b_i$ では，スコア差 $\sigma(z_i+c)-\sigma(z_j+c)$ が
+$\sigma'(z+c)$ に比例して伸び縮みし，バイアス差 $b_j-b_i$ との大小関係が入れ替わる．
+logit 空間の選択 $z_i+c+b_i$ なら不変である．ゲートについても，$c\to+\infty$ で $s\to1$ となり
+$p$ は一様（各 $\alpha/k$）に近づき，同時に $s(1-s)\to0$ で式~\eqref{eq:routergrad} の勾配が消える．
+図~\ref{fig:mech}(b) は，平均 $-3$，標準偏差 1 のロジットに $\pm0.6$ のシフトを足すだけで，
+スコア空間では 5--8 割のトークンの top-10 が変わることを示す．
+
+\subsection{AdamW による増幅 \Hyp}
+AdamW の更新 $w\leftarrow(1-\eta\lambda)w-\eta\,m/\sqrt v$ では，
+勾配の\emph{大きさ}ではなく\emph{符号の持続性}が効く．符号が持続する座標では
+$m/\sqrt v\approx\pm1$ なので平衡値は $|w|\approx1/\lambda$，符号がランダムな座標では
+ランダムウォークの平衡で $|w|\approx\sqrt{\eta/2\lambda}$ になる．
+Ultra の値（$\lambda=0.25$，$\eta=2\times10^{-4}$）では，それぞれ 4 と 0.02 で，
+\textbf{200 倍の差}がつく．$\epsilon=10^{-16}$ なので，どれだけ小さな勾配でも符号さえ揃えば大きな更新になる．
+
+\subsection{崩壊の固定点 \Hyp}
+以上をつなぐと，図~\ref{fig:loop} の自己強化ループになる．
+浅い層では (a) $\mu$ が大きく（埋め込みに近い），(b) トークン ID の処理は shared expert で足りるので
+routed experts の固有の利得が小さい．このため割当が特徴量に依存しにくく，ループに入りやすい．
+バランシングは選択にしか効かないので，aux loss でも QB でも 4FFN でも同じ固定点に入りうる．
+これは「設定によらず崩壊する」という観測と整合する．
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  st/.style={draw,rounded corners,fill=#1,align=center,font=\footnotesize,minimum width=30mm,minimum height=9mm},
+  >=Stealth]
+\def\r{4.1}
+\node[st=cO!15] (a) at (90:\r)  {割当が特徴量と無関係\\（ランダムに近い）};
+\node[st=cR!12] (b) at (18:\r)  {全専門家の勾配が $\pm\mu$ に揃う\\（命題~\ref{prop:grad}）};
+\node[st=cR!12] (c) at (-54:\r) {$\mu$ 成分が AdamW で増幅\\$\Rightarrow$ raw コサイン上昇};
+\node[st=cB!12] (d) at (-126:\r){共通シフト・暗黙バイアス\\$\Rightarrow$ sigmoid 飽和／スコア差縮小};
+\node[st=cB!12] (e) at (162:\r) {選択がバイアス主導\\ゲート一様・勾配消失};
+\draw[->,thick] (a) to[bend left=15] (b);
+\draw[->,thick] (b) to[bend left=15] (c);
+\draw[->,thick] (c) to[bend left=15] (d);
+\draw[->,thick] (d) to[bend left=15] (e);
+\draw[->,thick] (e) to[bend left=15] (a);
+\node[align=center,font=\scriptsize,text=gray!40!black] at (0,0.1) {浅い層で入りやすい：\\$\mu$ が大きい\\shared expert が吸収\\ShortcutMoE で入力が早い};
+\end{tikzpicture}
+\caption{仮説としての崩壊ループ．どの段も単独では異常ではなく，組み合わさると自己強化する．
+FC1/FC2 の勾配ゼロ（式~\eqref{eq:expgrad} で $p_i\approx0$ や dead ReLU）は右下の段の症状として現れうる．}
+\label{fig:loop}
+\end{figure}
+
+\subsection{「2\% 対 1.95\%」の二つの解釈 \Hyp}
+選ばれた 10 個のスコアが平均のわずか 1.024 倍しかないことを意味する．
+(a) スコアが小さい領域（$s\approx e^z$）なら，512 個の正規分布から上位 10 個を選んだときの上振れは約 $2.4\sigma_z$ なので，
+専門家間のロジットの標準偏差は $\sigma_z\approx0.01$ と逆算でき，識別情報が本当に消えている．
+初期値は $0.0089\times\sqrt{10240}\approx0.9$ である．
+(b) $s\approx1$ に飽和しているなら，ロジットに差が残っていてもスコアは一様に見える．
+\emph{sigmoid スコアの平均値を見るだけで両者を区別できる}．
+
+% =====================================================================
+\section{仮説の一覧}
+% =====================================================================
+表~\ref{tab:hyp} に，ここまでの仮説と，それぞれを実機で区別するための観測をまとめる．
+本命は H1 と H1-S の組み合わせだが，同じ症状は他の仮説でも説明できるので，反証条件を先に決めておく．
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright}p{36mm}>{\raggedright}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+& 仮説 & 予測される観測 & 反証する観測 \\ \midrule
+H1 & $\mu$ チャネル（本命） & ルーターの第 1 特異ベクトル $\approx\hat\mu$；ロジットの大半がトークンによらない成分；割当とトークン特徴の相互情報量が小さい & ロジットのトークン依存成分が大きく，割当が特徴量に強く依存する \\
+H1-S & sigmoid 飽和 & $\bar s\approx1$ か $s(1-s)\approx0$；選択 margin が QB の bin 幅未満 & $\bar s$ が中程度で margin が十分大きい \\
+H2 & 中心化入力の低ランク性 & 初期層の中心化入力の有効ランクだけが低い & 初期層の有効ランクが深い層以上なのに崩壊は初期層だけ \\
+H3 & モダリティ方向 & 第 1 特異ベクトル $\approx\mu_{\text{img}}-\mu_{\text{txt}}$ & 両者の cos が低い \\
+H4 & BF16 の勾配丸め & 初期層で $g_j$ の専門家間の相対ばらつき $\lesssim2^{-8}$ & 相対ばらつき $\gg2^{-8}$ \\
+H5 & 専門家の冗長化が先 & 専門家出力の類似が，ルーターの崩壊より先に起きる & 時系列の順序が逆 \\
+H6 & fused router の再構成誤差 & TE 内で $(s+b)-b$；$s$ が小さいほどゲート誤差が大きい & TE のソースに再構成がない \\
+H0 & 無害な共通成分 & raw コサインは高いが，割当は特徴量に依存している & --- \\
+\bottomrule
+\end{tabularx}
+\caption{仮説と，それぞれを区別する観測．H4，H6 は H1 の悪循環を強める増幅器としても働きうる．}
+\label{tab:hyp}
+\end{table}
+
+% =====================================================================
+\section{トイモデルによる検証 \Toy}\label{sec:toy}
+% =====================================================================
+\subsection{目的と設定}
+H1 の機構が原理的に起こりうるか，そしてどの指標が崩壊を見分けられるかを，
+MacBook Pro の CPU で数分で回る小さなモデルで確かめた
+（コード：\texttt{experiments/router\_collapse\_toy/toy.py}）．
+\emph{これは Ultra についての証拠ではなく，機構の可能性と指標の妥当性を示すものである}．
+
+\begin{itemize}[leftmargin=*]
+\item 入力：$x=\mu+m_c+\xi$ を RMSNorm したもの（$d=64$）．$c\in\{1..8\}$ はトークンの種類，
+  $m_c$ は種類ごとの中心，$\xi$ はノイズ．$\norm\mu$ の大小で「浅い層（強い平均）」と「深い層（弱い平均）」を模す．
+\item 目標：$y=Ax+\beta B_cx$．共通部分 $A$ は shared expert（線形）で学べる．種類固有の部分 $B_c$ を学ぶには専門化が必要で，
+  その利得は $\beta=0.03$ と小さく設定した（浅い層で routed experts の固有の利得が小さい状況）．
+\item MoE：専門家 32 個（線形），top-4，sigmoid スコア，選択は $s+b$（スコア空間），ゲートは選ばれた中で正規化．
+  バイアスは DeepSeek-V3 型の符号更新（QB そのものではない）．
+\item 最適化：AdamW（$\epsilon=10^{-16}$，weight decay 0.1），3000 ステップ，バッチ 1024，3 シード．
+\item 比較：弱い平均／強い平均／強い平均 + logit 空間の選択／強い平均 + ルーター入力の中心化
+  （移動平均を引き，学習可能な専門家ごとのバイアスを足す）／強い平均 + ルーターを Muon に．
+\end{itemize}
+
+\subsection{結果}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_mechanism.png}
+\caption{(a) 命題~\ref{prop:grad} の数値確認．割当がランダムなとき，ルーター勾配のうち $\hat\mu$ 方向の割合は，
+異方性 $\kappa>0$ ならトークン数とともに 1 に近づく．
+(b) 全専門家に同じシフト $c$ を足したとき top-10 が変わらないトークンの割合．
+スコア空間の選択（実線）は小さなシフトでも大きく変わり，logit 空間（破線）は不変．}
+\label{fig:mech}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_training.png}
+\caption{トイモデルの学習曲線（3 シードの平均と範囲）．強い平均（橙）では専門化（NMI）が失敗し，
+logit 空間の選択（緑）でも直らない．入力の中心化（赤）と Muon（紫）では専門化が回復する．
+raw コサイン（左上）は弱い平均（青，健全）と強い平均（橙，崩壊）でほぼ同じ．}
+\label{fig:train}
+\end{figure}
+
+\begin{table}[h]
+\centering\footnotesize
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+条件 & raw $|\cos|$ & $|\cos(u_1,\mu)|$ & トークン非依存ロジット割合 & NMI（専門化） & loss \\ \midrule
+弱い平均（健全）           & 0.74 & 0.98 & 0.840 & 0.98 & $1.1\times10^{-4}$ \\
+強い平均                   & 0.78 & 0.86 & 0.999 & \textbf{0.13} & $3.8\times10^{-3}$ \\
+強い平均 + logit 空間       & 0.90 & 0.90 & 0.999 & \textbf{0.10} & $1.5\times10^{-2}$ \\
+強い平均 + 入力の中心化     & 0.25 & 0.05 & 0.000 & 1.00 & $1.0\times10^{-4}$ \\
+強い平均 + Muon            & 0.37 & 0.75 & 0.958 & 1.00 & $1.3\times10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\caption{最終ステップの値（3 シード平均）．NMI は top-1 専門家とトークン種類の正規化相互情報量（1 で完全な専門化）．
+「トークン非依存ロジット割合」はロジット行列のエネルギーのうち，専門家ごとのトークン平均で説明される割合．
+強い平均の条件では，トークン固有の成分を消しても top-4 が変わらないトークンが 35\%（logit 空間では 65\%）あり，選択がバイアスと定数成分で決まっている．}
+\label{tab:toy}
+\end{table}
+
+\subsection{読み取れること}
+\begin{enumerate}[leftmargin=*]
+\item \textbf{機構は再現した}．同じ小さな利得（$\beta=0.03$）でも，平均が弱ければ専門化し（NMI 0.98），
+  強ければ失敗する（NMI 0.13）．浅い層で崩壊しやすいという仮説と整合する．
+\item \textbf{raw コサインも $\mu$ との整列も，崩壊の指標にならない}．健全な条件でも raw $|\cos|=0.74$，
+  $|\cos(u_1,\mu)|=0.98$ だった．区別できたのは，ロジットのトークン依存成分の割合（0.16 対 0.001）と，
+  割当と特徴量の相互情報量（NMI）と，「トークン固有成分を消しても選択が変わらない割合」である．
+\item \textbf{logit 空間の選択だけでは直らなかった}．共通シフトへの不変性は得られるが，
+  $\mu$ チャネルそのものは残り，バイアスの幅が 17 まで広がった．
+\item \textbf{原因側の介入は効いた}．入力の中心化（$\mu$ チャネルを構造的に断つ）と Muon（特異値を揃え，
+  ランク 1 の共通成分が更新を独占しないようにする）はいずれも専門化を回復した．
+\end{enumerate}
+
+\begin{cautionbox}[トイモデルの限界]
+専門家は線形，次元は 64，バランサーは QB ではなく符号更新，平均の強さは手で選んだ．
+MaxVio の値はバイアスの更新率に強く依存するので解釈しない．
+Ultra に当てはまるかは，\S\ref{sec:plan} の解析で確かめる必要がある．
+\end{cautionbox}
+
+% =====================================================================
+\section{実機での切り分け計画}\label{sec:plan}
+% =====================================================================
+学習は回さず，既存のチェックポイントとログで仮説を絞る．
+トイ実験の教訓から，\emph{主指標は raw コサインではなく，ルーティングの特徴量依存性}とする．
+
+\begin{description}[leftmargin=*,font=\normalfont\bfseries]
+\item[段階 0（計算資源ゼロ）] W\&B の既存指標（ルーターロジットの大きさ，バイアス幅，FC 勾配）から，
+  sigmoid スコアの平均値（飽和か一様か）と，各現象の開始ステップを読む．Abhinav のコサイン図を重みから再現する．
+\item[段階 1（CPU，重みだけ）] 崩壊前後の複数チェックポイントで，全 68 層のルーター重み・\texttt{expert\_bias}・Adam の状態を読む．
+  符号付きコサイン，専門家平均で中心化したコサイン，特異値分布，第 1 特異ベクトルの符号パターン，
+  Adam の符号持続性 $|m|/\sqrt v$ を層 $\times$ ステップで追う．
+\item[段階 2（数ノード，forward のみ）] 層 $l$ の入力は $l$ より前の層だけで決まるので，
+  パターンを 4 番目の MoE 層で切ったモデルにチェックポイントを読み込めば，初期層のルーター入力 $X$ を正確に取れる．
+  $\kappa$，中心化入力の有効ランク，ロジットのトークン依存成分の割合，$\bar s$ と $s(1-s)$，選択 margin と QB の bin 幅，
+  反実仮想（トークン固有成分を消す，$\mu$ を除去する，logit 空間で選択する）での選択の一致率，割当とトークン種類・モダリティの相互情報量を計算する．
+  本番のゲートとオフラインで再計算したゲートを比べれば H6 も検査できる．
+\item[段階 3（必要なら）] 1 ステップの forward+backward ダンプで，ルーター勾配の $\hat\mu$ 方向の割合（命題~\ref{prop:grad} の直接検証），
+  $g_j$ の相対ばらつきと $2^{-8}$ の比較（H4），専門家の入れ替えによる損失変化（機能的な冗長性）を測る．
+\end{description}
+
+\begin{pointbox}[最小の決定的な解析]
+1 チェックポイント・1 バッチで，ルーター入力 $X$ と $R$ から $Z=XR\T$ を作り，
+$Z=\bm 1a\T+m\bm 1\T+Z_{cc}$（専門家ごとの定数／トークンごとの定数／二重中心化した残り）に分解する．
+$Z_{cc}$ の割合が小さく，$Z_{cc}$ を消しても選択が変わらない割合が高ければ H1 系．
+逆なら H0（無害）か，崩壊の原因は別の所にある．
+\end{pointbox}
+
+% =====================================================================
+\section{既存の取り組みとの関係}
+% =====================================================================
+リポジトリのブランチを調べた結果（10 月 8 日時点）\Ver：
+\begin{itemize}[leftmargin=*]
+\item \textbf{logit 空間 QB}（Philip Monk，\texttt{pmonk/qb-logit-space} ほか 2 本，未マージ）．
+  Nano の比較で最も混んだ専門家の負荷が平均の 2.29 倍から 1.27 倍に下がり，loss は +0.003\%．
+  ルーターのコサインや専門化は測られていない．トイ実験では logit 空間の選択だけでは専門化は回復しなかった．
+\item \textbf{QB の改修}（Roger Waleffe）：bin 数 8192，EMA 0.8，バイアス幅のガード．
+\item \textbf{ルーター直交性 loss}（Abhinav Khattar）：Nano で MaxVio は下がったが loss は変わらず．
+  H1 の見方では，$\mu$ 経由の暗黙バイアスを消すのでバランシングは楽になるが，トークン固有の情報は増えないので loss は変わらない，という予測どおりの結果である．
+\item \textbf{FP32 ルーター重み}，\textbf{Adam の二次モーメント FP64}，\textbf{GDP の sigmoid を FP32} など精度系の修正．
+\item \textbf{ルーター入力の中心化}は，誰も取り組んでいない．
+\end{itemize}
+
+% =====================================================================
+\section{解決策の候補}
+% =====================================================================
+いずれも，効果の判定は MaxVio や raw コサインではなく，専門化（割当の特徴量依存性，専門家の入れ替えによる損失変化）と held-out loss で行うべきである．
+\begin{enumerate}[leftmargin=*]
+\item \textbf{ルーター入力の中心化}：$z=R(x-\hat\mu)+c$．$\hat\mu$ は global batch 単位の移動平均，$c$ は専門家ごとのバイアス．
+  切り替え時に $c_i=r_i\T\hat\mu$ と置けばロジットが変わらないので，続行中の run にも入れられる．トイでは最も効いた．
+\item \textbf{ルーターを Muon に}：フラグ一つ．トイでも効き，議事録や HiLD の論文とも整合する．
+\item \textbf{logit 空間 QB}：選択を共通シフトに不変にし，スコア空間のバイアス幅や bin 解像度の問題を消す．単独では不十分な可能性がある．
+\item \textbf{構造の変更}（新規 run 向け）：top-$k$ 内 softmax ゲート，崩壊する層の dense 化．
+\item \textbf{補助的な対策}：FP32 化，Adam の $\epsilon$ を上げる，直交性 loss（使うなら入力側で中心化したロジット相関を罰する版）．
+\end{enumerate}
+
+% =====================================================================
+\section{まとめ}
+% =====================================================================
+初期 MoE 層のルーター崩壊は，「入力の多様性不足」でも「QB そのもの」でもなく，
+\emph{ルーター入力のトークン平均方向を通じた勾配の整列と，sigmoid スコア空間の選択・ゲートが共通成分に敏感であることの組み合わせ}
+として説明できる可能性が高い．トイモデルはこの機構を再現し，raw コサインが崩壊の指標として不十分であることも示した．
+次の一手は，学習を回すことではなく，既存チェックポイントでルーティングのトークン依存成分を測ることである．
+
+\appendix
+\section{記号表}
+\begin{tabular}{@{}ll@{}}
+$d$，$E$，$k$ & 隠れ次元，専門家数，選択数 \\
+$R$，$r_i$ & ルーター行列とその第 $i$ 行 \\
+$z$，$s$，$b$ & ロジット，sigmoid スコア，バランシングのバイアス \\
+$T$，$p_i$ & 選ばれた専門家の集合，ゲート重み \\
+$\mu$，$\Sigma$，$\kappa$ & ルーター入力のトークン平均，共分散，異方性 $\norm\mu^2/\tr\Sigma$ \\
+$\delta_{t,j}$ & トークン $t$ の専門家 $j$ のロジットに対する勾配 \\
+$g_j$ & $\partial L/\partial p_j$ \\
+$u_1$ & ルーター行列の第 1 特異ベクトル（入力側） \\
+\end{tabular}
+
+\end{document}
