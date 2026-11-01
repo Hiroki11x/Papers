@@ -1,0 +1,44 @@
+name: Build issue data for GitHub Pages
+
+# Exports GitHub Issues to static JSON under data/ so the site never calls
+# the GitHub API from the browser (avoids the 60 req/h unauthenticated limit).
+
+on:
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
+  schedule:
+    - cron: "17 3 * * *"   # daily safety net (UTC)
+  workflow_dispatch:
+
+concurrency:
+  group: build-data
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Export issues to data/
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/build_data.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "chore(data): refresh issue export"
+          git push origin HEAD:master

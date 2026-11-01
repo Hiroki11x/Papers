@@ -437,3 +437,257 @@ main {
         font-size: 12px;
     }
 }
+
+/* --- v9: toolbar, search, sort, label counts, pagination extras --- */
+.site-intro-meta {
+    margin-top: 6px !important;
+    font-size: 12px !important;
+    color: #8c959f !important;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.search-wrap {
+    flex: 1 1 320px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-wrap input[type="search"] {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #24292e;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    outline: none;
+}
+
+.search-wrap input[type="search"]:focus {
+    border-color: #0969da;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.25);
+}
+
+.search-hint {
+    font-size: 12px;
+    color: #8c959f;
+    white-space: nowrap;
+}
+
+.select-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #57606a;
+}
+
+.select-wrap select {
+    padding: 7px 28px 7px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #24292e;
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.select-wrap select:hover {
+    background: #f3f4f6;
+    border-color: #afb8c1;
+}
+
+.label-filter a .count {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 6px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #0969da;
+    background: #ffffff;
+    border-radius: 2em;
+}
+
+.label-filter a.active .count,
+.label-filter a:hover .count {
+    color: #0969da;
+    background: #ffffff;
+}
+
+.result-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #57606a;
+}
+
+.result-summary .clear-link {
+    color: #0969da;
+    text-decoration: none;
+}
+
+.result-summary .clear-link:hover {
+    text-decoration: underline;
+}
+
+mark {
+    background: #fff8c5;
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+}
+
+.pagination {
+    align-items: center;
+}
+
+.pagination a.nav-edge {
+    font-size: 13px;
+}
+
+.page-jump {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    font-size: 13px;
+    color: #57606a;
+}
+
+.page-jump label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.page-jump input {
+    width: 64px;
+    padding: 5px 8px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+}
+
+/* --- Detail view extras --- */
+.detail-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.detail-nav .back-link {
+    margin-bottom: 0;
+}
+
+.neighbor-links {
+    display: flex;
+    gap: 6px;
+}
+
+.neighbor-links a {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: #0969da;
+    text-decoration: none;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.neighbor-links a:hover {
+    background: #f6f8fa;
+}
+
+.neighbor-links a.disabled {
+    color: #8c959f;
+    pointer-events: none;
+}
+
+.github-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #0969da;
+    text-decoration: none;
+}
+
+.github-link:hover {
+    text-decoration: underline;
+}
+
+.issue-body table {
+    border-collapse: collapse;
+    margin: 16px 0;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 14px;
+}
+
+.issue-body th,
+.issue-body td {
+    padding: 6px 13px;
+    border: 1px solid #d0d7de;
+}
+
+.issue-body tr:nth-child(2n) {
+    background: #f6f8fa;
+}
+
+.issue-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+
+.issue-body code:not(.inline-code) {
+    background-color: rgba(175, 184, 193, 0.2);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9em;
+}
+
+.issue-body pre code:not(.inline-code) {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+@media (max-width: 544px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* flex-basis would become a 320px *height* in column direction */
+    .search-wrap {
+        flex: none;
+    }
+
+    .select-wrap {
+        justify-content: space-between;
+    }
+
+    .select-wrap select {
+        flex: 1;
+    }
+}
