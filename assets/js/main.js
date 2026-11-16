@@ -5,7 +5,7 @@
  * files are unavailable, and its responses are cached in sessionStorage, so
  * normal browsing never hits the unauthenticated rate limit.
  */
-console.log("Running main.js version 9");
+console.log("Running main.js version 10");
 
 const OWNER = "Hiroki11x";
 const REPO = "Papers";
@@ -289,7 +289,7 @@ function renderSiteIntro(index) {
         ? `Data updated ${new Date(index.generated_at).toLocaleString()}`
         : "Live data from the GitHub API";
     intro.innerHTML = `
-        <h2>Paper Reading Notes</h2>
+        <h1>Paper Reading Notes</h1>
         <p>${index.count} notes generated from GitHub Issues. Search, filter by label, and sort below.</p>
         <p class="site-intro-meta">${escapeHtml(updated)}</p>`;
     return intro;
@@ -539,7 +539,7 @@ async function renderDetailView(number, token) {
 
         const card = document.createElement("article");
         card.className = "detail-card";
-        const h = document.createElement("h2");
+        const h = document.createElement("h1");
         h.className = "issue-title";
         h.textContent = issue.title;
         card.appendChild(h);

@@ -8,37 +8,34 @@
     <meta property="og:title" content="Papers | Reading Notes">
     <meta property="og:description" content="A lightweight archive of machine learning paper reading notes, published from GitHub Issues via GitHub Pages.">
     <meta property="og:type" content="website">
-    <!-- Primer CSS for GitHub-like styling -->
-    <link href="https://unpkg.com/@primer/css@^20.0.0/dist/primer.css" rel="stylesheet" />
-    <!-- Google Fonts: Zen Kaku Gothic New -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
+    <meta name="theme-color" content="#f4f5f1">
+    <link rel="stylesheet" href="assets/css/style.css?v=10">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container-lg p-responsive header-inner">
-            <a href="./" class="header-link">
-                <h1>Papers</h1>
-            </a>
-            <p class="site-subtitle">Research reading notes from GitHub Issues.</p>
+    <a class="skip-link" href="#issues-container">Skip to content</a>
+    <div class="site-shell">
+        <header class="site-header">
+            <a href="https://hiroki11x.github.io/" class="site-title">Hiroki Naganuma</a>
             <nav class="site-nav" aria-label="Main navigation">
-                <a href="./">Notes</a>
-                <a href="https://github.com/Hiroki11x/Papers#readme" target="_blank" rel="noopener noreferrer">README</a>
-                <a href="https://github.com/Hiroki11x/Papers/blob/master/notes/templates/paper-note.md" target="_blank" rel="noopener noreferrer">Note template</a>
-                <a href="https://github.com/Hiroki11x/Papers/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+                <a href="./" aria-current="page">Papers</a>
+                <a href="https://hiroki11x.github.io/posts/">Blog</a>
+                <a href="https://hiroki11x.github.io/">Homepage</a>
+                <a href="https://github.com/Hiroki11x/Papers/issues" target="_blank" rel="noopener noreferrer">GitHub Issues ↗</a>
             </nav>
-        </div>
-    </header>
-    <main id="issues-container" class="container-lg p-responsive"></main>
-    <footer>
-        <p>&copy; 2026 Hiroki Naganuma · Papers</p>
-    </footer>
+        </header>
+        <main id="issues-container" tabindex="-1" aria-label="Paper reading notes"></main>
+        <footer class="site-footer">
+            <nav aria-label="Footer navigation">
+                <a href="https://hiroki11x.github.io/posts/">Back to blog</a>
+                <a href="https://github.com/Hiroki11x/Papers#readme">README</a>
+                <a href="https://github.com/Hiroki11x/Papers/blob/master/notes/templates/paper-note.md">Note template</a>
+            </nav>
+            <small>&copy; 2026 Hiroki Naganuma · Papers</small>
+        </footer>
+    </div>
     <!-- Markdown rendering (pinned versions, cdnjs). main.js falls back to a built-in parser if these fail. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" crossorigin="anonymous"></script>
-    <script src="assets/js/main.js?v=9"></script>
+    <script src="assets/js/main.js?v=10"></script>
 </body>
 </html>
